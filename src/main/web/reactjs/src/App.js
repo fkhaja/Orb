@@ -1,24 +1,27 @@
-import React, {Component} from 'react';
-import Tasks from './components/tasks';
+import React from 'react';
+import NavigationBar from "./components/NavigationBar";
+import {Col, Container, Row} from "react-bootstrap";
+import Welcome from "./components/Welcome";
+import Footer from "./components/Footer";
 
-class App extends Component {
-  state = {
-    tasks: []
-  };
+function App() {
+    const marginTop = {
+        marginTop: "20px"
+    };
 
-  componentDidMount() {
-    fetch('http://localhost:8080/tasks')
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({ tasks: data })
-        })
-        .catch(console.log)
-  }
-  render() {
     return (
-        <Tasks tasks={this.state.tasks} />
+        <div className="App">
+            <NavigationBar/>
+            <Container>
+                <Row>
+                    <Col style={marginTop}>
+                        <Welcome/>
+                    </Col>
+                </Row>
+            </Container>
+            <Footer/>
+        </div>
     )
-  }
 }
 
 export default App;
