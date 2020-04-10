@@ -1,8 +1,11 @@
 import React from 'react';
-import NavigationBar from "./components/NavigationBar";
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Col, Container, Row} from "react-bootstrap";
+
+import NavigationBar from "./components/NavigationBar";
 import Welcome from "./components/Welcome";
 import Footer from "./components/Footer";
+import TaskList from "./components/TaskList";
 
 function App() {
     const marginTop = {
@@ -10,17 +13,20 @@ function App() {
     };
 
     return (
-        <div className="App">
+        <Router>
             <NavigationBar/>
             <Container>
                 <Row>
                     <Col style={marginTop}>
-                        <Welcome/>
+                        <Switch>
+                            <Route path="/home" exact component={Welcome}/>
+                            <Route path="/tasks" exact component={TaskList}/>
+                        </Switch>
                     </Col>
                 </Row>
             </Container>
             <Footer/>
-        </div>
+        </Router>
     )
 }
 
