@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import ListGroup from "react-bootstrap/ListGroup";
 
 export default class TaskList extends React.Component {
     constructor(props) {
@@ -25,23 +26,13 @@ export default class TaskList extends React.Component {
 
     render() {
         return (
-            <div className="text-white">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Value</th>
-                            <th>Expiry</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.tasks.map(task => (
-                            <tr key={task.id}>
-                                <td>{task.value}</td>
-                                <td>{task.expiry}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div>
+                <h1 className="text-white">Task List</h1>
+                <ListGroup className="text-white">
+                    {this.state.tasks.map(task => (
+                        <ListGroup.Item className="bg-dark">#{task.id}: {task.value}</ListGroup.Item>
+                    ))}
+                </ListGroup>
             </div>
         )
     }
