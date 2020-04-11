@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 
 @Entity
 @Data
@@ -19,8 +18,4 @@ public class Task {
     @Column(name = "value")
     @NotBlank
     private String value;
-
-    @Column(name = "expiry")
-    @Positive
-    private long expiry;
 }
