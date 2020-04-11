@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import ListGroup from "react-bootstrap/ListGroup";
 import AddTask from "./AddTask";
+import DeleteTask from "./DeleteTask";
 
 export default class TaskList extends React.Component {
     constructor(props) {
@@ -35,7 +36,10 @@ export default class TaskList extends React.Component {
                     <ListGroup className="text-white">
                         {this.state.tasks.map(task => (
                             <ListGroup.Item className="bg-dark" key={task.id}>
-                                #{task.id}: {task.value}
+                                <span>#{task.id}: {task.value}</span>
+                                <span style={{"float": "right"}}>
+                                    <DeleteTask onTaskDelete={this.handleTaskListChange} taskId={task.id}/>
+                                </span>
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
