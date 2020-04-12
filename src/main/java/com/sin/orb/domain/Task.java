@@ -1,5 +1,6 @@
 package com.sin.orb.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,4 +19,9 @@ public class Task {
     @Column(name = "value")
     @NotBlank
     private String value;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "task_card_id")
+    @JsonBackReference
+    private TaskCard taskCard;
 }
