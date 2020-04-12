@@ -1,5 +1,6 @@
 package com.sin.orb.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,7 @@ public class TaskCard {
 
     @Column(name = "creation_date")
     @Basic
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
     @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER)

@@ -33,7 +33,7 @@ export default class TaskCardList extends React.Component {
                         {this.state.taskCards.map(card => (
                             <ListGroup.Item className="bg-dark" key={card.id}>
                                 <div>
-                                    <h2>{card.name}</h2>
+                                    <h2>{card.name} <span style={{"fontSize": "small"}}>({card.creationDate})</span></h2>
                                     <ListGroup className="text-white">
                                         {card.tasks.map(task => (
                                             <ListGroup.Item className="bg-dark" key={card.id}>
