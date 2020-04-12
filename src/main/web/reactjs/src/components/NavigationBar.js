@@ -10,6 +10,7 @@ export default class NavigationBar extends React.Component{
                 <Nav className="mr-auto">
                     <Link to={"home"} className="nav-link">Home</Link>
                     <Link to={"tasks"} className="nav-link">Tasks</Link>
+                    <Link to={"taskcards"} className="nav-link">Task Cards</Link>
                 </Nav>
             </Navbar>
         );

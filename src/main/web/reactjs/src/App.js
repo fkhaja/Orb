@@ -6,6 +6,7 @@ import NavigationBar from "./components/NavigationBar";
 import Welcome from "./components/Welcome";
 import Footer from "./components/Footer";
 import TaskList from "./components/TaskList";
+import TaskCardList from "./components/TaskCardList";
 
 function App() {
     const marginTop = {
@@ -21,6 +22,7 @@ function App() {
                         <Switch>
                             <Route path="/home" exact component={Welcome}/>
                             <Route path="/tasks" exact component={TaskList}/>
+                            <Route path="/taskCards" exact component={TaskCardList}/>
                         </Switch>
                     </Col>
                 </Row>
