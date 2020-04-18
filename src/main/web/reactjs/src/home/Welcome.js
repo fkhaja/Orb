@@ -4,7 +4,7 @@ import {Jumbotron} from "react-bootstrap";
 export default class Welcome extends React.Component{
     render() {
         return (
-            <Jumbotron className="bg-dark text-white">
+            <Jumbotron className="text-dark">
                 <h1>Welcome to Orb!</h1>
                 <blockquote className="blockquote mb-0">
                     <p>
