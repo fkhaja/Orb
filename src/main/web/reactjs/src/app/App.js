@@ -12,6 +12,7 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import NavigationBar from "../components/NavigationBar";
 import Welcome from "../home/Welcome";
+import NotFound from "../common/NotFound";
 
 export default class App extends Component {
     constructor(props) {
@@ -65,6 +66,7 @@ export default class App extends Component {
                         <Route path="/signup"
                                render={(props) => <Signup authenticated={this.state.authenticated} {...props} />}/>
                         <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}/>
+                        <Route component={NotFound}/>
                     </Switch>
                 </div>
                 <Alert stack={{limit: 3}}
