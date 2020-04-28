@@ -41,7 +41,7 @@ export default class Login extends React.Component {
             <div className="login-container">
                 <div className="login-content">
                     <h1 className="login-title font-weight-bold">LOGIN</h1>
-                    <LoginForm {...this.props} />
+                    <LoginForm {...this.props} onLogin={this.props.onLogin}/>
                     <br/>
                     <ProviderLogin/>
                     <br/> <br/>
@@ -58,7 +58,7 @@ export default class Login extends React.Component {
 class ProviderLogin extends React.Component {
     render() {
         return (
-            <div style={{"text-align": "center"}} className="signup-link">
+            <div style={{"textAlign": "center"}} className="signup-link">
                 <p>Or Sign Up Using</p>
                 <Container>
                     <Row className="justify-content-md-center">
@@ -110,12 +110,11 @@ class LoginForm extends React.Component {
 
         const loginRequest = Object.assign({}, this.state);
 
-        login(loginRequest)
-            .then(response => {
-                localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-                Alert.success("You're successfully logged in!");
-                this.props.history.push("/");
-            }).catch(error => {
+        login(loginRequest).then(response => {
+            localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+            Alert.success("You're successfully logged in!");
+            this.props.history.push("/");
+        }).then(this.props.onLogin).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
     }

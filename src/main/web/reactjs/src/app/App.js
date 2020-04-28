@@ -24,6 +24,7 @@ export default class App extends Component {
 
         this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
     }
 
     loadCurrentlyLoggedInUser() {
@@ -45,6 +46,10 @@ export default class App extends Component {
         Alert.success("You're safely logged out!");
     }
 
+    handleLogin() {
+        this.loadCurrentlyLoggedInUser();
+    }
+
     componentDidMount() {
         this.loadCurrentlyLoggedInUser();
     }
@@ -57,7 +62,9 @@ export default class App extends Component {
                 </div>
                 <div>
                     <Switch>
-
+                        <Route exact path="/">
+                            <Redirect to="/workspace"/>
+                        </Route>
                         <PrivateRoute path={"/workspace"} authenticated={this.state.authenticated}
                                       currentUser={this.state.currentUser}
                                       component={Workspace}/>
@@ -65,13 +72,10 @@ export default class App extends Component {
                                       currentUser={this.state.currentUser}
                                       component={Profile}/>
                         <Route path="/login"
-                               render={(props) => <Login authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...props} />}/>
+                               render={(props) => <Login authenticated={this.state.authenticated} currentUser={this.state.currentUser} onLogin={this.handleLogin} {...props} />}/>
                         <Route path="/signup"
                                render={(props) => <Signup authenticated={this.state.authenticated} {...props} />}/>
                         <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}/>
-                        <Route path="/*">
-                            <Redirect to="/workspace"/>
-                        </Route>
                         <Route component={NotFound}/>
                     </Switch>
                 </div>
