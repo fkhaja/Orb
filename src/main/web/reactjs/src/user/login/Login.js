@@ -32,7 +32,7 @@ export default class Login extends React.Component {
         if (this.props.authenticated) {
             return <Redirect
                 to={{
-                    pathname: "/",
+                    pathname: "/workspace",
                     state: {from: this.props.location}
                 }}/>;
         }

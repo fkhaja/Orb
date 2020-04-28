@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
@@ -11,8 +11,8 @@ import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import NavigationBar from "../components/NavigationBar";
-import Welcome from "../home/Welcome";
 import NotFound from "../common/NotFound";
+import Workspace from "../components/Workspace";
 
 export default class App extends Component {
     constructor(props) {
@@ -57,15 +57,21 @@ export default class App extends Component {
                 </div>
                 <div>
                     <Switch>
-                        <Route exact path="/" component={Welcome}/>
+
+                        <PrivateRoute path={"/workspace"} authenticated={this.state.authenticated}
+                                      currentUser={this.state.currentUser}
+                                      component={Workspace}/>
                         <PrivateRoute path="/profile" authenticated={this.state.authenticated}
                                       currentUser={this.state.currentUser}
                                       component={Profile}/>
                         <Route path="/login"
-                               render={(props) => <Login authenticated={this.state.authenticated} {...props} />}/>
+                               render={(props) => <Login authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...props} />}/>
                         <Route path="/signup"
                                render={(props) => <Signup authenticated={this.state.authenticated} {...props} />}/>
                         <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}/>
+                        <Route path="/*">
+                            <Redirect to="/workspace"/>
+                        </Route>
                         <Route component={NotFound}/>
                     </Switch>
                 </div>

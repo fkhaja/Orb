@@ -1,27 +1,28 @@
 import React from 'react';
-import {Nav, Navbar} from "react-bootstrap";
+import {Dropdown, DropdownButton, Nav, Navbar} from "react-bootstrap";
 import {Link, NavLink} from 'react-router-dom';
 
 export default class NavigationBar extends React.Component {
     render() {
         return (
-            <Navbar bg="dark" variant="dark">
-                <Link to={"/"} className="navbar-brand">Orb</Link>
-                <Nav className="mr-auto">
-                    <NavLink to="/tasks" className="nav-link">Tasks</NavLink>
-                    <NavLink to="/taskcards" className="nav-link">Task cards</NavLink>
-                </Nav>
+            <Navbar bg="white">
+                <Link to={"/workspace"} className="navbar-brand text-dark font-weight-bold mr-auto">Orb</Link>
                 {this.props.authenticated ? (
                     <Nav>
-                        <NavLink to="/profile" className="nav-link">Profile</NavLink>
-                        <button onClick={this.props.onLogout} className="nav-link btn btn-link">Logout</button>
+                        <DropdownButton alignRight id="dropdown-menu-align-right" variant="transparent">
+                            <Dropdown.Item>
+                                <NavLink to="/profile" style={{"text-decoration": "none"}}
+                                         className="text-dark">Profile</NavLink>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <NavLink to="/taskcards" style={{"text-decoration": "none"}} className="text-dark">My
+                                    cards</NavLink>
+                            </Dropdown.Item>
+                            <Dropdown.Divider/>
+                            <Dropdown.Item onClick={this.props.onLogout}>Logout</Dropdown.Item>
+                        </DropdownButton>
                     </Nav>
-                ) : (
-                    <Nav>
-                        <NavLink to="/login" className="nav-link">Login</NavLink>
-                        <NavLink to="/signup" className="nav-link">Signup</NavLink>
-                    </Nav>
-                )}
+                ) : (<Nav/>)}
             </Navbar>
         );
     }

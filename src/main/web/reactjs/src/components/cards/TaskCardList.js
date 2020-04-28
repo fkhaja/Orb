@@ -7,8 +7,8 @@ export default class TaskCardList extends React.Component {
 
     render() {
         return (
-            <div style={{"margin": "0 auto", "width": "70%" }}>
-                <CardDeck style={{"width": "85%"}}>
+            <div style={{"margin": "0 auto"}}>
+                <CardDeck style={{"width": "85%", "margin": "0 auto"}}>
                     {this.splitTo(this.props.cards, 4).map(row => (
                         <div className="text-md-center">
                             <Row style={{"margin": "15px"}}>
