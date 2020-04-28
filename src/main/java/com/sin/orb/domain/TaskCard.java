@@ -1,5 +1,6 @@
 package com.sin.orb.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
@@ -31,4 +32,9 @@ public class TaskCard {
     @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Task> tasks;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
 }
