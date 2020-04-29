@@ -10,9 +10,10 @@ import PrivateRoute from '../common/PrivateRoute';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/navbars/NavigationBar";
 import NotFound from "../common/NotFound";
 import Workspace from "../components/Workspace";
+import SideBar from "../components/navbars/SideBar";
 
 export default class App extends Component {
     constructor(props) {
@@ -59,6 +60,7 @@ export default class App extends Component {
             <div>
                 <div>
                     <NavigationBar authenticated={this.state.authenticated} onLogout={this.handleLogout}/>
+                    <SideBar/>
                 </div>
                 <div>
                     <Switch>
