@@ -24,9 +24,7 @@ export default class Header extends React.Component {
                                 </NavLink>
                             </li>
                             <li className="divider"/>
-                            <li>
-                                <button className="text-button" onClick={this.props.onLogout}>Logout</button>
-                            </li>
+                            <li onClick={this.props.onLogout}>Logout</li>
                         </ul>
                     </label>
                 </div>
