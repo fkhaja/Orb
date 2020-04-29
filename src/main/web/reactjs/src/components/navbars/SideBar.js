@@ -13,7 +13,7 @@ export default class SideBar extends React.Component {
                     <Image className="sidenav-icon-main" src={houseIcon}/>
                 </Link>
                 <Link to={"/workspace"} className="gb-left-menu__nav-item"
-                      style={{"text-decoration": "none", "color": "#50667b"}}>
+                      style={{"textDecoration": "none", "color": "#50667b"}}>
                     <Image className="sidenav-icon" src={cardIcon}/>
                     Workspace
                 </Link>

@@ -4,7 +4,7 @@ import {Redirect} from 'react-router-dom'
 
 export default class OAuth2RedirectHandler extends React.Component {
     getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
         let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
 
         let results = regex.exec(this.props.location.search);
