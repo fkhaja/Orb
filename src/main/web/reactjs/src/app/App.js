@@ -63,7 +63,7 @@ export default class App extends Component {
                         </Route>
                         <PrivateRoute path={"/workspace"} authenticated={this.state.authenticated}
                                       currentUser={this.state.currentUser}
-                                      component={Workspace}/>
+                                      component={Workspace} onLogout={this.handleLogout}/>
                         <PrivateRoute path="/profile" authenticated={this.state.authenticated}
                                       currentUser={this.state.currentUser}
                                       component={Profile}/>
