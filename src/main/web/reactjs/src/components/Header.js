@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 import './Header.css'
+import defaultPic from '../img/default-avatar.png';
 
 export default class Header extends React.Component {
     render() {
@@ -11,7 +12,8 @@ export default class Header extends React.Component {
                     <span className="dd-text font-weight-bold">{this.props.currentUser.username}</span>
                     <label className="dropdown">
                         <div className="dd-button">
-                            <img src={this.props.currentUser.imageUrl} className="avatar-pic"/>
+                            <img src={this.props.currentUser.imageUrl ? this.props.currentUser.imageUrl : defaultPic}
+                                 className="avatar-pic"/>
                         </div>
                         <input type="checkbox" className="dd-input" id="test"/>
                         <ul className="dd-menu">
