@@ -10,7 +10,6 @@ import PrivateRoute from '../common/PrivateRoute';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
-import NavigationBar from "../components/navbars/NavigationBar";
 import NotFound from "../common/NotFound";
 import Workspace from "../components/Workspace";
 
@@ -57,9 +56,6 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <div>
-                    <NavigationBar authenticated={this.state.authenticated} onLogout={this.handleLogout}/>
-                </div>
                 <div>
                     <Switch>
                         <Route exact path="/">

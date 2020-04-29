@@ -3,6 +3,7 @@ import TaskCardList from "./cards/TaskCardList";
 import {getTaskCards} from "../util/APIUtils";
 import './Workspace.css';
 import SideBar from "./navbars/SideBar";
+import Header from "./Header";
 
 export default class Workspace extends React.Component {
     constructor(props) {
@@ -26,8 +27,11 @@ export default class Workspace extends React.Component {
         return (
             <div className="grid-container">
                 <SideBar className="grid-col-1"/>
-                <div className="grid-col-2 workspace">
-                    <TaskCardList cards={this.state.taskCards}/>
+                <div className="grid-col-2">
+                    <Header currentUser={this.props.currentUser}/> <br/>
+                    <div className="workspace">
+                        <TaskCardList cards={this.state.taskCards}/>
+                    </div>
                 </div>
             </div>
         );
