@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Profile.css';
+import SideBar from "../../components/navbars/SideBar";
 
 export default class Profile extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ export default class Profile extends Component {
     render() {
         return (
             <div className="profile-container">
+                <SideBar/>
                 <div className="container">
                     <div className="profile-info">
                         <div className="profile-avatar">

@@ -13,7 +13,6 @@ import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import NavigationBar from "../components/navbars/NavigationBar";
 import NotFound from "../common/NotFound";
 import Workspace from "../components/Workspace";
-import SideBar from "../components/navbars/SideBar";
 
 export default class App extends Component {
     constructor(props) {
@@ -60,7 +59,6 @@ export default class App extends Component {
             <div>
                 <div>
                     <NavigationBar authenticated={this.state.authenticated} onLogout={this.handleLogout}/>
-                    <SideBar/>
                 </div>
                 <div>
                     <Switch>
@@ -74,7 +72,9 @@ export default class App extends Component {
                                       currentUser={this.state.currentUser}
                                       component={Profile}/>
                         <Route path="/login"
-                               render={(props) => <Login authenticated={this.state.authenticated} currentUser={this.state.currentUser} onLogin={this.handleLogin} {...props} />}/>
+                               render={(props) => <Login authenticated={this.state.authenticated}
+                                                         currentUser={this.state.currentUser}
+                                                         onLogin={this.handleLogin} {...props} />}/>
                         <Route path="/signup"
                                render={(props) => <Signup authenticated={this.state.authenticated} {...props} />}/>
                         <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}/>
@@ -82,8 +82,8 @@ export default class App extends Component {
                     </Switch>
                 </div>
                 <Alert stack={{limit: 3}}
-                       timeout = {3000}
-                       position='top-right' effect='slide' offset={65} />
+                       timeout={3000}
+                       position='top-right' effect='slide' offset={65}/>
             </div>
         );
     }
