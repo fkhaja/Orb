@@ -35,7 +35,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task updateTask(Task existingTask, Task task) {
-        BeanUtils.copyProperties(task, existingTask, "id");
+        BeanUtils.copyProperties(task, existingTask, "id", "taskCard");
         return taskRepository.save(existingTask);
     }
 

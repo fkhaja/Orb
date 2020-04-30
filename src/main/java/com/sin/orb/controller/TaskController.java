@@ -1,6 +1,8 @@
 package com.sin.orb.controller;
 
 import com.sin.orb.domain.Task;
+import com.sin.orb.domain.TaskCard;
+import com.sin.orb.exceptions.NotFoundException;
 import com.sin.orb.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("taskcards/{cardId}/tasks")
 public class TaskController {
     private final TaskService taskService;
 
@@ -18,27 +20,38 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getAllTasks() {
-        return taskService.findAllTasks();
+    public List<Task> getAllTasks(@PathVariable("cardId") TaskCard taskCard) {
+        return taskCard.getTasks();
     }
 
     @GetMapping("{id}")
-    public Task getTask(@PathVariable String id) {
-        return taskService.findTaskById(Long.valueOf(id));
+    public Task getTask(@PathVariable("cardId") TaskCard taskCard, @PathVariable Long id) {
+        return taskCard.getTasks()
+                       .stream()
+                       .filter(task -> task.getId().equals(id))
+                       .findFirst()
+                       .orElseThrow(NotFoundException::new);
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
+    public Task createTask(@PathVariable("cardId") TaskCard taskCard, @RequestBody Task task) {
+        task.setTaskCard(taskCard);
         return taskService.saveTask(task);
     }
 
     @PutMapping("{id}")
-    public Task updateTask(@PathVariable("id") Task existingTask, @RequestBody Task task) {
-        return taskService.updateTask(existingTask, task);
+    public Task updateTask(@PathVariable("cardId") TaskCard taskCard, @PathVariable("id") Task existing, @RequestBody Task replacement) {
+        if(!taskCard.getTasks().contains(existing)) throw new NotFoundException();
+
+        return taskService.updateTask(existing, replacement);
     }
 
     @DeleteMapping("{id}")
-    public void deleteTask(@PathVariable("id") Task task) {
-        taskService.deleteTask(task);
+    public void deleteTask(@PathVariable("cardId") TaskCard taskCard, @PathVariable("id") Long id) {
+        taskService.deleteTask(taskCard.getTasks()
+                                       .stream()
+                                       .filter(task -> task.getId().equals(id))
+                                       .findFirst()
+                                       .orElseThrow(NotFoundException::new));
     }
 }
