@@ -1,7 +1,7 @@
 package com.sin.orb.service;
 
 import com.sin.orb.domain.TaskCard;
-import com.sin.orb.exceptions.NotFoundException;
+import com.sin.orb.exceptions.ResourceNotFoundException;
 import com.sin.orb.repo.TaskCardRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +30,13 @@ public class TaskCardServiceImpl implements TaskCardService {
 
     @Override
     public TaskCard findTaskCardById(Long id) {
-        return repository.findById(id).orElseThrow(NotFoundException::new);
+        return repository.findById(id)
+                         .orElseThrow(() -> new ResourceNotFoundException("TaskCard", "id", id));
     }
 
     @Override
     public TaskCard updateTaskCard(TaskCard existing, TaskCard replacement) {
-        BeanUtils.copyProperties(replacement, existing, "id", "user");
+        BeanUtils.copyProperties(replacement, existing, "id", "user", "creationDate", "tasks");
         return repository.save(existing);
     }
 

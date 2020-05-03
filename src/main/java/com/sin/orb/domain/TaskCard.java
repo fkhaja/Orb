@@ -29,7 +29,7 @@ public class TaskCard {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "taskCard", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Task> tasks;
 
