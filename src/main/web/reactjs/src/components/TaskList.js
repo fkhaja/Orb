@@ -1,8 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import ListGroup from "react-bootstrap/ListGroup";
-import AddTask from "./AddTask";
-import DeleteTask from "./DeleteTask";
+import {getTasks} from "../util/APIUtils";
 
 export default class TaskList extends React.Component {
     constructor(props) {
@@ -15,11 +13,11 @@ export default class TaskList extends React.Component {
 
     componentDidMount() {
         this.findAllTasks();
+        console.log(this.state.tasks);
     }
 
     findAllTasks() {
-        axios.get('http://localhost:8080/tasks')
-            .then(response => response.data)
+        getTasks(this.props.card.id)
             .then(data => {
                 this.setState(state => ({
                     tasks: data
@@ -29,21 +27,15 @@ export default class TaskList extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1 className="text-white">Task List</h1>
-                <AddTask onTaskAdd={this.handleTaskListChange}/> <br/>
-                <div>
-                    <ListGroup className="text-white">
-                        {this.state.tasks.map(task => (
-                            <ListGroup.Item className="bg-dark" key={task.id}>
-                                <span>#{task.id}: {task.value}</span>
-                                <span style={{"float": "right"}}>
-                                    <DeleteTask onTaskDelete={this.handleTaskListChange} taskId={task.id}/>
-                                </span>
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-                </div>
+            <div  className="workspace">
+                <h1 className="text-muted">Task List</h1>
+                <ListGroup variant="flush">
+                    {this.state.tasks.map(task => (
+                        <ListGroup.Item key={task.id}>
+                            <span>#{task.id}: {task.value}</span>
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
             </div>
         )
     }

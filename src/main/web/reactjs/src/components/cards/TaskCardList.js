@@ -13,7 +13,7 @@ export default class TaskCardList extends React.Component {
                         <div className="text-md-center">
                             <Row style={{"margin": "15px"}}>
                                 {row.map(card => (
-                                        <TaskCard name={card.name}/>
+                                        <TaskCard card={card}/>
                                     )
                                 )}
                             </Row>

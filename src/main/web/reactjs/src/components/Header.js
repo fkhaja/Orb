@@ -8,7 +8,7 @@ export default class Header extends React.Component {
     render() {
         return (
             <div className="gb-header__content">
-                <h3>My task cards</h3>
+                <h3>{this.props.title}</h3>
                 <div>
                     <span className="dd-text font-weight-bold">{this.props.currentUser.username}</span>
                     <label className="dropdown">

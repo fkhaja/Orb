@@ -56,3 +56,10 @@ export function getTaskCards(userId) {
         method: 'GET'
     })
 }
+
+export function getTasks(cardId) {
+    return request({
+        url: `${API_BASE_URL}/taskcards/${cardId}/tasks`,
+        method: 'GET'
+    })
+}

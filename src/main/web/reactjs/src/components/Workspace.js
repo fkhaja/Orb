@@ -28,7 +28,7 @@ export default class Workspace extends React.Component {
             <div className="grid-container">
                 <SideBar className="grid-col-1"/>
                 <div className="grid-col-2">
-                    <Header currentUser={this.props.currentUser} onLogout={this.props.onLogout}/> <br/>
+                    <Header currentUser={this.props.currentUser} onLogout={this.props.onLogout} title='My task cards'/> <br/>
                     <div className="workspace">
                         <TaskCardList cards={this.state.taskCards}/>
                     </div>
