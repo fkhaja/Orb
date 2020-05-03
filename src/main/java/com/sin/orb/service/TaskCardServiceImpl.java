@@ -31,7 +31,7 @@ public class TaskCardServiceImpl implements TaskCardService {
     @Override
     public TaskCard findTaskCardById(Long id) {
         return repository.findById(id)
-                         .orElseThrow(() -> new ResourceNotFoundException("TaskCard", "id", id));
+                         .orElseThrow(() -> new ResourceNotFoundException("Task card", "id", id));
     }
 
     @Override

@@ -1,8 +1,9 @@
 package com.sin.orb.controller;
 
 import com.sin.orb.domain.TaskCard;
-import com.sin.orb.domain.User;
 import com.sin.orb.exceptions.ResourceNotFoundException;
+import com.sin.orb.security.CurrentUser;
+import com.sin.orb.security.UserPrincipal;
 import com.sin.orb.service.TaskCardService;
 import com.sin.orb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("users/{userId}/taskcards")
+@RequestMapping("taskcards")
 public class TaskCardController {
     private TaskCardService taskCardService;
     private UserService userService;
@@ -24,26 +25,19 @@ public class TaskCardController {
         this.userService = userService;
     }
 
-
     @GetMapping
-    public List<TaskCard> getAllTaskCards(@PathVariable("userId") Long userId) {
-        return userService.findUserById(userId).getTaskCards();
+    public List<TaskCard> getAllTaskCards(@CurrentUser UserPrincipal userPrincipal) {
+        return userService.findUserById(userPrincipal.getId()).getTaskCards();
     }
 
     @GetMapping("{id}")
-    public TaskCard getTaskCard(@PathVariable("userId") Long userId, @PathVariable Long id) {
-        return userService.findUserById(userId).getTaskCards()
-                          .stream()
-                          .filter(card -> card.getId().equals(id))
-                          .findFirst()
-                          .orElseThrow(() -> new ResourceNotFoundException("TaskCard", "id", id));
+    public TaskCard getTaskCard(@CurrentUser UserPrincipal userPrincipal, @PathVariable Long id) {
+        return findTaskCard(userService.findUserById(userPrincipal.getId()).getTaskCards(), id);
     }
 
     @PostMapping
-    public TaskCard createTaskCard(@PathVariable("userId") Long userId, @RequestBody TaskCard taskCard) {
-
-
-        taskCard.setUser(userService.findUserById(userId));
+    public TaskCard createTaskCard(@CurrentUser UserPrincipal userPrincipal, @RequestBody TaskCard taskCard) {
+        taskCard.setUser(userService.findUserById(userPrincipal.getId()));
         taskCard.setCreationDate(LocalDate.now());
         taskCard.setTasks(new ArrayList<>());
 
@@ -51,21 +45,20 @@ public class TaskCardController {
     }
 
     @PutMapping("{id}")
-    public TaskCard updateTaskCard(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody TaskCard replacement) {
-        User user = userService.findUserById(userId);
-        TaskCard existing = taskCardService.findTaskCardById(id);
-
-        if (!user.getTaskCards().contains(existing)) throw new ResourceNotFoundException("TaskCard", "id", id);
-
+    public TaskCard updateTaskCard(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id, @RequestBody TaskCard replacement) {
+        TaskCard existing = findTaskCard(userService.findUserById(userPrincipal.getId()).getTaskCards(), id);
         return taskCardService.updateTaskCard(existing, replacement);
     }
 
     @DeleteMapping("{id}")
-    public void deleteTaskCard(@PathVariable("userId") Long userId, @PathVariable("id") Long id) {
-        taskCardService.deleteTaskCard(userService.findUserById(userId).getTaskCards()
-                                                  .stream()
-                                                  .filter(card -> card.getId().equals(id))
-                                                  .findFirst()
-                                                  .orElseThrow(() -> new ResourceNotFoundException("TaskCard", "id", id)));
+    public void deleteTaskCard(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id) {
+        taskCardService.deleteTaskCard(findTaskCard(userService.findUserById(userPrincipal.getId()).getTaskCards(), id));
+    }
+
+    private TaskCard findTaskCard(List<TaskCard> cards, Long id) {
+        return cards.stream()
+                    .filter(card -> card.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow(() -> new ResourceNotFoundException("Task card", "id", id));
     }
 }
