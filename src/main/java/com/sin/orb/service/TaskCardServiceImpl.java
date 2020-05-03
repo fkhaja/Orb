@@ -1,13 +1,10 @@
 package com.sin.orb.service;
 
 import com.sin.orb.domain.TaskCard;
-import com.sin.orb.exceptions.ResourceNotFoundException;
 import com.sin.orb.repo.TaskCardRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TaskCardServiceImpl implements TaskCardService {
@@ -21,17 +18,6 @@ public class TaskCardServiceImpl implements TaskCardService {
     @Override
     public TaskCard saveTaskCard(TaskCard taskCard) {
         return repository.save(taskCard);
-    }
-
-    @Override
-    public List<TaskCard> findAllTaskCards() {
-        return repository.findAll();
-    }
-
-    @Override
-    public TaskCard findTaskCardById(Long id) {
-        return repository.findById(id)
-                         .orElseThrow(() -> new ResourceNotFoundException("Task card", "id", id));
     }
 
     @Override
