@@ -1,8 +1,8 @@
 package com.sin.orb.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @EqualsAndHashCode(of = {"id"})
 @Table(name = "tasks")
+@ToString(exclude = {"taskCard"})
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,5 @@ public class Task {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "task_card_id")
-    @JsonBackReference
     private TaskCard taskCard;
 }

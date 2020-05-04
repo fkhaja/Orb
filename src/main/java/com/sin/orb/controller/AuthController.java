@@ -7,8 +7,8 @@ import com.sin.orb.payload.ApiResponse;
 import com.sin.orb.payload.AuthResponse;
 import com.sin.orb.payload.LoginRequest;
 import com.sin.orb.payload.SignUpRequest;
-import com.sin.orb.repo.UserRepository;
 import com.sin.orb.security.TokenProvider;
+import com.sin.orb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,15 +29,15 @@ import java.net.URI;
 @RequestMapping("/auth")
 public class AuthController {
     private AuthenticationManager authenticationManager;
-    private UserRepository userRepository;
+    private UserService userService;
     private PasswordEncoder passwordEncoder;
     private TokenProvider tokenProvider;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository,
+    public AuthController(AuthenticationManager authenticationManager, UserService userService,
                           PasswordEncoder passwordEncoder, TokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
     }
@@ -57,7 +57,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userService.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }
 
@@ -67,7 +67,7 @@ public class AuthController {
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.LOCAL);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User result = userRepository.save(user);
+        User result = userService.save(user);
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
                                                   .buildAndExpand(result.getId()).toUri();
