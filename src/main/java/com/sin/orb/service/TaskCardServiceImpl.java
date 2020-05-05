@@ -6,6 +6,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TaskCardServiceImpl implements TaskCardService {
     private TaskCardRepository repository;
@@ -29,5 +31,15 @@ public class TaskCardServiceImpl implements TaskCardService {
     @Override
     public void deleteTaskCard(TaskCard taskCard) {
         repository.delete(taskCard);
+    }
+
+    @Override
+    public List<TaskCard> findAllTaskCards(Long userId) {
+        return repository.findAllByUserIdEquals(userId);
+    }
+
+    @Override
+    public TaskCard findTaskCardById(Long id, Long userId) {
+        return repository.findByIdEqualsAndUserId(id, userId);
     }
 }
