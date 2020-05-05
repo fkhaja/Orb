@@ -8,11 +8,11 @@ public interface TaskCardService {
 
     TaskCard saveTaskCard(TaskCard taskCard);
 
-    List<TaskCard> findAllTaskCards();
-
-    TaskCard findTaskCardById(Long id);
-
     TaskCard updateTaskCard(TaskCard existing, TaskCard replacement);
 
     void deleteTaskCard(TaskCard taskCard);
+
+    List<TaskCard> findAllTaskCards(Long userId);
+
+    TaskCard findTaskCardById(Long id, Long userId);
 }

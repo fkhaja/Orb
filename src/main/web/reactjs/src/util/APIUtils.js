@@ -50,9 +50,9 @@ export function signUp(signUpRequest) {
     });
 }
 
-export function getTaskCards(userId) {
+export function getTaskCards() {
     return request({
-        url: `${API_BASE_URL}/users/${userId}/taskcards`,
+        url: `${API_BASE_URL}/taskcards`,
         method: 'GET'
     })
 }

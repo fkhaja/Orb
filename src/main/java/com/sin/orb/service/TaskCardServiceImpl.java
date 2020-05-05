@@ -1,7 +1,6 @@
 package com.sin.orb.service;
 
 import com.sin.orb.domain.TaskCard;
-import com.sin.orb.exceptions.NotFoundException;
 import com.sin.orb.repo.TaskCardRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +23,23 @@ public class TaskCardServiceImpl implements TaskCardService {
     }
 
     @Override
-    public List<TaskCard> findAllTaskCards() {
-        return repository.findAll();
-    }
-
-    @Override
-    public TaskCard findTaskCardById(Long id) {
-        return repository.findById(id).orElseThrow(NotFoundException::new);
-    }
-
-    @Override
     public TaskCard updateTaskCard(TaskCard existing, TaskCard replacement) {
-        BeanUtils.copyProperties(replacement, existing, "id", "user");
+        BeanUtils.copyProperties(replacement, existing, "id", "user", "creationDate", "tasks");
         return repository.save(existing);
     }
 
     @Override
     public void deleteTaskCard(TaskCard taskCard) {
         repository.delete(taskCard);
+    }
+
+    @Override
+    public List<TaskCard> findAllTaskCards(Long userId) {
+        return repository.findAllByUserIdEquals(userId);
+    }
+
+    @Override
+    public TaskCard findTaskCardById(Long id, Long userId) {
+        return repository.findByIdEqualsAndUserId(id, userId);
     }
 }

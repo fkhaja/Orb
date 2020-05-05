@@ -1,13 +1,11 @@
 package com.sin.orb.service;
 
 import com.sin.orb.domain.Task;
-import com.sin.orb.exceptions.NotFoundException;
+import com.sin.orb.exceptions.ResourceNotFoundException;
 import com.sin.orb.repo.TaskRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -24,16 +22,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAllTasks() {
-        return taskRepository.findAll();
-    }
-
-    @Override
-    public Task findTaskById(Long id) {
-        return taskRepository.findById(id).orElseThrow(NotFoundException::new);
-    }
-
-    @Override
     public Task updateTask(Task existingTask, Task task) {
         BeanUtils.copyProperties(task, existingTask, "id", "taskCard");
         return taskRepository.save(existingTask);
@@ -42,5 +30,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Task task) {
         taskRepository.delete(task);
+    }
+
+    @Override
+    public Task findTaskById(Long id){
+        return taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
     }
 }

@@ -18,7 +18,7 @@ export default class Workspace extends React.Component {
     }
 
     findTaskCards() {
-        getTaskCards(this.props.currentUser.id).then(data => this.setState(state => ({
+        getTaskCards().then(data => this.setState(state => ({
             taskCards: data
         })));
     }

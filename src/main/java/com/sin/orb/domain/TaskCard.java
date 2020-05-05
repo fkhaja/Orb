@@ -1,10 +1,9 @@
 package com.sin.orb.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +14,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(of = {"id"})
 @Table(name = "task_cards")
+@ToString(exclude = {"user"})
 public class TaskCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +26,9 @@ public class TaskCard {
 
     @Column(name = "creation_date")
     @Basic
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "taskCard", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER)
     private List<Task> tasks;
 
     @ManyToOne(cascade = CascadeType.ALL)

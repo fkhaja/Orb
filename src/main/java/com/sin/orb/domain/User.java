@@ -1,7 +1,5 @@
 package com.sin.orb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,7 +33,6 @@ public class User {
     @Column(name = "email_verified", nullable = false)
     private Boolean emailVerified = false;
 
-    @JsonIgnore
     @Column(name = "password")
     private String password;
 
@@ -48,6 +45,5 @@ public class User {
     private String providerId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<TaskCard> taskCards;
 }
