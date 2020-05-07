@@ -1,6 +1,6 @@
-import React from 'react';
-import ListGroup from "react-bootstrap/ListGroup";
+import React, {Fragment} from 'react';
 import {getTasks} from "../util/APIUtils";
+import "./TaskList.css";
 
 export default class TaskList extends React.Component {
     constructor(props) {
@@ -26,16 +26,19 @@ export default class TaskList extends React.Component {
     }
 
     render() {
+        let count = 0;
+
         return (
-            <div  className="workspace">
-                <h1 className="text-muted">Task List</h1>
-                <ListGroup variant="flush">
+            <div className="workspace task-list-body">
+                <h1 className="text-muted">Tasks</h1>
+                <div id="checklist" className="task-list">
                     {this.state.tasks.map(task => (
-                        <ListGroup.Item key={task.id}>
-                            <span>#{task.id}: {task.value}</span>
-                        </ListGroup.Item>
+                        <Fragment key={task.id}>
+                            <input id={++count} type="checkbox" name="r"/>
+                            <label htmlFor={count}>{task.value}</label>
+                        </Fragment>
                     ))}
-                </ListGroup>
+                </div>
             </div>
         )
     }
