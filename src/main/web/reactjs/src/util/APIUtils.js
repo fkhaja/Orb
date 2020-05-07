@@ -63,3 +63,14 @@ export function getTasks(cardId) {
         method: 'GET'
     })
 }
+
+export async function updateTasks(tasks, cardId) {
+    const promises = tasks.map(task => {
+        request({
+            url: `${API_BASE_URL}/taskcards/${cardId}/tasks/${task.id}`,
+            method: 'PUT',
+            body: JSON.stringify(task)
+        });
+    });
+    return Promise.all(promises);
+}

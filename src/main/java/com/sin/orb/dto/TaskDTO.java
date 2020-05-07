@@ -7,6 +7,7 @@ import lombok.Data;
 public class TaskDTO {
     private Long id;
     private String value;
+    private Boolean completed = false;
     @JsonBackReference
     private TaskCardDTO taskCard;
 }
