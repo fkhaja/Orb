@@ -1,4 +1,4 @@
-package com.sin.orb.exceptions;
+package com.sin.orb.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

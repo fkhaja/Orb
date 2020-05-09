@@ -1,6 +1,6 @@
 package com.sin.orb.security.oauth2;
 
-import com.sin.orb.exceptions.BadRequestException;
+import com.sin.orb.exception.BadRequestException;
 import com.sin.orb.security.TokenProvider;
 import com.sin.orb.util.CookieUtils;
 import lombok.extern.slf4j.Slf4j;

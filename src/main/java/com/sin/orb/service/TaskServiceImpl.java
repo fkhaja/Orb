@@ -2,7 +2,7 @@ package com.sin.orb.service;
 
 import com.sin.orb.domain.Task;
 import com.sin.orb.domain.TaskCard;
-import com.sin.orb.repo.TaskRepository;
+import com.sin.orb.repository.TaskRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +23,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task updateTask(Task existingTask, Task task) {
-        BeanUtils.copyProperties(task, existingTask, "id", "taskCard");
-        return taskRepository.save(existingTask);
+    public Task updateTask(Task existing, Task task) {
+        BeanUtils.copyProperties(task, existing, "id", "taskCard");
+        return taskRepository.save(existing);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.sin.orb.security.oauth2;
 
 import com.sin.orb.domain.User;
-import com.sin.orb.exceptions.OAuth2AuthenticationProcessingException;
-import com.sin.orb.repo.UserRepository;
+import com.sin.orb.exception.OAuth2AuthenticationProcessingException;
+import com.sin.orb.repository.UserRepository;
 import com.sin.orb.security.AuthProvider;
 import com.sin.orb.security.oauth2.user.OAuth2UserInfo;
 import com.sin.orb.security.oauth2.user.OAuth2UserInfoFactory;

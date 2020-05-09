@@ -2,7 +2,7 @@ package com.sin.orb.service;
 
 import com.sin.orb.domain.TaskCard;
 import com.sin.orb.domain.User;
-import com.sin.orb.repo.TaskCardRepository;
+import com.sin.orb.repository.TaskCardRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

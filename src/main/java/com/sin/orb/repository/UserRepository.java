@@ -1,4 +1,4 @@
-package com.sin.orb.repo;
+package com.sin.orb.repository;
 
 import com.sin.orb.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

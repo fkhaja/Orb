@@ -1,8 +1,8 @@
 package com.sin.orb.security;
 
 import com.sin.orb.domain.User;
-import com.sin.orb.exceptions.ResourceNotFoundException;
-import com.sin.orb.repo.UserRepository;
+import com.sin.orb.exception.ResourceNotFoundException;
+import com.sin.orb.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,6 +1,6 @@
 package com.sin.orb.domain;
 
-import com.sin.orb.exceptions.ResourceNotFoundException;
+import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.security.AuthProvider;
 import lombok.AccessLevel;
 import lombok.Data;

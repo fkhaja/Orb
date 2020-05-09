@@ -1,7 +1,7 @@
 package com.sin.orb.controller;
 
 import com.sin.orb.domain.User;
-import com.sin.orb.exceptions.BadRequestException;
+import com.sin.orb.exception.BadRequestException;
 import com.sin.orb.payload.ApiResponse;
 import com.sin.orb.payload.AuthResponse;
 import com.sin.orb.payload.LoginRequest;
