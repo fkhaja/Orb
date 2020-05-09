@@ -1,12 +1,12 @@
 package com.sin.orb.controller;
 
-import com.sin.orb.domain.AuthProvider;
 import com.sin.orb.domain.User;
 import com.sin.orb.exceptions.BadRequestException;
 import com.sin.orb.payload.ApiResponse;
 import com.sin.orb.payload.AuthResponse;
 import com.sin.orb.payload.LoginRequest;
 import com.sin.orb.payload.SignUpRequest;
+import com.sin.orb.security.AuthProvider;
 import com.sin.orb.security.TokenProvider;
 import com.sin.orb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

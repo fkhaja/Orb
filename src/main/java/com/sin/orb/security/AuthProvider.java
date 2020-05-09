@@ -1,4 +1,4 @@
-package com.sin.orb.domain;
+package com.sin.orb.security;
 
 public enum  AuthProvider {
     LOCAL,

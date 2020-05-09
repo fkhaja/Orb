@@ -1,7 +1,7 @@
 package com.sin.orb.security.oauth2.user;
 
-import com.sin.orb.domain.AuthProvider;
 import com.sin.orb.exceptions.OAuth2AuthenticationProcessingException;
+import com.sin.orb.security.AuthProvider;
 
 import java.util.Map;
 

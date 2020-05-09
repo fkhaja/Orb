@@ -1,14 +1,15 @@
 package com.sin.orb.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sin.orb.exceptions.ResourceNotFoundException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,19 +21,26 @@ public class TaskCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
     @NotBlank
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "creation_date")
     @Basic
+    @Column(name = "creation_date")
     private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER)
-    private List<Task> tasks;
+    @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Task> tasks;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JoinColumn(name = "user_id", updatable = false)
     private User user;
+
+    public Task getTask(Long id) {
+        return tasks.stream()
+                    .filter(task -> task.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
+    }
 }

@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -17,14 +18,16 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "value")
     @NotBlank
+    @Column(name = "value")
     private String value;
 
-    @Column(name = "completed", nullable = false, columnDefinition = "boolean default false")
+    @NotNull
+    @Column(name = "completed", columnDefinition = "boolean default false")
     private Boolean completed;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "task_card_id")
+    @JoinColumn(name = "task_card_id", updatable = false)
     private TaskCard taskCard;
 }

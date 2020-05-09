@@ -34,7 +34,7 @@ public class TaskCardController {
 
     @GetMapping("{id}")
     public TaskCardDTO getTaskCard(@CurrentUser User user, @PathVariable Long id) {
-        return toDto(findTaskCard(user.getTaskCards(), id));
+        return toDto(user.getTaskCard(id));
     }
 
     @PostMapping
@@ -45,14 +45,14 @@ public class TaskCardController {
 
     @PutMapping("{id}")
     public TaskCardDTO updateTaskCard(@CurrentUser User user, @PathVariable("id") Long id, @RequestBody TaskCardDTO replacementDto) {
-        TaskCard existing = findTaskCard(user.getTaskCards(), id);
+        TaskCard existing = user.getTaskCard(id);
         TaskCard replacement = toEntity(replacementDto);
         return toDto(taskCardService.updateTaskCard(existing, replacement));
     }
 
     @DeleteMapping("{id}")
     public void deleteTaskCard(@CurrentUser User user, @PathVariable("id") Long id) {
-        taskCardService.deleteTaskCard(findTaskCard(user.getTaskCards(), id));
+        taskCardService.deleteTaskCard(user.getTaskCard(id));
     }
 
     private TaskCardDTO toDto(TaskCard taskCard) {
@@ -61,12 +61,5 @@ public class TaskCardController {
 
     private TaskCard toEntity(TaskCardDTO taskCardDto) {
         return modelMapper.map(taskCardDto, TaskCard.class);
-    }
-
-    private TaskCard findTaskCard(List<TaskCard> cards, Long id) {
-        return cards.stream()
-                    .filter(card -> card.getId().equals(id))
-                    .findFirst()
-                    .orElse(null);
     }
 }

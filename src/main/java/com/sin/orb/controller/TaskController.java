@@ -4,7 +4,6 @@ import com.sin.orb.domain.Task;
 import com.sin.orb.domain.TaskCard;
 import com.sin.orb.domain.User;
 import com.sin.orb.dto.TaskDTO;
-import com.sin.orb.exceptions.ResourceNotFoundException;
 import com.sin.orb.security.CurrentUser;
 import com.sin.orb.service.TaskService;
 import org.modelmapper.ModelMapper;
@@ -28,50 +27,37 @@ public class TaskController {
 
     @GetMapping
     public List<TaskDTO> getAllTasks(@CurrentUser User user, @PathVariable("cardId") Long cardId) {
-        return findTaskCard(user.getTaskCards(), cardId)
-                .getTasks()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+        return user.getTaskCard(cardId)
+                   .getTasks()
+                   .stream()
+                   .map(this::toDto)
+                   .collect(Collectors.toList());
     }
 
     @GetMapping("{id}")
     public TaskDTO getTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable Long id) {
-        Task task = findTask(findTaskCard(user.getTaskCards(), cardId).getTasks(), id);
+        Task task = user.getTaskCard(cardId).getTask(id);
         return toDto(task);
     }
 
     @PostMapping
     public TaskDTO createTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @RequestBody TaskDTO taskDTO) {
         Task task = toEntity(taskDTO);
-        return toDto(taskService.saveTask(task, findTaskCard(user.getTaskCards(), cardId)));
+        TaskCard taskCard = user.getTaskCard(cardId);
+        return toDto(taskService.saveTask(task, taskCard));
     }
 
     @PutMapping("{id}")
     public TaskDTO updateTask(@CurrentUser User user, @PathVariable("cardId") Long cardId,
                               @PathVariable("id") Long id, @RequestBody TaskDTO replacementDto) {
-        Task existing = findTask(findTaskCard(user.getTaskCards(), cardId).getTasks(), id);
+        Task existing = user.getTaskCard(cardId).getTask(id);
         Task replacement = toEntity(replacementDto);
         return toDto(taskService.updateTask(existing, replacement));
     }
 
     @DeleteMapping("{id}")
     public void deleteTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable("id") Long id) {
-        taskService.deleteTask(findTask(findTaskCard(user.getTaskCards(), cardId).getTasks(), id));
-    }
-
-    private TaskCard findTaskCard(List<TaskCard> cards, Long id) {
-        return cards.stream()
-                    .filter(card -> card.getId().equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new ResourceNotFoundException("Task card", "id", id));
-    }
-
-    private Task findTask(List<Task> tasks, Long id) {
-        return tasks.stream()
-                    .filter(task -> task.getId().equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
+        taskService.deleteTask(user.getTaskCard(cardId).getTask(id));
     }
 
     private TaskDTO toDto(Task task) {

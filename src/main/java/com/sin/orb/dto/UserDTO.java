@@ -2,7 +2,7 @@ package com.sin.orb.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sin.orb.domain.AuthProvider;
+import com.sin.orb.security.AuthProvider;
 import lombok.Data;
 
 import java.util.List;

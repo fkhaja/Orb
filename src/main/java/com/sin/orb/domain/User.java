@@ -1,5 +1,7 @@
 package com.sin.orb.domain;
 
+import com.sin.orb.exceptions.ResourceNotFoundException;
+import com.sin.orb.security.AuthProvider;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,12 +14,12 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @Data
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @EqualsAndHashCode(of = {"id"})
 public class User implements OAuth2User, UserDetails {
     @Id
@@ -25,17 +27,20 @@ public class User implements OAuth2User, UserDetails {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @NotNull
+    @Column(name = "username")
     private String username;
 
     @Email
-    @Column(name = "email", nullable = false)
+    @NotNull
+    @Column(name = "email")
     private String email;
 
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "email_verified", nullable = false)
+    @NotNull
+    @Column(name = "email_verified")
     private Boolean emailVerified = false;
 
     @Column(name = "password")
@@ -49,14 +54,21 @@ public class User implements OAuth2User, UserDetails {
     @Column(name = "provider_id")
     private String providerId;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<TaskCard> taskCards;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<TaskCard> taskCards;
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 
     @Transient
     private Map<String, Object> attributes;
+
+    public TaskCard getTaskCard(Long id) {
+        return taskCards.stream()
+                        .filter(card -> card.getId().equals(id))
+                        .findFirst()
+                        .orElseThrow(() -> new ResourceNotFoundException("Task card", "id", id));
+    }
 
     @Override
     public boolean isAccountNonExpired() {
