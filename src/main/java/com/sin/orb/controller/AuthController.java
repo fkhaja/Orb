@@ -43,11 +43,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
@@ -56,19 +54,18 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if (userService.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest request) {
+        if (userService.existsByEmail(request.getEmail())) {
+            throw new BadRequestException("Email address already in use");
         }
 
         User user = new User();
-        user.setUsername(signUpRequest.getUsername());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(signUpRequest.getPassword());
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
         user.setProvider(AuthProvider.LOCAL);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User result = userService.save(user);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
+        User result = userService.save(user);
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
                                                   .buildAndExpand(result.getId()).toUri();
 

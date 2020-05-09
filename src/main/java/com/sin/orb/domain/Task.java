@@ -24,7 +24,7 @@ public class Task {
     @Column(name = "completed", nullable = false, columnDefinition = "boolean default false")
     private Boolean completed;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "task_card_id")
     private TaskCard taskCard;
 }

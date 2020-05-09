@@ -1,5 +1,6 @@
 package com.sin.orb.security;
 
+import com.sin.orb.domain.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,12 +20,12 @@ public class TokenProvider {
     private long tokenExpiration;
 
     public String createToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + tokenExpiration);
 
         return Jwts.builder()
-                   .setSubject(Long.toString(userPrincipal.getId()))
+                   .setSubject(Long.toString(user.getId()))
                    .setIssuedAt(new Date())
                    .setExpiration(expiryDate)
                    .signWith(SignatureAlgorithm.HS512, tokenSecret)

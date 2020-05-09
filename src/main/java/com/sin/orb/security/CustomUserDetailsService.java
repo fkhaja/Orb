@@ -4,11 +4,14 @@ import com.sin.orb.domain.User;
 import com.sin.orb.exceptions.ResourceNotFoundException;
 import com.sin.orb.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -24,13 +27,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                                   .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-        return UserPrincipal.create(user);
+        user.setAuthorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        return user;
     }
 
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id)
                                   .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-        return UserPrincipal.create(user);
+        user.setAuthorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        return user;
     }
 }

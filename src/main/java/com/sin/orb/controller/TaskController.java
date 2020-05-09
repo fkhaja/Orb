@@ -2,12 +2,11 @@ package com.sin.orb.controller;
 
 import com.sin.orb.domain.Task;
 import com.sin.orb.domain.TaskCard;
+import com.sin.orb.domain.User;
 import com.sin.orb.dto.TaskDTO;
 import com.sin.orb.exceptions.ResourceNotFoundException;
 import com.sin.orb.security.CurrentUser;
-import com.sin.orb.security.UserPrincipal;
 import com.sin.orb.service.TaskService;
-import com.sin.orb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +18,17 @@ import java.util.stream.Collectors;
 @RequestMapping("taskcards/{cardId}/tasks")
 public class TaskController {
     private TaskService taskService;
-    private UserService userService;
     private ModelMapper modelMapper;
 
     @Autowired
-    public TaskController(TaskService taskService, UserService userService, ModelMapper modelMapper) {
+    public TaskController(TaskService taskService, ModelMapper modelMapper) {
         this.taskService = taskService;
-        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
     @GetMapping
-    public List<TaskDTO> getAllTasks(@CurrentUser UserPrincipal userPrincipal, @PathVariable("cardId") Long cardId) {
-        return findTaskCard(userService.findUserById(userPrincipal.getId()).getTaskCards(), cardId)
+    public List<TaskDTO> getAllTasks(@CurrentUser User user, @PathVariable("cardId") Long cardId) {
+        return findTaskCard(user.getTaskCards(), cardId)
                 .getTasks()
                 .stream()
                 .map(this::toDto)
@@ -39,28 +36,28 @@ public class TaskController {
     }
 
     @GetMapping("{id}")
-    public TaskDTO getTask(@CurrentUser UserPrincipal userPrincipal, @PathVariable("cardId") Long cardId, @PathVariable Long id) {
-        return toDto(findTask(findTaskCard(userService.findUserById(userPrincipal.getId()).getTaskCards(), cardId).getTasks(), id));
+    public TaskDTO getTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable Long id) {
+        Task task = findTask(findTaskCard(user.getTaskCards(), cardId).getTasks(), id);
+        return toDto(task);
     }
 
     @PostMapping
-    public TaskDTO createTask(@CurrentUser UserPrincipal userPrincipal, @PathVariable("cardId") Long cardId, @RequestBody TaskDTO taskDTO) {
+    public TaskDTO createTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @RequestBody TaskDTO taskDTO) {
         Task task = toEntity(taskDTO);
-        task.setTaskCard(findTaskCard(userService.findUserById(userPrincipal.getId()).getTaskCards(), cardId));
-        return toDto(taskService.saveTask(task));
+        return toDto(taskService.saveTask(task, findTaskCard(user.getTaskCards(), cardId)));
     }
 
     @PutMapping("{id}")
-    public TaskDTO updateTask(@CurrentUser UserPrincipal userPrincipal, @PathVariable("cardId") Long cardId,
-                           @PathVariable("id") Long id, @RequestBody TaskDTO replacementDto) {
-        Task existing = findTask(findTaskCard(userService.findUserById(userPrincipal.getId()).getTaskCards(), cardId).getTasks(), id);
+    public TaskDTO updateTask(@CurrentUser User user, @PathVariable("cardId") Long cardId,
+                              @PathVariable("id") Long id, @RequestBody TaskDTO replacementDto) {
+        Task existing = findTask(findTaskCard(user.getTaskCards(), cardId).getTasks(), id);
         Task replacement = toEntity(replacementDto);
         return toDto(taskService.updateTask(existing, replacement));
     }
 
     @DeleteMapping("{id}")
-    public void deleteTask(@CurrentUser UserPrincipal userPrincipal, @PathVariable("cardId") Long cardId, @PathVariable("id") Long id) {
-        taskService.deleteTask(findTask(findTaskCard(userService.findUserById(userPrincipal.getId()).getTaskCards(), cardId).getTasks(), id));
+    public void deleteTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable("id") Long id) {
+        taskService.deleteTask(findTask(findTaskCard(user.getTaskCards(), cardId).getTasks(), id));
     }
 
     private TaskCard findTaskCard(List<TaskCard> cards, Long id) {
@@ -77,11 +74,11 @@ public class TaskController {
                     .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
     }
 
-    private TaskDTO toDto(Task task){
+    private TaskDTO toDto(Task task) {
         return modelMapper.map(task, TaskDTO.class);
     }
 
-    private Task toEntity(TaskDTO taskDto){
+    private Task toEntity(TaskDTO taskDto) {
         return modelMapper.map(taskDto, Task.class);
     }
 }

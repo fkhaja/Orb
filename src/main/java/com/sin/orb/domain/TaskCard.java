@@ -31,7 +31,7 @@ public class TaskCard {
     @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER)
     private List<Task> tasks;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;

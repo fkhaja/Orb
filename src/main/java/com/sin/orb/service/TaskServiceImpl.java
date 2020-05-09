@@ -1,7 +1,7 @@
 package com.sin.orb.service;
 
 import com.sin.orb.domain.Task;
-import com.sin.orb.exceptions.ResourceNotFoundException;
+import com.sin.orb.domain.TaskCard;
 import com.sin.orb.repo.TaskRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task saveTask(Task task) {
+    public Task saveTask(Task task, TaskCard card) {
+        task.setTaskCard(card);
         return taskRepository.save(task);
     }
 
@@ -30,10 +31,5 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Task task) {
         taskRepository.delete(task);
-    }
-
-    @Override
-    public Task findTaskById(Long id){
-        return taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
     }
 }

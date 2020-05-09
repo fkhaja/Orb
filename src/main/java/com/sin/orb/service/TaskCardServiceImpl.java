@@ -1,12 +1,14 @@
 package com.sin.orb.service;
 
 import com.sin.orb.domain.TaskCard;
+import com.sin.orb.domain.User;
 import com.sin.orb.repo.TaskCardRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Service
 public class TaskCardServiceImpl implements TaskCardService {
@@ -18,28 +20,22 @@ public class TaskCardServiceImpl implements TaskCardService {
     }
 
     @Override
-    public TaskCard saveTaskCard(TaskCard taskCard) {
+    public TaskCard saveTaskCard(TaskCard taskCard, User user) {
+        taskCard.setUser(user);
+        taskCard.setCreationDate(LocalDate.now());
+        taskCard.setTasks(new ArrayList<>());
+
         return repository.save(taskCard);
     }
 
     @Override
     public TaskCard updateTaskCard(TaskCard existing, TaskCard replacement) {
-        BeanUtils.copyProperties(replacement, existing, "id", "user", "creationDate", "tasks");
+        BeanUtils.copyProperties(replacement, existing, "id", "user", "creationDate");
         return repository.save(existing);
     }
 
     @Override
     public void deleteTaskCard(TaskCard taskCard) {
         repository.delete(taskCard);
-    }
-
-    @Override
-    public List<TaskCard> findAllTaskCards(Long userId) {
-        return repository.findAllByUserIdEquals(userId);
-    }
-
-    @Override
-    public TaskCard findTaskCardById(Long id, Long userId) {
-        return repository.findByIdEqualsAndUserId(id, userId);
     }
 }
