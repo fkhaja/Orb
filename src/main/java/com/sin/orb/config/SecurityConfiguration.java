@@ -25,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService customUserDetailsService;
     private CustomOAuth2UserService customOAuth2UserService;
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -33,11 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService,
-                          CustomOAuth2UserService customOAuth2UserService,
-                          OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler,
-                          OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler,
-                          OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository) {
+    public SecurityConfiguration(CustomUserDetailsService customUserDetailsService,
+                                 CustomOAuth2UserService customOAuth2UserService,
+                                 OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler,
+                                 OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler,
+                                 OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository) {
         this.customUserDetailsService = customUserDetailsService;
         this.customOAuth2UserService = customOAuth2UserService;
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
