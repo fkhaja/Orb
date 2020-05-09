@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -30,7 +30,7 @@ public class TaskCard {
     private LocalDate creationDate;
 
     @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<Task> tasks;
+    private List<Task> tasks;
 
     @NotNull
     @ManyToOne

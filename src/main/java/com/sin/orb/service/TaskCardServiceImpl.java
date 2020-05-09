@@ -30,7 +30,7 @@ public class TaskCardServiceImpl implements TaskCardService {
 
     @Override
     public TaskCard updateTaskCard(TaskCard existing, TaskCard replacement) {
-        BeanUtils.copyProperties(replacement, existing, "id", "user", "creationDate");
+        BeanUtils.copyProperties(replacement, existing, "id", "user", "creationDate", "tasks");
         return repository.save(existing);
     }
 
