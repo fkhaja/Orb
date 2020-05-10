@@ -19,7 +19,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sin.orb.security.oauth2.OAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.sin.orb.security.oauth2.OAuth2AuthorizationRequestRepository.REDIRECT_URI_COOKIE;
 
 @Slf4j
 @Component
@@ -37,48 +37,40 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication auth) throws IOException {
+        String targetUrl = determineTargetUrl(req, resp, auth);
 
-        String targetUrl = determineTargetUrl(request, response, authentication);
-
-        if (response.isCommitted()) {
+        if (resp.isCommitted()) {
             log.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
         }
 
-        clearAuthenticationAttributes(request, response);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        clearAuthenticationAttributes(req, resp);
+        getRedirectStrategy().sendRedirect(req, resp, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        Authentication authentication) {
-
-        Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(
-                Cookie::getValue);
+    protected String determineTargetUrl(HttpServletRequest req, HttpServletResponse resp, Authentication auth) {
+        Optional<String> redirectUri = CookieUtils.getCookie(req, REDIRECT_URI_COOKIE).map(Cookie::getValue);
 
         if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new BadRequestException("Unauthorized Redirect URI");
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-        String token = tokenProvider.createToken(authentication);
+        String token = tokenProvider.createToken(auth);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                                    .queryParam("token", token)
                                    .build().toUriString();
     }
 
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-        requestRepository.removeAuthorizationRequestCookies(request, response);
+    protected void clearAuthenticationAttributes(HttpServletRequest req, HttpServletResponse resp) {
+        super.clearAuthenticationAttributes(req);
+        requestRepository.removeAuthorizationRequestCookies(req, resp);
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
-
         return authorizeRedirectUris.stream()
                                     .anyMatch(authorizedRedirectUri -> {
                                         URI authorizedURI = URI.create(authorizedRedirectUri);
