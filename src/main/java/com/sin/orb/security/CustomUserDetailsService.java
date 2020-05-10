@@ -4,7 +4,6 @@ import com.sin.orb.domain.User;
 import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                                   .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-        user.setAuthorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        user.setAuthorities(Collections.singleton(Role.ROLE_USER));
         return user;
     }
 
@@ -35,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id)
                                   .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-        user.setAuthorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        user.setAuthorities(Collections.singleton(Role.ROLE_USER));
         return user;
     }
 }

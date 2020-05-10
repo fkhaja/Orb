@@ -4,12 +4,12 @@ import com.sin.orb.domain.User;
 import com.sin.orb.exception.OAuth2AuthenticationProcessingException;
 import com.sin.orb.repository.UserRepository;
 import com.sin.orb.security.AuthProvider;
+import com.sin.orb.security.Role;
 import com.sin.orb.security.oauth2.user.OAuth2UserInfo;
 import com.sin.orb.security.oauth2.user.OAuth2UserInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -65,7 +65,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else {
             user = registerNewUser(oAuth2UserRequest, userInfo);
         }
-        user.setAuthorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        user.setAuthorities(Collections.singleton(Role.ROLE_USER));
         user.setAttributes(oAuth2User.getAttributes());
         return user;
     }
