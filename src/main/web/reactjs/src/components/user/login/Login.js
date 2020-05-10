@@ -1,10 +1,10 @@
 import React from 'react';
 import './Login.css';
-import {ACCESS_TOKEN, FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL} from '../../constants/Security';
-import {login} from '../../util/APIUtils';
+import {ACCESS_TOKEN, FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL} from '../../../constants/Security';
+import {login} from '../../../util/AuthUtils';
 import {Link, Redirect} from 'react-router-dom'
-import fbLogo from '../../img/facebook-logo.png';
-import googleLogo from '../../img/google-logo.png';
+import fbLogo from '../../../img/facebook-logo.png';
+import googleLogo from '../../../img/google-logo.png';
 import Alert from 'react-s-alert';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";

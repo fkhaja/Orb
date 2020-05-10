@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
-import Login from '../user/login/Login';
-import Signup from '../user/signup/Signup';
-import Profile from '../user/profile/Profile';
-import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
-import {getCurrentUser} from '../util/APIUtils';
+import Login from './user/login/Login';
+import Signup from './user/signup/Signup';
+import Profile from './user/profile/Profile';
+import OAuth2RedirectHandler from './user/oauth2/OAuth2RedirectHandler';
+import {getCurrentUser} from '../util/AuthUtils';
 import {ACCESS_TOKEN} from '../constants/Security';
-import PrivateRoute from '../common/PrivateRoute';
+import PrivateRoute from './common/PrivateRoute';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
-import NotFound from "../common/NotFound";
-import Workspace from "../components/Workspace";
-import TaskCardContent from "../components/cards/TaskCardContent";
+import NotFound from "./common/NotFound";
+import Workspace from "./Workspace";
+import TaskCardContent from "./cards/TaskCardContent";
 
 export default class App extends Component {
     constructor(props) {
@@ -64,13 +64,16 @@ export default class App extends Component {
                         </Route>
                         <PrivateRoute exact path={"/workspace"} authenticated={this.state.authenticated}
                                       currentUser={this.state.currentUser}
-                                      component={Workspace} onLogout={this.handleLogout}/>
+                                      component={Workspace}
+                                      onLogout={this.handleLogout}/>
                         <PrivateRoute exact path={"/workspace/taskcards/:id"} component={TaskCardContent}
                                       authenticated={this.state.authenticated}
-                                      currentUser={this.state.currentUser}/>
+                                      currentUser={this.state.currentUser}
+                                      onLogout={this.handleLogout}/>
                         <PrivateRoute path="/profile" authenticated={this.state.authenticated}
                                       currentUser={this.state.currentUser}
-                                      component={Profile}/>
+                                      component={Profile}
+                                      onLogout={this.handleLogout}/>
                         <Route path="/login"
                                render={(props) => <Login authenticated={this.state.authenticated}
                                                          currentUser={this.state.currentUser}

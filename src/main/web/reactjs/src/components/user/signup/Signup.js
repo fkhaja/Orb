@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import './Signup.css';
 import {Link, Redirect} from 'react-router-dom'
-import {FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL} from '../../constants/Security';
-import {signUp} from '../../util/APIUtils';
-import fbLogo from '../../img/facebook-logo.png';
-import googleLogo from '../../img/google-logo.png';
+import {FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL} from '../../../constants/Security';
+import fbLogo from '../../../img/facebook-logo.png';
+import googleLogo from '../../../img/google-logo.png';
 import Alert from 'react-s-alert';
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -12,6 +11,7 @@ import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import {signUp} from "../../../util/AuthUtils";
 
 class Signup extends Component {
     render() {

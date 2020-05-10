@@ -1,5 +1,5 @@
 import React from 'react';
-import {ACCESS_TOKEN} from '../../constants/Security';
+import {ACCESS_TOKEN} from '../../../constants/Security';
 import {Redirect} from 'react-router-dom'
 
 export default class OAuth2RedirectHandler extends React.Component {
