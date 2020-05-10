@@ -1,17 +1,14 @@
 package com.sin.orb.controller;
 
 import com.sin.orb.domain.TaskCard;
-import com.sin.orb.dto.TaskCardDTO;
+import com.sin.orb.domain.User;
+import com.sin.orb.dto.TaskCardDto;
+import com.sin.orb.mapper.TaskCardMapper;
 import com.sin.orb.security.CurrentUser;
-import com.sin.orb.security.UserPrincipal;
 import com.sin.orb.service.TaskCardService;
-import com.sin.orb.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,56 +16,40 @@ import java.util.stream.Collectors;
 @RequestMapping("taskcards")
 public class TaskCardController {
     private TaskCardService taskCardService;
-    private UserService userService;
-    private ModelMapper modelMapper;
 
     @Autowired
-    public TaskCardController(TaskCardService taskCardService, UserService userService, ModelMapper modelMapper) {
+    public TaskCardController(TaskCardService taskCardService) {
         this.taskCardService = taskCardService;
-        this.userService = userService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping
-    public List<TaskCardDTO> getAllTaskCards(@CurrentUser UserPrincipal userPrincipal) {
-        return taskCardService.findAllTaskCards(userPrincipal.getId())
-                              .stream()
-                              .map(this::toDto)
-                              .collect(Collectors.toList());
+    public List<TaskCardDto> getAllTaskCards(@CurrentUser User user) {
+        return user.getTaskCards()
+                   .stream()
+                   .map(TaskCardMapper.INSTANCE::toDto)
+                   .collect(Collectors.toList());
     }
 
     @GetMapping("{id}")
-    public TaskCardDTO getTaskCard(@CurrentUser UserPrincipal userPrincipal, @PathVariable Long id) {
-        return toDto(taskCardService.findTaskCardById(id, userPrincipal.getId()));
+    public TaskCardDto getTaskCard(@CurrentUser User user, @PathVariable Long id) {
+        return TaskCardMapper.INSTANCE.toDto(user.getTaskCard(id));
     }
 
     @PostMapping
-    public TaskCardDTO createTaskCard(@CurrentUser UserPrincipal userPrincipal, @RequestBody TaskCardDTO taskCardDto) {
-        TaskCard taskCard = toEntity(taskCardDto);
-        taskCard.setUser(userService.findUserById(userPrincipal.getId()));
-        taskCard.setCreationDate(LocalDate.now());
-        taskCard.setTasks(new ArrayList<>());
-
-        return toDto(taskCardService.saveTaskCard(taskCard));
+    public TaskCardDto createTaskCard(@CurrentUser User user, @RequestBody TaskCardDto taskCardDto) {
+        TaskCard taskCard = TaskCardMapper.INSTANCE.toEntity(taskCardDto);
+        return TaskCardMapper.INSTANCE.toDto(taskCardService.saveTaskCard(taskCard, user));
     }
 
     @PutMapping("{id}")
-    public TaskCardDTO updateTaskCard(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id, @RequestBody TaskCardDTO replacementDto) {
-        TaskCard existing = taskCardService.findTaskCardById(id, userPrincipal.getId());
-        TaskCard replacement = toEntity(replacementDto);
-        return toDto(taskCardService.updateTaskCard(existing, replacement));
+    public TaskCardDto updateTaskCard(@CurrentUser User user, @PathVariable("id") Long id, @RequestBody TaskCardDto replacementDto) {
+        TaskCard existing = user.getTaskCard(id);
+        TaskCard replacement = TaskCardMapper.INSTANCE.toEntity(replacementDto);
+        return TaskCardMapper.INSTANCE.toDto(taskCardService.updateTaskCard(existing, replacement));
     }
 
     @DeleteMapping("{id}")
-    public void deleteTaskCard(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id) {
-        taskCardService.deleteTaskCard(taskCardService.findTaskCardById(id, userPrincipal.getId()));
-    }
-
-    private TaskCardDTO toDto(TaskCard taskCard) {
-        return modelMapper.map(taskCard, TaskCardDTO.class);
-    }
-
-    private TaskCard toEntity(TaskCardDTO taskCardDto) {
-        return modelMapper.map(taskCardDto, TaskCard.class);
+    public void deleteTaskCard(@CurrentUser User user, @PathVariable("id") Long id) {
+        taskCardService.deleteTaskCard(user.getTaskCard(id));
     }
 }

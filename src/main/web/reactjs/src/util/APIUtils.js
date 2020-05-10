@@ -1,6 +1,6 @@
-import {ACCESS_TOKEN, API_BASE_URL} from '../constants/Security';
+import {ACCESS_TOKEN} from '../constants/Security';
 
-const request = (options) => {
+export const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
     });
@@ -22,55 +22,3 @@ const request = (options) => {
             })
         );
 };
-
-export function getCurrentUser() {
-    if (!localStorage.getItem(ACCESS_TOKEN)) {
-        return Promise.reject("No access token set.");
-    }
-
-    return request({
-        url: API_BASE_URL + "/user/me",
-        method: 'GET'
-    });
-}
-
-export function login(loginRequest) {
-    return request({
-        url: API_BASE_URL + "/auth/login",
-        method: 'POST',
-        body: JSON.stringify(loginRequest)
-    });
-}
-
-export function signUp(signUpRequest) {
-    return request({
-        url: API_BASE_URL + "/auth/signup",
-        method: 'POST',
-        body: JSON.stringify(signUpRequest)
-    });
-}
-
-export function getTaskCards() {
-    return request({
-        url: `${API_BASE_URL}/taskcards`,
-        method: 'GET'
-    })
-}
-
-export function getTasks(cardId) {
-    return request({
-        url: `${API_BASE_URL}/taskcards/${cardId}/tasks`,
-        method: 'GET'
-    })
-}
-
-export async function updateTasks(tasks, cardId) {
-    const promises = tasks.map(task => {
-        request({
-            url: `${API_BASE_URL}/taskcards/${cardId}/tasks/${task.id}`,
-            method: 'PUT',
-            body: JSON.stringify(task)
-        });
-    });
-    return Promise.all(promises);
-}

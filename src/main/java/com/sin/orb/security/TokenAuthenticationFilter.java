@@ -30,7 +30,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
-
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Long userId = tokenProvider.getUserIdFromToken(jwt);
                 UserDetails userDetails = customUserDetailsService.loadUserById(userId);
@@ -43,7 +42,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("Could not set user authentication in security context", e);
         }
-
         filterChain.doFilter(request, response);
     }
 

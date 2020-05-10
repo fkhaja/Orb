@@ -9,7 +9,7 @@ export default class TaskCard extends React.Component {
 
     render() {
         return (
-            <Card style={{"max-width": '19rem'}} className="scale">
+            <Card style={{"maxWidth": '19rem'}} className="scale">
                 <Card.Body>
                     <Card.Title className="text-md-center font-weight-bold">{this.props.card.name}</Card.Title>
                     <hr/>

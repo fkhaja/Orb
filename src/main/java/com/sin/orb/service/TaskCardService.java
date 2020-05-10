@@ -1,18 +1,13 @@
 package com.sin.orb.service;
 
 import com.sin.orb.domain.TaskCard;
-
-import java.util.List;
+import com.sin.orb.domain.User;
 
 public interface TaskCardService {
 
-    TaskCard saveTaskCard(TaskCard taskCard);
+    TaskCard saveTaskCard(TaskCard card, User user);
 
     TaskCard updateTaskCard(TaskCard existing, TaskCard replacement);
 
-    void deleteTaskCard(TaskCard taskCard);
-
-    List<TaskCard> findAllTaskCards(Long userId);
-
-    TaskCard findTaskCardById(Long id, Long userId);
+    void deleteTaskCard(TaskCard card);
 }
