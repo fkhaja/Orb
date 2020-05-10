@@ -27,7 +27,7 @@ public class Task {
     private Boolean completed;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_card_id", updatable = false)
     private TaskCard taskCard;
 }

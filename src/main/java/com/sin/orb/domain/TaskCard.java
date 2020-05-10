@@ -33,7 +33,7 @@ public class TaskCard {
     private List<Task> tasks;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
 
