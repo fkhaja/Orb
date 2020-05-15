@@ -19,7 +19,7 @@ export default class TaskCard extends React.Component {
                         bulk of the card's content.
                     </Card.Text>
                     <Link to={{
-                        pathname: `workspace/taskcards/${this.props.card.id}`,
+                        pathname: `workspace/taskcards/${this.props.card.cardId}`,
                         state: {
                             card: this.props.card
                         }
