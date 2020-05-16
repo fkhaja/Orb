@@ -24,12 +24,13 @@ export default class TaskList extends React.Component {
 
         return (
             <div>
+                <hr/>
                 {this.state.tasks.map(task => (
                     <Task task={task} onCompleted={this.handleTaskUpdate} key={task.taskId}/>
                 ))}
-                <hr/>
                 {taskCount > 0 &&
-                <div>
+                <div className="modal_progress_bar">
+                    <hr/>
                     <h3 className="text-muted text-center small">Completed</h3>
                     <ProgressBar label={`${percentage}%`} now={percentage}/>
                 </div>

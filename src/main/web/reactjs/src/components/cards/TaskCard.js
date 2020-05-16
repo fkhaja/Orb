@@ -40,7 +40,7 @@ export default class TaskCard extends React.Component {
                         </p>
                         <div className="modal-content">
                             <h2 className="title">{this.props.card.name}</h2>
-                            <div>
+                            <div className="modal_task_list">
                                 <TaskCardContent card={this.props.card}/>
                             </div>
                         </div>
