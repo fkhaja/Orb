@@ -1,4 +1,5 @@
-import React, {Fragment} from 'react';
+import React from 'react';
+import './TaskList.css';
 
 export default class Task extends React.Component {
 
@@ -8,13 +9,14 @@ export default class Task extends React.Component {
     }
 
     render() {
+        const id = `option${this.props.task.taskId}`;
         return (
-            <Fragment key={this.props.task.id}>
-                <input id={this.props.id} type="checkbox" name="check"
-                       onChange={this.onCompleted}
-                       checked={this.props.task.completed}/>
-                <label htmlFor={this.props.id}>{this.props.task.value}</label>
-            </Fragment>
+            <div className="inputGroup">
+                <input id={id} name={id} type="checkbox" onChange={this.onCompleted} checked={this.props.task.completed}/>
+                <label htmlFor={id}>
+                    <span className="inputGroup_content">{this.props.task.value}</span>
+                </label>
+            </div>
         )
     }
 
