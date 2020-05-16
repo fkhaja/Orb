@@ -12,7 +12,6 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import NotFound from "./common/NotFound";
 import Workspace from "./Workspace";
-import TaskCardContent from "./cards/TaskCardContent";
 
 export default class App extends Component {
     constructor(props) {
@@ -65,10 +64,6 @@ export default class App extends Component {
                         <PrivateRoute exact path={"/workspace"} authenticated={this.state.authenticated}
                                       currentUser={this.state.currentUser}
                                       component={Workspace}
-                                      onLogout={this.handleLogout}/>
-                        <PrivateRoute exact path={"/workspace/taskcards/:id"} component={TaskCardContent}
-                                      authenticated={this.state.authenticated}
-                                      currentUser={this.state.currentUser}
                                       onLogout={this.handleLogout}/>
                         <PrivateRoute path="/profile" authenticated={this.state.authenticated}
                                       currentUser={this.state.currentUser}

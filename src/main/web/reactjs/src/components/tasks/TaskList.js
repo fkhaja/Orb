@@ -25,7 +25,6 @@ export default class TaskList extends React.Component {
 
         return (
             <div className="workspace task-list-body">
-                <h1 className="text-muted">Tasks</h1>
                 <div id="checklist" className="task-list">
                     {this.state.tasks.map(task => (
                         <Task task={task} onCompleted={this.handleTaskUpdate} id={++id} key={task.taskId}/>
@@ -35,9 +34,7 @@ export default class TaskList extends React.Component {
                 {taskCount > 0 &&
                 <div>
                     <h3 className="text-muted text-center">Completed</h3>
-                    <ProgressBar striped variant="success"
-                                 label={`${percentage}%`}
-                                 now={percentage}/>
+                    <ProgressBar striped variant="success" label={`${percentage}%`} now={percentage}/>
                 </div>
                 }
             </div>
