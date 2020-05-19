@@ -15,3 +15,18 @@ export async function updateTask(task, cardId) {
         body: JSON.stringify(task)
     })
 }
+
+export async function findAllTasksForCard(cardId) {
+    return request({
+        url: `${API_BASE_URL}/taskcards/${cardId}/tasks`,
+        method: 'GET'
+    })
+}
+
+export async function saveTask(task, cardId) {
+    return request({
+        url: `${API_BASE_URL}/taskcards/${cardId}/tasks`,
+        method: 'POST',
+        body: JSON.stringify(task)
+    })
+}

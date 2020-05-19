@@ -91,3 +91,10 @@
     cursor: pointer;
     visibility: hidden;
 }
+
+.add_task__btn {
+    position: relative;
+    width: 150px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
