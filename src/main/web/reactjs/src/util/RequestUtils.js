@@ -30,3 +30,10 @@ export async function saveTask(task, cardId) {
         body: JSON.stringify(task)
     })
 }
+
+export async function deleteTask(task, cardId) {
+    return request({
+        url: `${API_BASE_URL}/taskcards/${cardId}/tasks/${task.taskId}`,
+        method: 'DELETE'
+    })
+}

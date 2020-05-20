@@ -1,5 +1,5 @@
 import React from 'react';
-import {findAllTasksForCard, saveTask, updateTask} from "../../util/RequestUtils";
+import {deleteTask, findAllTasksForCard, saveTask, updateTask} from "../../util/RequestUtils";
 import "./TaskList.css";
 import "../Modal.css"
 import ProgressBar from "react-bootstrap/ProgressBar";
@@ -19,6 +19,7 @@ export default class TaskList extends React.Component {
         this.handleTaskUpdate = this.handleTaskUpdate.bind(this);
         this.handleShowInputChange = this.handleShowInputChange.bind(this);
         this.handleTaskCreate = this.handleTaskCreate.bind(this);
+        this.handleTaskDelete = this.handleTaskDelete.bind(this);
     }
 
     componentDidMount() {
@@ -32,9 +33,9 @@ export default class TaskList extends React.Component {
         return (
             <div>
                 <hr/>
-                {this.state.tasks.map(task => (
-                    <Task task={task} onUpdate={this.handleTaskUpdate} key={task.taskId}
-                          cardId={this.props.card.cardId}/>
+                {this.state.tasks.map((task, i) => (
+                    <Task task={task} onUpdate={this.handleTaskUpdate} key={task.taskId} index={i}
+                          cardId={this.props.card.cardId} onDelete={(i) => this.handleTaskDelete(i)}/>
                 ))}
 
                 {this.state.showInput ?
@@ -64,7 +65,16 @@ export default class TaskList extends React.Component {
     }
 
     handleTaskCreate(task) {
-        saveTask(task, this.props.card.cardId).then(this.updateTaskList).catch(console.log);
+        saveTask(task, this.props.card.cardId)
+            .then(response => this.setState(() => ({tasks: this.state.tasks.concat(response)})))
+            .catch(console.log);
+    }
+
+    handleTaskDelete(index) {
+        deleteTask(this.state.tasks[index], this.props.card.cardId).catch(console.log);
+        let newTasks = this.state.tasks.slice();
+        newTasks.splice(index,1);
+        this.setState(() => ({tasks: newTasks}));
     }
 
     handleShowInputChange() {

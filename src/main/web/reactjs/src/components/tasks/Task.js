@@ -11,6 +11,7 @@ export default class Task extends React.Component {
             value: this.props.task.value
         };
         this.onCompleted = this.onCompleted.bind(this);
+        this.onDelete = this.onDelete.bind(this);
         this.handleEditableChange = this.handleEditableChange.bind(this);
         this.handleSaveEdit = this.handleSaveEdit.bind(this);
     }
@@ -31,6 +32,9 @@ export default class Task extends React.Component {
                             <button onClick={this.handleEditableChange} disabled={this.props.task.completed}>
                                 Edit
                             </button>
+                            <button onClick={this.onDelete} disabled={this.props.task.completed}>
+                                Delete
+                            </button>
                         </label>
                     </div>
                 }
@@ -48,6 +52,10 @@ export default class Task extends React.Component {
             this.props.task.value = this.state.value;
             this.props.onUpdate(this.props.task);
         });
+    }
+
+    onDelete() {
+        this.props.onDelete(this.props.index);
     }
 
     onCompleted() {
