@@ -12,6 +12,7 @@ export default class TaskCard extends React.Component {
             editable: false,
             name: this.props.card.name
         };
+        this.onDelete = this.onDelete.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleShow = this.handleShow.bind(this);
         this.handleEditableChange = this.handleEditableChange.bind(this);
@@ -29,7 +30,7 @@ export default class TaskCard extends React.Component {
             <div>
                 <div className="card p-card">
                     {this.state.editable &&
-                    <TaskCardForm onCancel={this.handleEditableChange} initialValue={{name: this.state.name}} onSubmit={this.handleSaveEdit}/>}
+                    <TaskCardForm onCancel={this.handleEditableChange} initialValue={this.state.name} onSubmit={this.handleSaveEdit}/>}
                     {!this.state.editable &&
                     <Fragment>
                         <div onClick={this.handleShow}>
@@ -61,6 +62,7 @@ export default class TaskCard extends React.Component {
                     </div>
                 </div>
                 <button onClick={this.handleEditableChange}>Edit</button>
+                <button onClick={this.onDelete}>Delete</button>
             </div>
         )
     }
@@ -86,5 +88,9 @@ export default class TaskCard extends React.Component {
             this.props.card.name = this.state.name;
             this.props.onUpdate(this.props.card);
         });
+    }
+
+    onDelete() {
+        this.props.onDelete(this.props.index);
     }
 }

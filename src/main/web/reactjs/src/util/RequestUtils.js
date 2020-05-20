@@ -55,3 +55,9 @@ export async function updateTaskCard(card) {
     })
 }
 
+export async function deleteTaskCard(card) {
+    return request({
+        url: `${API_BASE_URL}/taskcards/${card.cardId}`,
+        method: 'DELETE'
+    })
+}

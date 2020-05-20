@@ -3,7 +3,7 @@ import TaskCard from "./TaskCard";
 import './TaskCardList.css'
 import {Button} from "react-bootstrap";
 import TaskCardForm from "./TaskCardForm";
-import {saveTaskCard, updateTaskCard} from "../../util/RequestUtils";
+import {deleteTaskCard, saveTaskCard, updateTaskCard} from "../../util/RequestUtils";
 
 export default class TaskCardList extends React.Component {
     constructor(props) {
@@ -15,6 +15,7 @@ export default class TaskCardList extends React.Component {
         this.handleShowInputChange = this.handleShowInputChange.bind(this);
         this.handleTaskCardCreate = this.handleTaskCardCreate.bind(this);
         this.handleTaskCardUpdate = this.handleTaskCardUpdate.bind(this);
+        this.handleTaskCardDelete = this.handleTaskCardDelete.bind(this);
     }
 
     componentDidMount() {
@@ -33,8 +34,9 @@ export default class TaskCardList extends React.Component {
                 }
 
                 <div className="container">
-                    {this.state.cards.map(card => (
-                        <TaskCard card={card} key={card.cardId} onUpdate={this.handleTaskCardUpdate}/>
+                    {this.state.cards.map((card, i) => (
+                        <TaskCard card={card} key={card.cardId} index={i} onUpdate={this.handleTaskCardUpdate}
+                                  onDelete={(i) => this.handleTaskCardDelete(i)}/>
                     ))}
                 </div>
             </div>
@@ -54,5 +56,12 @@ export default class TaskCardList extends React.Component {
     handleTaskCardUpdate(card) {
         this.setState({showInput: false});
         updateTaskCard(card).catch(console.log);
+    }
+
+    handleTaskCardDelete(index) {
+        deleteTaskCard(this.state.cards[index]).catch(console.log);
+        let newCards = this.state.cards.slice();
+        newCards.splice(index, 1);
+        this.setState(() => ({cards: newCards}));
     }
 }
