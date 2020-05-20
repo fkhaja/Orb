@@ -37,3 +37,11 @@ export async function deleteTask(task, cardId) {
         method: 'DELETE'
     })
 }
+
+export async function saveTaskCard(card) {
+    return request({
+        url: `${API_BASE_URL}/taskcards`,
+        method: 'POST',
+        body: JSON.stringify(card)
+    })
+}

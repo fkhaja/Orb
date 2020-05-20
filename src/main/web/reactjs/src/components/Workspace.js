@@ -27,7 +27,7 @@ export default class Workspace extends React.Component {
             <div>
                 <Header currentUser={this.props.currentUser} onLogout={this.props.onLogout} title='My task cards'/>
                 <div className="workspace">
-                    <TaskCardList cards={this.state.taskCards}/>
+                    {this.state.taskCards.length > 0 && <TaskCardList cards={this.state.taskCards}/>}
                 </div>
             </div>
         );

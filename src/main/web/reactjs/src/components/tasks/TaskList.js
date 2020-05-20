@@ -41,7 +41,7 @@ export default class TaskList extends React.Component {
                 {this.state.showInput ?
                     <TaskForm onCancel={this.handleShowInputChange} onSubmit={this.handleTaskCreate}/>
                     :
-                    <Button variant="outline-primary" onClick={this.handleShowInputChange} className="add_task__btn">
+                    <Button variant="outline-primary" onClick={this.handleShowInputChange} className="add__btn">
                         Add task
                     </Button>
                 }
