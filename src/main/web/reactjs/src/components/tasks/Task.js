@@ -1,27 +1,57 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import './TaskList.css';
+import TaskForm from "./TaskForm";
 
 export default class Task extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            editable: false,
+            value: this.props.task.value
+        };
         this.onCompleted = this.onCompleted.bind(this);
+        this.handleEditableChange = this.handleEditableChange.bind(this);
+        this.handleSaveEdit = this.handleSaveEdit.bind(this);
     }
 
     render() {
         const id = `option${this.props.task.taskId}`;
         return (
-            <div className="inputGroup">
-                <input id={id} name={id} type="checkbox" onChange={this.onCompleted} checked={this.props.task.completed}/>
-                <label htmlFor={id}>
-                    <span className="inputGroup_content">{this.props.task.value}</span>
-                </label>
-            </div>
+            <Fragment>
+                {this.state.editable ?
+                    <TaskForm initialValue={this.state.value} onCancel={this.handleEditableChange}
+                              onSubmit={this.handleSaveEdit}/>
+                    :
+                    <div className="inputGroup">
+                        <input id={id} name={id} type="checkbox" onChange={this.onCompleted}
+                               checked={this.props.task.completed}/>
+                        <label htmlFor={id}>
+                            <span className="inputGroup_content">{this.state.value}</span>
+                            <button onClick={this.handleEditableChange} disabled={this.props.task.completed}>
+                                Edit
+                            </button>
+                        </label>
+                    </div>
+                }
+            </Fragment>
+
         )
+    }
+
+    handleEditableChange() {
+        this.setState(() => ({editable: !this.state.editable}))
+    }
+
+    handleSaveEdit(task) {
+        this.setState(() => ({value: task.value, editable: false}), () => {
+            this.props.task.value = this.state.value;
+            this.props.onUpdate(this.props.task);
+        });
     }
 
     onCompleted() {
         this.props.task.completed = !this.props.task.completed;
-        this.props.onCompleted(this.props.task);
+        this.props.onUpdate(this.props.task);
     }
 }
