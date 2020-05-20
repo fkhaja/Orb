@@ -7,7 +7,7 @@ export default class TaskForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
+            name: this.props.initialValue.name || '',
             description: ''
         };
         this.handleChange = this.handleChange.bind(this);

@@ -1,15 +1,21 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import './TaskCard.css';
 import '../Modal.css';
 import TaskCardContent from "./TaskCardContent";
+import TaskCardForm from "./TaskCardForm";
 
 export default class TaskCard extends React.Component {
 
     constructor(props) {
         super(props);
-
+        this.state = {
+            editable: false,
+            name: this.props.card.name
+        };
         this.handleClose = this.handleClose.bind(this);
         this.handleShow = this.handleShow.bind(this);
+        this.handleEditableChange = this.handleEditableChange.bind(this);
+        this.handleSaveEdit = this.handleSaveEdit.bind(this);
     }
 
     componentDidMount() {
@@ -21,14 +27,22 @@ export default class TaskCard extends React.Component {
     render() {
         return (
             <div>
-                <div className="card p-card" onClick={this.handleShow}>
-                    <h3 className="h3-card">{this.props.card.name}</h3>
-                    <p className="small p-card">Card description with lots of great facts and interesting details.</p>
-                    <div className="go-corner">
-                        <div className="go-arrow">
-                            →
+                <div className="card p-card">
+                    {this.state.editable &&
+                    <TaskCardForm onCancel={this.handleEditableChange} initialValue={{name: this.state.name}} onSubmit={this.handleSaveEdit}/>}
+                    {!this.state.editable &&
+                    <Fragment>
+                        <div onClick={this.handleShow}>
+                            <h3 className="h3-card">{this.props.card.name}</h3>
+                            <p className="small p-card">Card description with lots of great facts and interesting
+                                details.</p>
+                            <div className="go-corner">
+                                <div className="go-arrow">
+                                    →
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </Fragment>}
                 </div>
                 <div id={`modal-overlay-container-${this.props.card.cardId}`} className="modal-overlay">
                     <div id={`modal-div-${this.props.card.cardId}`} className="modal">
@@ -46,6 +60,7 @@ export default class TaskCard extends React.Component {
                         </div>
                     </div>
                 </div>
+                <button onClick={this.handleEditableChange}>Edit</button>
             </div>
         )
     }
@@ -59,6 +74,17 @@ export default class TaskCard extends React.Component {
     handleShow() {
         this.elements.forEach(function (item) {
             item.classList.add('active');
+        });
+    }
+
+    handleEditableChange() {
+        this.setState(() => ({editable: !this.state.editable}));
+    }
+
+    handleSaveEdit(card) {
+        this.setState(() => ({name: card.name, editable: false}), () => {
+            this.props.card.name = this.state.name;
+            this.props.onUpdate(this.props.card);
         });
     }
 }

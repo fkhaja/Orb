@@ -1,5 +1,5 @@
 import React from 'react';
-import {deleteTask, findAllTasksForCard, saveTask, updateTask} from "../../util/RequestUtils";
+import {deleteTask, saveTask, updateTask} from "../../util/RequestUtils";
 import "./TaskList.css";
 import "../Modal.css"
 import ProgressBar from "react-bootstrap/ProgressBar";
@@ -15,7 +15,6 @@ export default class TaskList extends React.Component {
             tasks: this.props.card.tasks,
             showInput: false
         };
-        this.updateTaskList = this.updateTaskList.bind(this);
         this.handleTaskUpdate = this.handleTaskUpdate.bind(this);
         this.handleShowInputChange = this.handleShowInputChange.bind(this);
         this.handleTaskCreate = this.handleTaskCreate.bind(this);
@@ -79,10 +78,6 @@ export default class TaskList extends React.Component {
 
     handleShowInputChange() {
         this.setState(() => ({showInput: !this.state.showInput}));
-    }
-
-    updateTaskList() {
-        findAllTasksForCard(this.props.card.cardId).then(data => this.setState({tasks: data}));
     }
 
     getPercentage(number, count) {

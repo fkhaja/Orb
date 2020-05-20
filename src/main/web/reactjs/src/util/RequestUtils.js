@@ -45,3 +45,13 @@ export async function saveTaskCard(card) {
         body: JSON.stringify(card)
     })
 }
+
+export async function updateTaskCard(card) {
+    console.log(card);
+    return request({
+        url: `${API_BASE_URL}/taskcards/${card.cardId}`,
+        method: 'PUT',
+        body: JSON.stringify(card)
+    })
+}
+
