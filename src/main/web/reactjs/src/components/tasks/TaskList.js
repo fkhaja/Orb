@@ -5,7 +5,8 @@ import "../Modal.css"
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Task from "./Task";
 import TaskForm from "./TaskForm";
-import {Button} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 export default class TaskList extends React.Component {
     constructor(props) {
@@ -32,7 +33,7 @@ export default class TaskList extends React.Component {
         return (
             <div>
                 <hr/>
-                <div className="task__container">
+                <div className="task-container">
                     {this.state.tasks.map((task, i) => (
                         <Task task={task} onUpdate={this.handleTaskUpdate} key={task.taskId} index={i}
                               cardId={this.props.card.cardId} onDelete={(i) => this.handleTaskDelete(i)}/>
@@ -41,10 +42,16 @@ export default class TaskList extends React.Component {
                     {this.state.showInput ?
                         <TaskForm onCancel={this.handleShowInputChange} onSubmit={this.handleTaskCreate}/>
                         :
-                        <Button variant="outline-primary" onClick={this.handleShowInputChange} className="add__btn">
-                            Add task
-                        </Button>
+                        <div className="add-task" onClick={this.handleShowInputChange}>
+                            <label>
+                            <span className="add-task-icon-container">
+                                <FontAwesomeIcon icon={faPlus} className="add-task-icon"/>
+                            </span>
+                                <span className="add-task-content">Add task</span>
+                            </label>
+                        </div>
                     }
+
                 </div>
                 {taskCount > 0 &&
                 <div className="modal_progress_bar footer">

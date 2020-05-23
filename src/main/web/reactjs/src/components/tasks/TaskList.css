@@ -101,26 +101,27 @@
     transform: translate(-50%, 0);
 }
 
-.task__container {
+.task-container {
     height: 600px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
-.task__container::-webkit-scrollbar {
+.task-container::-webkit-scrollbar {
     width: 8px;
 }
 
-.task__container::-webkit-scrollbar-track {
+.task-container::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 5px;
 }
 
-.task__container::-webkit-scrollbar-thumb {
+.task-container::-webkit-scrollbar-thumb {
     background: #bebebe;
     border-radius: 5px;
 }
 
-.task__container::-webkit-scrollbar-thumb:hover {
+.task-container::-webkit-scrollbar-thumb:hover {
     background: #b4b4b4;
 }
 
@@ -140,4 +141,55 @@
 
 .action_buttons:hover {
     opacity: 1 !important;
+}
+
+
+.add-task {
+    background-color: #fff;
+    display: block;
+    margin: 5px 0;
+    font-size: 14px;
+    color: black;
+    position: relative;
+}
+
+.add-task label {
+    padding: 10px 30px 10px 7px;
+    width: 100%;
+    display: block;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.add-task:hover {
+    color: #5562eb;
+}
+
+.add-task:hover .add-task-icon-container{
+    background-color: #5562eb;
+}
+
+.add-task:hover .add-task-icon{
+    color: white;
+}
+
+.add-task:hover .add-task-content{
+    color: #5562eb;
+}
+
+.add-task-icon-container {
+    padding: 6px 7px 2px 7px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+}
+
+.add-task-content {
+    margin-left: 9px;
+}
+
+.add-task-icon {
+    color: black;
 }
