@@ -1,6 +1,8 @@
 import React, {Fragment} from 'react';
 import './TaskList.css';
 import TaskForm from "./TaskForm";
+import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default class Task extends React.Component {
 
@@ -29,12 +31,12 @@ export default class Task extends React.Component {
                                checked={this.props.task.completed}/>
                         <label htmlFor={id}>
                             <span className="inputGroup_content">{this.state.value}</span>
-                            <button onClick={this.handleEditableChange} disabled={this.props.task.completed}>
-                                Edit
-                            </button>
-                            <button onClick={this.onDelete} disabled={this.props.task.completed}>
-                                Delete
-                            </button>
+                            <div className="action_buttons">
+                                <FontAwesomeIcon icon={faEdit} color="gray" size="sm" title="Edit"
+                                                 className="card-icon" onClick={this.handleEditableChange}/>
+                                <FontAwesomeIcon icon={faTrash} color="gray" size="sm" title="Remove"
+                                                 className="card-icon" onClick={this.onDelete}/>
+                            </div>
                         </label>
                     </div>
                 }
