@@ -78,3 +78,14 @@
     transition: all 0.3s ease-out;
     color: #ffffff;
 }
+
+.card-icons__container {
+    color: white;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.card-icon {
+    margin-right: 5px;
+}

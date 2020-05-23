@@ -3,6 +3,9 @@ import './TaskCard.css';
 import '../Modal.css';
 import TaskCardContent from "./TaskCardContent";
 import TaskCardForm from "./TaskCardForm";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
+
 
 export default class TaskCard extends React.Component {
 
@@ -29,21 +32,28 @@ export default class TaskCard extends React.Component {
         return (
             <div>
                 <div className="card p-card">
-                    {this.state.editable &&
-                    <TaskCardForm onCancel={this.handleEditableChange} initialValue={this.state.name} onSubmit={this.handleSaveEdit}/>}
-                    {!this.state.editable &&
-                    <Fragment>
-                        <div onClick={this.handleShow}>
-                            <h3 className="h3-card">{this.props.card.name}</h3>
-                            <p className="small p-card">Card description with lots of great facts and interesting
-                                details.</p>
-                            <div className="go-corner">
-                                <div className="go-arrow">
-                                    →
+                    {this.state.editable ?
+                        <TaskCardForm onCancel={this.handleEditableChange} initialValue={this.state.name}
+                                      onSubmit={this.handleSaveEdit}/>
+                        :
+                        <Fragment>
+                            <div onClick={this.handleShow}>
+                                <h3 className="h3-card">{this.props.card.name}</h3>
+                                <p className="small p-card">
+                                    Card description with lots of great facts and interesting details.
+                                </p>
+                                <div className="go-corner">
+                                    <div className="go-arrow">→</div>
                                 </div>
                             </div>
-                        </div>
-                    </Fragment>}
+                            <div className="card-icons__container">
+                                <FontAwesomeIcon icon={faEdit} color="white" size="sm" title="Edit"
+                                                 className="card-icon" onClick={this.handleEditableChange}/>
+                                <FontAwesomeIcon icon={faTrash} color="white" size="sm" title="Remove"
+                                                 className="card-icon" onClick={this.onDelete}/>
+                            </div>
+                        </Fragment>
+                    }
                 </div>
                 <div id={`modal-overlay-container-${this.props.card.cardId}`} className="modal-overlay">
                     <div id={`modal-div-${this.props.card.cardId}`} className="modal">
@@ -61,8 +71,6 @@ export default class TaskCard extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button onClick={this.handleEditableChange}>Edit</button>
-                <button onClick={this.onDelete}>Delete</button>
             </div>
         )
     }
