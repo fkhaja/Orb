@@ -106,6 +106,24 @@
     overflow-y: auto;
 }
 
+.task__container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.task__container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.task__container::-webkit-scrollbar-thumb {
+    background: #bebebe;
+    border-radius: 5px;
+}
+
+.task__container::-webkit-scrollbar-thumb:hover {
+    background: #b4b4b4;
+}
+
 .action_buttons {
     color: black;
     position: absolute;
