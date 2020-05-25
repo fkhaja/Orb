@@ -2,7 +2,6 @@ import React from 'react';
 import TaskCardList from "./cards/TaskCardList";
 import {findTaskCards} from "../util/RequestUtils";
 import './Workspace.css';
-import Header from "./navbars/Header";
 
 export default class Workspace extends React.Component {
     constructor(props) {
@@ -25,7 +24,6 @@ export default class Workspace extends React.Component {
     render() {
         return (
             <div>
-                <Header currentUser={this.props.currentUser} onLogout={this.props.onLogout} title='My task cards'/>
                 <div className="workspace">
                     {this.state.taskCards.length > 0 && <TaskCardList cards={this.state.taskCards}/>}
                 </div>

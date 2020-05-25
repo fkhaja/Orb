@@ -1,95 +1,39 @@
-.gb-header__content {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 90px;
-    padding: 0 16px;
-    border-bottom: 1px solid rgba(164,175,221,.2);
-    width: 95%;
-    margin: 0 auto;
-    font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
-    color: #3f5368;
+.hr-navbar ul {
+    list-style-type: none;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgba(121, 87, 205, 0.85);
 }
 
-.dropdown {
-    display: inline-block;
-    position: relative;
+.hr-navbar li {
+    float: left;
+    height: 50px;
+    width: 50px;
 }
 
-.dd-button {
-    display: inline-block;
-    padding: 10px 30px 10px 20px;
-    cursor: pointer;
-    white-space: nowrap;
+.hr-navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+    transition: 200ms;
+}
 
+.hr-navbar li a:hover {
+    background-color: #4f5cc5;
+}
+
+.right-sided {
+    float: right !important;
 }
 
 .avatar-pic {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50px;
-}
-
-.dd-button:after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid black;
-}
-
-.dd-input {
-    display: none;
-}
-
-.dd-menu {
-    position: absolute;
-    top: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 0;
-    margin: 2px 0 0 0;
-    box-shadow: 0 0 6px 0 rgba(0,0,0,0.1);
-    background-color: #ffffff;
-    list-style-type: none;
-}
-
-.dd-input + .dd-menu {
-    display: none;
-}
-
-.dd-input:checked + .dd-menu {
-    display: block;
-}
-
-.dd-menu li {
-    padding: 10px 20px;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.dd-menu li:hover {
-    background-color: #f6f6f6;
-}
-
-.dd-menu li a {
-    display: block;
-    margin: -10px -20px;
-    padding: 10px 20px;
-}
-
-.dd-menu li.divider{
-    padding: 0;
-    border-bottom: 1px solid #cccccc;
-}
-
-.dd-text{
-    font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
-    color: #3f5368;
+    margin-top: -7px;
+    margin-left: -3px;
 }

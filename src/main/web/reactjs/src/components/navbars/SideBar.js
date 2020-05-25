@@ -1,23 +1,38 @@
 import React from 'react';
 import './SideBar.css'
-import houseIcon from '../../img/house.png';
-import cardIcon from '../../img/card.png';
-import {Image} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
 export default class SideBar extends React.Component {
     render() {
         return (
-            <div className="sidenav">
-                <Link to={"/workspace"} className="gb-left-menu__logo colorize scale">
-                    <Image className="sidenav-icon-main" src={houseIcon}/>
-                </Link>
-                <Link to={"/workspace"} className="gb-left-menu__nav-item"
-                      style={{"textDecoration": "none", "color": "#50667b"}}>
-                    <Image className="sidenav-icon" src={cardIcon}/>
-                    Workspace
-                </Link>
-            </div>
+            <aside className="sidebar">
+                <div id="leftside-navigation" className="nano">
+                    <ul className="nano-content">
+                        <li>
+                            <Link to={"/workspace"}>
+                                <i className="fa fa-dashboard"/>
+                                <span>Workspace</span>
+                            </Link>
+                        </li>
+                        <li className="sub-menu">
+                            <Link to={"/"}>
+                                <i className="fa fa-cogs"/>
+                                <span>Tables</span>
+                                <i className="arrow fa fa-angle-right pull-right"/>
+                            </Link>
+                            <ul/>
+                        </li>
+                        <li className="sub-menu">
+                            <Link to={"/"}>
+                                <i className="fa fa-cogs"/>
+                                <span>Labels</span>
+                                <i className="arrow fa fa-angle-right pull-right"/>
+                            </Link>
+                            <ul/>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
         )
     }
 }
