@@ -23,7 +23,7 @@
     overflow: hidden;
     top: 0;
     right: 0;
-    background-color: #7e50cb;
+    background-color: #7a58e5;
     border-radius: 0 4px 0 32px;
 }
 
@@ -38,7 +38,7 @@
     display: block;
     position: relative;
     max-width: 262px;
-    border-radius: 4px;
+    border-radius: 8px;
     margin: 12px;
     text-decoration: none;
     z-index: 0;
@@ -56,7 +56,7 @@
     z-index: -1;
     top: -16px;
     right: -16px;
-    background: #7e50cb;
+    background: #7a58e5;
     height: 32px;
     width: 32px;
     border-radius: 32px;

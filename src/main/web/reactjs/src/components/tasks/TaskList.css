@@ -97,8 +97,6 @@
 .add__btn {
     position: relative;
     width: 150px;
-    left: 50%;
-    transform: translate(-50%, 0);
 }
 
 .task-container {

@@ -1,11 +1,96 @@
-.workspace-box {
-    display: flex;
-}
-.sidebar {
-    display: block;
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+@import url("https://fonts.googleapis.com/css2?family=Mukta&display=swap");
+
+.workspace-container {
+    margin-top: 30px;
+    text-align: center;
+    font-family: Nunito, sans-serif;
 }
 
-.workspace {
-    margin-top: 20px;
-    flex: 1;
+.main-content {
+    display: inline-block;
+    width: 688px;
+
+    margin-right: 25pt;
+    vertical-align: middle;
+}
+
+.sidebar-container {
+    width: 428px;
+    display: inline-block;
+    margin: 0 20pt 20pt 20pt;
+    justify-items: center;
+    vertical-align: top
+}
+
+.sidebar-part {
+    width: 380px;
+    margin: 10px 10px 30px 10px;
+    border-radius: 16px;
+    border: 2px solid #e5e5e5;
+}
+
+.sidebar-part-header {
+    padding: 20px 20px 0 20px;
+    text-align: left;
+    font-family: Nunito, sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.sidebar-divider {
+    background-color: #e5e5e5;
+    width: available;
+    height: 2px;
+}
+
+.sidebar-picture {
+    width: 70px;
+    height: 70px;
+    margin: 20px;
+}
+
+.picture-block {
+    margin-left: auto;
+    text-align: left;
+}
+
+.picture-block div {
+    text-align: left;
+    display: inline-block;
+    height: 70px;
+}
+
+.picture-block span {
+    display: block;
+    color: #77778d;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.sidebar-description {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    padding: 10px 20px 30px 20px;
+    font-family: Mukta, sans-serif;
+    color: #232323;
+    font-size: 16px;
+}
+
+.news-board {
+    display: flex;
+    background: #7a58e5;
+    height: 300px;
+    border-radius: inherit;
+}
+
+.news-board h2 {
+    width: auto;
+    margin: auto;
+    font-family: Mukta, sans-serif;
+    font-size: 36px;
+    color: white;
+    font-weight: bolder;
+    text-transform: uppercase;
 }
