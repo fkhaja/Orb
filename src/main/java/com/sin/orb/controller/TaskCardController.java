@@ -8,6 +8,7 @@ import com.sin.orb.security.CurrentUser;
 import com.sin.orb.service.TaskCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,34 +25,35 @@ public class TaskCardController {
     }
 
     @GetMapping
-    public List<TaskCardDto> getAllTaskCards(@CurrentUser User user) {
-        return taskCardService.findAllForUser(user)
-                              .stream()
-                              .map(TaskCardMapper.INSTANCE::toDto)
-                              .collect(Collectors.toList());
+    public ResponseEntity<List<TaskCardDto>> getAllTaskCards(@CurrentUser User user) {
+        return ResponseEntity.ok(taskCardService.findAllForUser(user)
+                                                .stream()
+                                                .map(TaskCardMapper.INSTANCE::toDto)
+                                                .collect(Collectors.toList()));
     }
 
     @GetMapping("{id}")
-    public TaskCardDto getTaskCard(@CurrentUser User user, @PathVariable Long id) {
-        return TaskCardMapper.INSTANCE.toDto(taskCardService.findTaskCardForUser(id, user));
+    public ResponseEntity<TaskCardDto> getTaskCard(@CurrentUser User user, @PathVariable Long id) {
+        return ResponseEntity.ok(TaskCardMapper.INSTANCE.toDto(taskCardService.findTaskCardForUser(id, user)));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public TaskCardDto createTaskCard(@CurrentUser User user, @RequestBody TaskCardDto taskCardDto) {
+    public ResponseEntity<TaskCardDto> createTaskCard(@CurrentUser User user, @RequestBody TaskCardDto taskCardDto) {
         TaskCard taskCard = TaskCardMapper.INSTANCE.toEntity(taskCardDto);
-        return TaskCardMapper.INSTANCE.toDto(taskCardService.saveTaskCard(taskCard, user));
+        TaskCard created = taskCardService.saveTaskCard(taskCard, user);
+        return new ResponseEntity<>(TaskCardMapper.INSTANCE.toDto(created), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public TaskCardDto updateTaskCard(@CurrentUser User user, @PathVariable("id") Long id, @RequestBody TaskCardDto replacementDto) {
+    public ResponseEntity<TaskCardDto> updateTaskCard(@CurrentUser User user, @PathVariable("id") Long id, @RequestBody TaskCardDto replacementDto) {
         TaskCard existing = taskCardService.findTaskCardForUser(id, user);
         TaskCard replacement = TaskCardMapper.INSTANCE.toEntity(replacementDto);
-        return TaskCardMapper.INSTANCE.toDto(taskCardService.updateTaskCard(existing, replacement));
+        return ResponseEntity.ok(TaskCardMapper.INSTANCE.toDto(taskCardService.updateTaskCard(existing, replacement)));
     }
 
     @DeleteMapping("{id}")
-    public void deleteTaskCard(@CurrentUser User user, @PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteTaskCard(@CurrentUser User user, @PathVariable("id") Long id) {
         taskCardService.deleteTaskCard(taskCardService.findTaskCardForUser(id, user));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
