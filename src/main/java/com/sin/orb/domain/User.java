@@ -54,7 +54,7 @@ public class User implements OAuth2User, UserDetails {
     @Column(name = "provider_id")
     private String providerId;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<TaskCard> taskCards;
 
     @Transient

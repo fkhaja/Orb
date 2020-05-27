@@ -7,6 +7,7 @@ import com.sin.orb.mapper.TaskCardMapper;
 import com.sin.orb.security.CurrentUser;
 import com.sin.orb.service.TaskCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,18 +25,19 @@ public class TaskCardController {
 
     @GetMapping
     public List<TaskCardDto> getAllTaskCards(@CurrentUser User user) {
-        return user.getTaskCards()
-                   .stream()
-                   .map(TaskCardMapper.INSTANCE::toDto)
-                   .collect(Collectors.toList());
+        return taskCardService.findAllForUser(user)
+                              .stream()
+                              .map(TaskCardMapper.INSTANCE::toDto)
+                              .collect(Collectors.toList());
     }
 
     @GetMapping("{id}")
     public TaskCardDto getTaskCard(@CurrentUser User user, @PathVariable Long id) {
-        return TaskCardMapper.INSTANCE.toDto(user.getTaskCard(id));
+        return TaskCardMapper.INSTANCE.toDto(taskCardService.findTaskCardForUser(id, user));
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public TaskCardDto createTaskCard(@CurrentUser User user, @RequestBody TaskCardDto taskCardDto) {
         TaskCard taskCard = TaskCardMapper.INSTANCE.toEntity(taskCardDto);
         return TaskCardMapper.INSTANCE.toDto(taskCardService.saveTaskCard(taskCard, user));
@@ -43,13 +45,13 @@ public class TaskCardController {
 
     @PutMapping("{id}")
     public TaskCardDto updateTaskCard(@CurrentUser User user, @PathVariable("id") Long id, @RequestBody TaskCardDto replacementDto) {
-        TaskCard existing = user.getTaskCard(id);
+        TaskCard existing = taskCardService.findTaskCardForUser(id, user);
         TaskCard replacement = TaskCardMapper.INSTANCE.toEntity(replacementDto);
         return TaskCardMapper.INSTANCE.toDto(taskCardService.updateTaskCard(existing, replacement));
     }
 
     @DeleteMapping("{id}")
     public void deleteTaskCard(@CurrentUser User user, @PathVariable("id") Long id) {
-        taskCardService.deleteTaskCard(user.getTaskCard(id));
+        taskCardService.deleteTaskCard(taskCardService.findTaskCardForUser(id, user));
     }
 }
