@@ -1,11 +1,7 @@
 package com.sin.orb.domain;
 
-import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.security.AuthProvider;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,10 +13,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-@Entity
 @Data
+@Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @EqualsAndHashCode(of = {"id"})
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements OAuth2User, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,13 +60,6 @@ public class User implements OAuth2User, UserDetails {
 
     @Transient
     private Map<String, Object> attributes;
-
-    public TaskCard getTaskCard(Long id) {
-        return taskCards.stream()
-                        .filter(card -> card.getId().equals(id))
-                        .findFirst()
-                        .orElseThrow(() -> new ResourceNotFoundException("Task card", "id", id));
-    }
 
     @Override
     public boolean isAccountNonExpired() {

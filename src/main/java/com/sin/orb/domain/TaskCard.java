@@ -1,9 +1,7 @@
 package com.sin.orb.domain;
 
 import com.sin.orb.exception.ResourceNotFoundException;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,11 +9,13 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
 @Data
+@Entity
 @EqualsAndHashCode(of = {"id"})
 @Table(name = "task_cards")
 @ToString(exclude = {"user"})
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,18 +1,18 @@
 package com.sin.orb.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Entity
 @Data
-@EqualsAndHashCode(of = {"id"})
+@Entity
 @Table(name = "tasks")
+@EqualsAndHashCode(of = {"id"})
 @ToString(exclude = {"taskCard"})
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
