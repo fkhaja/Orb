@@ -1,0 +1,129 @@
+package com.sin.orb.service;
+
+import com.sin.orb.domain.TaskCard;
+import com.sin.orb.domain.User;
+import com.sin.orb.exception.ResourceNotFoundException;
+import com.sin.orb.repository.TaskCardRepository;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@SpringBootTest
+class TaskCardServiceTest {
+
+    @MockBean
+    private TaskCardRepository taskCardRepository;
+
+    @Autowired
+    private TaskCardService taskCardService;
+
+    @Captor
+    private ArgumentCaptor<TaskCard> captor;
+
+    private final User userStub = new User();
+    private final TaskCard cardStub = new TaskCard(1L, "test", LocalDate.now(), Collections.emptyList(), userStub);
+
+    @Test
+    void findAllForUserShouldReturnTaskCardList() {
+        List<TaskCard> stubList = List.of(cardStub);
+
+        when(taskCardRepository.findAllByUserIs(any(User.class))).thenReturn(stubList);
+
+        List<TaskCard> resultList = taskCardService.findAllForUser(userStub);
+
+        verify(taskCardRepository).findAllByUserIs(any(User.class));
+        assertThat(resultList.size()).isEqualTo(1);
+        assertThat(resultList.get(0)).isSameAs(stubList.get(0));
+    }
+
+    @Test
+    void findTaskCardByIdShouldReturnRequiredTaskCard() {
+        when(taskCardRepository.findByIdAndUserIs(any(Long.class), any(User.class))).thenReturn(Optional.of(cardStub));
+
+        TaskCard taskCard = taskCardService.findTaskCardForUser(1L, userStub);
+
+        verify(taskCardRepository).findByIdAndUserIs(any(Long.class), any(User.class));
+        assertThat(taskCard.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void whenRepositoryDidNotFindRequiredCardThenThrowException() {
+        when(taskCardRepository.findByIdAndUserIs(any(Long.class), any(User.class))).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> taskCardService.findTaskCardForUser(1L, userStub))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("not found");
+
+        verify(taskCardRepository).findByIdAndUserIs(any(Long.class), any(User.class));
+    }
+
+    @Test
+    void saveTaskCardShouldSetMissingFieldsAndSaveCard() {
+        TaskCard card = new TaskCard();
+        card.setName("test");
+
+        when(taskCardRepository.save(any(TaskCard.class))).thenReturn(new TaskCard());
+        taskCardService.saveTaskCard(card, userStub);
+
+        verify(taskCardRepository).save(captor.capture());
+
+        TaskCard result = captor.getValue();
+        assertThat(result.getName()).isSameAs(card.getName());
+        assertThat(result.getUser()).isNotNull();
+        assertThat(result.getCreationDate()).isNotNull();
+    }
+
+    @Test
+    void updateTaskCardShouldUpdateRequiredCard() {
+        TaskCard replacement = new TaskCard();
+        replacement.setName("updated");
+
+        when(taskCardRepository.save(any(TaskCard.class))).thenReturn(new TaskCard());
+        taskCardService.updateTaskCard(cardStub, replacement);
+
+        verify(taskCardRepository).save(captor.capture());
+
+        assertThat(captor.getValue().getName()).isSameAs(replacement.getName());
+    }
+
+    @Test
+    void updateTaskCardShouldNotOverrideIdAndCreationDateAndTasks() {
+        TaskCard replacement = new TaskCard();
+        replacement.setName("updated");
+        replacement.setId(0L);
+        replacement.setCreationDate(LocalDate.MIN);
+        replacement.setTasks(null);
+
+        when(taskCardRepository.save(any(TaskCard.class))).thenReturn(new TaskCard());
+        taskCardService.updateTaskCard(cardStub, replacement);
+
+        verify(taskCardRepository).save(captor.capture());
+
+        TaskCard result = captor.getValue();
+        assertThat(result.getId()).isEqualTo(cardStub.getId());
+        assertThat(result.getUser()).isSameAs(cardStub.getUser());
+        assertThat(result.getCreationDate()).isSameAs(cardStub.getCreationDate());
+        assertThat(result.getTasks()).isEqualTo(cardStub.getTasks());
+    }
+
+    @Test
+    void deleteTaskCardShouldDeleteRequiredCard() {
+        doNothing().when(taskCardRepository).delete(any(TaskCard.class));
+        taskCardService.deleteTaskCard(cardStub);
+
+        verify(taskCardRepository).delete(any(TaskCard.class));
+    }
+}
