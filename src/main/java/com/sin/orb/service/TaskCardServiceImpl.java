@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class TaskCardServiceImpl implements TaskCardService {
-    private TaskCardRepository repository;
+    private final TaskCardRepository repository;
 
     @Autowired
     public TaskCardServiceImpl(TaskCardRepository repository) {

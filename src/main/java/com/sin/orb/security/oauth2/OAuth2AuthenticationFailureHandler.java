@@ -16,7 +16,7 @@ import static com.sin.orb.security.oauth2.OAuth2AuthorizationRequestRepository.R
 
 @Component
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
-    private OAuth2AuthorizationRequestRepository requestRepository;
+    private final OAuth2AuthorizationRequestRepository requestRepository;
 
     @Autowired
     public OAuth2AuthenticationFailureHandler(OAuth2AuthorizationRequestRepository requestRepository) {

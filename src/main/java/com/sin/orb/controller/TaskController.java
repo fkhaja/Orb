@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("taskcards/{cardId}/tasks")
 public class TaskController {
-    private TaskService taskService;
-    private TaskCardService taskCardService;
+    private final TaskService taskService;
+    private final TaskCardService taskCardService;
 
     @Autowired
     public TaskController(TaskService taskService, TaskCardService taskCardService) {

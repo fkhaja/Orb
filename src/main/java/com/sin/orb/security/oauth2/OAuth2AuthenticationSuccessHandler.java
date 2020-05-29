@@ -24,8 +24,8 @@ import static com.sin.orb.security.oauth2.OAuth2AuthorizationRequestRepository.R
 @Slf4j
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private TokenProvider tokenProvider;
-    private OAuth2AuthorizationRequestRepository requestRepository;
+    private final TokenProvider tokenProvider;
+    private final OAuth2AuthorizationRequestRepository requestRepository;
 
     @Value("#{'${app.oauth2.authorizedRedirectUris}'.split(',')}")
     private List<String> authorizeRedirectUris;

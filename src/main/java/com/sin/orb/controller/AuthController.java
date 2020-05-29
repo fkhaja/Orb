@@ -28,10 +28,10 @@ import java.net.URI;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private AuthenticationManager authenticationManager;
-    private UserService userService;
-    private PasswordEncoder passwordEncoder;
-    private TokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, UserService userService,
