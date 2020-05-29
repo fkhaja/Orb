@@ -30,16 +30,15 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<TaskDto>> getAllTasks(@CurrentUser User user, @PathVariable("cardId") Long cardId) {
-        return ResponseEntity.ok(taskCardService.findTaskCardForUser(cardId, user)
-                                                .getTasks()
-                                                .stream()
-                                                .map(TaskMapper.INSTANCE::toDto)
-                                                .collect(Collectors.toList()));
+        return ResponseEntity.ok(taskService.findAllTasks(cardId, user)
+                                            .stream()
+                                            .map(TaskMapper.INSTANCE::toDto)
+                                            .collect(Collectors.toList()));
     }
 
     @GetMapping("{id}")
     public ResponseEntity<TaskDto> getTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable Long id) {
-        Task task = taskCardService.findTaskCardForUser(cardId, user).getTask(id);
+        Task task = taskService.findTaskById(id, cardId, user);
         return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(task));
     }
 
@@ -54,14 +53,14 @@ public class TaskController {
     @PutMapping("{id}")
     public ResponseEntity<TaskDto> updateTask(@CurrentUser User user, @PathVariable("cardId") Long cardId,
                                               @PathVariable("id") Long id, @RequestBody TaskDto replacementDto) {
-        Task existing = taskCardService.findTaskCardForUser(cardId, user).getTask(id);
+        Task existing = taskService.findTaskById(id, cardId, user);
         Task replacement = TaskMapper.INSTANCE.toEntity(replacementDto);
         return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(taskService.updateTask(existing, replacement)));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable("id") Long id) {
-        taskService.deleteTask(taskCardService.findTaskCardForUser(cardId, user).getTask(id));
+        taskService.deleteTask(taskService.findTaskById(id, cardId, user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

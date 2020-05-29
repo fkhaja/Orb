@@ -1,6 +1,5 @@
 package com.sin.orb.domain;
 
-import com.sin.orb.exception.ResourceNotFoundException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,11 +35,4 @@ public class TaskCard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
-
-    public Task getTask(Long id) {
-        return tasks.stream()
-                    .filter(task -> task.getId().equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
-    }
 }
