@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,8 @@ class TaskCardServiceTest {
     private ArgumentCaptor<TaskCard> captor;
 
     private final User userStub = new User();
-    private final TaskCard cardStub = new TaskCard(1L, "test", LocalDate.now(), Collections.emptyList(), userStub);
+    private final TaskCard cardStub = new TaskCard(1L, "test", LocalDate.now(), Collections.emptyList(),
+                                                   userStub, "text", LocalDateTime.now(), true, "url");
 
     @Test
     void findAllForUserShouldReturnTaskCardList() {
@@ -120,6 +122,10 @@ class TaskCardServiceTest {
         assertThat(result.getUser()).isSameAs(cardStub.getUser());
         assertThat(result.getCreationDate()).isSameAs(cardStub.getCreationDate());
         assertThat(result.getTasks()).isEqualTo(cardStub.getTasks());
+        assertThat(result.getTerm()).isSameAs(cardStub.getTerm());
+        assertThat(result.getDescription()).isSameAs(cardStub.getDescription());
+        assertThat(result.getDone()).isSameAs(cardStub.getDone());
+        assertThat(result.getImageUrl()).isSameAs(cardStub.getImageUrl());
     }
 
     @Test

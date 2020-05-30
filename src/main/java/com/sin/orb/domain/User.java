@@ -2,6 +2,7 @@ package com.sin.orb.domain;
 
 import com.sin.orb.security.AuthProvider;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -27,6 +28,7 @@ public class User implements OAuth2User, UserDetails {
 
     @NotNull
     @Column(name = "username")
+    @Length(max = 64)
     private String username;
 
     @Email
@@ -36,10 +38,6 @@ public class User implements OAuth2User, UserDetails {
 
     @Column(name = "image_url")
     private String imageUrl;
-
-    @NotNull
-    @Column(name = "email_verified")
-    private Boolean emailVerified = false;
 
     @Column(name = "password")
     private String password;

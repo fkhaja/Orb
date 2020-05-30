@@ -15,7 +15,6 @@ class UserMapperTest {
         entity.setUsername("test");
         entity.setEmail("test@mail.com");
         entity.setImageUrl("url");
-        entity.setEmailVerified(true);
         entity.setProvider(AuthProvider.LOCAL);
         entity.setProviderId(null);
 
@@ -23,7 +22,6 @@ class UserMapperTest {
         assertThat(dto.getUsername()).isSameAs(entity.getUsername());
         assertThat(dto.getEmail()).isSameAs(entity.getEmail());
         assertThat(dto.getImageUrl()).isSameAs(entity.getImageUrl());
-        assertThat(dto.getEmailVerified()).isSameAs(entity.getEmailVerified());
         assertThat(dto.getProvider()).isSameAs(entity.getProvider());
         assertThat(dto.getProviderId()).isSameAs(entity.getProviderId());
     }

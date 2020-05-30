@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,8 +45,26 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void getAllTaskCardsShouldReturnCorrectDtoList() throws Exception {
-        TaskCard firstStub = new TaskCard(1L, "test", LocalDate.now(), Collections.emptyList(), null);
-        TaskCard secondStub = new TaskCard(2L, "card", LocalDate.now(), Collections.emptyList(), null);
+        TaskCard firstStub = new TaskCard();
+        firstStub.setId(1L);
+        firstStub.setName("test");
+        firstStub.setCreationDate(LocalDate.now());
+        firstStub.setTasks(Collections.emptyList());
+        firstStub.setDescription("description1");
+        firstStub.setTerm(LocalDateTime.MAX);
+        firstStub.setImageUrl("url1");
+        firstStub.setDone(true);
+
+        TaskCard secondStub = new TaskCard();
+        secondStub.setId(2L);
+        secondStub.setName("card");
+        secondStub.setCreationDate(LocalDate.now());
+        secondStub.setTasks(Collections.emptyList());
+        secondStub.setDescription("description2");
+        secondStub.setTerm(LocalDateTime.MIN);
+        secondStub.setImageUrl("url2");
+        secondStub.setDone(true);
+
         Page<TaskCard> stubPage = new PageImpl<>(List.of(firstStub, secondStub));
 
         when(taskCardService.findAllForUser(eq(null), any(Pageable.class))).thenReturn(stubPage);
@@ -57,10 +76,18 @@ class TaskCardControllerTest {
                .andExpect(jsonPath("$.content[0].name", equalTo("test")))
                .andExpect(jsonPath("$.content[0].creationDate", notNullValue()))
                .andExpect(jsonPath("$.content[0].tasks", hasSize(0)))
+               .andExpect(jsonPath("$.content[0].description", equalTo("description1")))
+               .andExpect(jsonPath("$.content[0].term", notNullValue()))
+               .andExpect(jsonPath("$.content[0].imageUrl", equalTo("url1")))
+               .andExpect(jsonPath("$.content[0].done", equalTo(true)))
                .andExpect(jsonPath("$.content[1].cardId", equalTo(2)))
                .andExpect(jsonPath("$.content[1].name", equalTo("card")))
                .andExpect(jsonPath("$.content[1].creationDate", notNullValue()))
                .andExpect(jsonPath("$.content[1].tasks", hasSize(0)))
+               .andExpect(jsonPath("$.content[1].description", equalTo("description2")))
+               .andExpect(jsonPath("$.content[1].term", notNullValue()))
+               .andExpect(jsonPath("$.content[1].imageUrl", equalTo("url2")))
+               .andExpect(jsonPath("$.content[1].done", equalTo(true)))
                .andExpect(status().isOk());
 
         verify(taskCardService).findAllForUser(eq(null), any(Pageable.class));
@@ -78,7 +105,15 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void getTaskCardShouldReturnCorrectDto() throws Exception {
-        TaskCard cardStub = new TaskCard(1L, "test", LocalDate.now(), Collections.emptyList(), null);
+        TaskCard cardStub = new TaskCard();
+        cardStub.setId(1L);
+        cardStub.setName("test");
+        cardStub.setCreationDate(LocalDate.now());
+        cardStub.setTasks(Collections.emptyList());
+        cardStub.setDescription("description");
+        cardStub.setTerm(LocalDateTime.MAX);
+        cardStub.setImageUrl("url");
+        cardStub.setDone(true);
 
         when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(cardStub);
 
@@ -88,6 +123,10 @@ class TaskCardControllerTest {
                .andExpect(jsonPath("$.name", equalTo("test")))
                .andExpect(jsonPath("$.creationDate", notNullValue()))
                .andExpect(jsonPath("$.tasks", hasSize(0)))
+               .andExpect(jsonPath("$.description", equalTo("description")))
+               .andExpect(jsonPath("$.term", notNullValue()))
+               .andExpect(jsonPath("$.imageUrl", equalTo("url")))
+               .andExpect(jsonPath("$.done", equalTo(true)))
                .andExpect(status().isOk());
 
         verify(taskCardService).findTaskCardForUser(any(Long.class), eq(null));
@@ -116,7 +155,16 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void createTaskCardShouldSaveCardAndReturnCorrectDto() throws Exception {
-        TaskCard cardStub = new TaskCard(1L, "test", LocalDate.now(), Collections.emptyList(), null);
+        TaskCard cardStub = new TaskCard();
+        cardStub.setId(1L);
+        cardStub.setName("test");
+        cardStub.setCreationDate(LocalDate.now());
+        cardStub.setTasks(Collections.emptyList());
+        cardStub.setDescription("description");
+        cardStub.setTerm(LocalDateTime.MAX);
+        cardStub.setImageUrl("url");
+        cardStub.setDone(true);
+
         TaskCardDto body = new TaskCardDto();
         body.setName("test");
 
@@ -130,6 +178,10 @@ class TaskCardControllerTest {
                .andExpect(jsonPath("$.name", equalTo("test")))
                .andExpect(jsonPath("$.creationDate", notNullValue()))
                .andExpect(jsonPath("$.tasks", hasSize(0)))
+               .andExpect(jsonPath("$.description", equalTo("description")))
+               .andExpect(jsonPath("$.term", notNullValue()))
+               .andExpect(jsonPath("$.imageUrl", equalTo("url")))
+               .andExpect(jsonPath("$.done", equalTo(true)))
                .andExpect(status().isCreated());
 
         verify(taskCardService).saveTaskCard(any(TaskCard.class), eq(null));
@@ -158,8 +210,25 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void updateTaskCardShouldUpdateCardAndReturnCorrectDto() throws Exception {
-        TaskCard existingStub = new TaskCard(1L, "test", LocalDate.now(), Collections.emptyList(), null);
-        TaskCard replacementStub = new TaskCard(1L, "card", LocalDate.now(), Collections.emptyList(), null);
+        TaskCard existingStub = new TaskCard();
+        existingStub.setId(1L);
+        existingStub.setName("test");
+        existingStub.setCreationDate(LocalDate.now());
+        existingStub.setTasks(Collections.emptyList());
+        existingStub.setDescription("description");
+        existingStub.setTerm(LocalDateTime.MAX);
+        existingStub.setImageUrl("url");
+
+        TaskCard replacementStub = new TaskCard();
+        replacementStub.setId(1L);
+        replacementStub.setName("card");
+        replacementStub.setCreationDate(LocalDate.now());
+        replacementStub.setTasks(Collections.emptyList());
+        replacementStub.setDescription("description upd");
+        replacementStub.setTerm(LocalDateTime.MIN);
+        replacementStub.setImageUrl("url upd");
+        replacementStub.setDone(true);
+
         TaskCardDto body = new TaskCardDto();
         body.setName("card");
 
@@ -174,6 +243,10 @@ class TaskCardControllerTest {
                .andExpect(jsonPath("$.name", equalTo("card")))
                .andExpect(jsonPath("$.creationDate", notNullValue()))
                .andExpect(jsonPath("$.tasks", hasSize(0)))
+               .andExpect(jsonPath("$.description", equalTo("description upd")))
+               .andExpect(jsonPath("$.term", notNullValue()))
+               .andExpect(jsonPath("$.imageUrl", equalTo("url upd")))
+               .andExpect(jsonPath("$.done", equalTo(true)))
                .andExpect(status().isOk());
 
         verify(taskCardService).updateTaskCard(any(TaskCard.class), any(TaskCard.class));

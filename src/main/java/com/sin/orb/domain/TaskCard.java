@@ -1,11 +1,13 @@
 package com.sin.orb.domain;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -22,6 +24,7 @@ public class TaskCard {
 
     @NotBlank
     @Column(name = "name")
+    @Length(max = 64)
     private String name;
 
     @Basic
@@ -35,4 +38,19 @@ public class TaskCard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
+
+    @Column(name = "description")
+    @Length(max = 500)
+    private String description;
+
+    @Basic
+    @Column(name = "term")
+    private LocalDateTime term;
+
+    @NotNull
+    @Column(name = "done", columnDefinition = "boolean default false")
+    private Boolean done;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 }
