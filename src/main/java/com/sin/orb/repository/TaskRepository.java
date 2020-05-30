@@ -2,14 +2,15 @@ package com.sin.orb.repository;
 
 import com.sin.orb.domain.Task;
 import com.sin.orb.domain.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface TaskRepository extends JpaRepository<Task, Long> {
+public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
 
-    List<Task> findAllByTaskCardIdAndTaskCardUserIs(Long id, User user);
+    Page<Task> findAllByTaskCardIdAndTaskCardUserIs(Long id, User user, Pageable pageable);
 
     Optional<Task> findByIdAndTaskCardIdAndTaskCardUserIs(Long id, Long cardId, User user);
 }

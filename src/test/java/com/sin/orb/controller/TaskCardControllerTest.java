@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,30 +46,30 @@ class TaskCardControllerTest {
     void getAllTaskCardsShouldReturnCorrectDtoList() throws Exception {
         TaskCard firstStub = new TaskCard(1L, "test", LocalDate.now(), Collections.emptyList(), null);
         TaskCard secondStub = new TaskCard(2L, "card", LocalDate.now(), Collections.emptyList(), null);
-        List<TaskCard> stubList = List.of(firstStub, secondStub);
+        Page<TaskCard> stubPage = new PageImpl<>(List.of(firstStub, secondStub));
 
-        when(taskCardService.findAllForUser(eq(null))).thenReturn(stubList);
+        when(taskCardService.findAllForUser(eq(null), any(Pageable.class))).thenReturn(stubPage);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/taskcards").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$", hasSize(2)))
-               .andExpect(jsonPath("$[0].cardId", equalTo(1)))
-               .andExpect(jsonPath("$[0].name", equalTo("test")))
-               .andExpect(jsonPath("$[0].creationDate", notNullValue()))
-               .andExpect(jsonPath("$[0].tasks", hasSize(0)))
-               .andExpect(jsonPath("$[1].cardId", equalTo(2)))
-               .andExpect(jsonPath("$[1].name", equalTo("card")))
-               .andExpect(jsonPath("$[1].creationDate", notNullValue()))
-               .andExpect(jsonPath("$[1].tasks", hasSize(0)))
+               .andExpect(jsonPath("$.content", hasSize(2)))
+               .andExpect(jsonPath("$.content[0].cardId", equalTo(1)))
+               .andExpect(jsonPath("$.content[0].name", equalTo("test")))
+               .andExpect(jsonPath("$.content[0].creationDate", notNullValue()))
+               .andExpect(jsonPath("$.content[0].tasks", hasSize(0)))
+               .andExpect(jsonPath("$.content[1].cardId", equalTo(2)))
+               .andExpect(jsonPath("$.content[1].name", equalTo("card")))
+               .andExpect(jsonPath("$.content[1].creationDate", notNullValue()))
+               .andExpect(jsonPath("$.content[1].tasks", hasSize(0)))
                .andExpect(status().isOk());
 
-        verify(taskCardService).findAllForUser(eq(null));
+        verify(taskCardService).findAllForUser(eq(null), any(Pageable.class));
     }
 
     @Test
     @WithMockUser
     void getAllTaskCardsShouldReturnStatusOk() throws Exception {
-        when(taskCardService.findAllForUser(eq(null))).thenReturn(Collections.emptyList());
+        when(taskCardService.findAllForUser(eq(null), any(Pageable.class))).thenReturn(Page.empty());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/taskcards").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());

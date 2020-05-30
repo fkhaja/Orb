@@ -6,11 +6,12 @@ import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.repository.TaskCardRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TaskCardServiceImpl implements TaskCardService {
@@ -42,8 +43,8 @@ public class TaskCardServiceImpl implements TaskCardService {
     }
 
     @Override
-    public List<TaskCard> findAllForUser(User user) {
-        return repository.findAllByUserIs(user);
+    public Page<TaskCard> findAllForUser(User user, Pageable pageable) {
+        return repository.findAllByUserIs(user, pageable);
     }
 
     @Override

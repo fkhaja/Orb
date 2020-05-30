@@ -7,12 +7,12 @@ import com.sin.orb.mapper.TaskCardMapper;
 import com.sin.orb.security.CurrentUser;
 import com.sin.orb.service.TaskCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("taskcards")
@@ -25,11 +25,9 @@ public class TaskCardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskCardDto>> getAllTaskCards(@CurrentUser User user) {
-        return ResponseEntity.ok(taskCardService.findAllForUser(user)
-                                                .stream()
-                                                .map(TaskCardMapper.INSTANCE::toDto)
-                                                .collect(Collectors.toList()));
+    public ResponseEntity<Page<TaskCardDto>> getAllTaskCards(@CurrentUser User user, @PageableDefault(sort = "id") Pageable pageable) {
+        Page<TaskCard> cards = taskCardService.findAllForUser(user, pageable);
+        return ResponseEntity.ok(cards.map(TaskCardMapper.INSTANCE::toDto));
     }
 
     @GetMapping("{id}")

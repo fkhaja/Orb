@@ -10,6 +10,9 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -38,15 +41,15 @@ class TaskCardServiceTest {
 
     @Test
     void findAllForUserShouldReturnTaskCardList() {
-        List<TaskCard> stubList = List.of(cardStub);
+        Page<TaskCard> stubPage = new PageImpl<>(List.of(cardStub));
 
-        when(taskCardRepository.findAllByUserIs(any(User.class))).thenReturn(stubList);
+        when(taskCardRepository.findAllByUserIs(any(User.class), any(Pageable.class))).thenReturn(stubPage);
 
-        List<TaskCard> resultList = taskCardService.findAllForUser(userStub);
+        Page<TaskCard> resultPage = taskCardService.findAllForUser(userStub, Pageable.unpaged());
 
-        verify(taskCardRepository).findAllByUserIs(any(User.class));
-        assertThat(resultList.size()).isEqualTo(1);
-        assertThat(resultList.get(0)).isSameAs(stubList.get(0));
+        verify(taskCardRepository).findAllByUserIs(any(User.class), any(Pageable.class));
+        assertThat(resultPage.getTotalElements()).isEqualTo(1);
+        assertThat(resultPage.getTotalPages()).isEqualTo(1);
     }
 
     @Test

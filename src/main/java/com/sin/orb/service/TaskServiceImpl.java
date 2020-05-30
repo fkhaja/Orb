@@ -7,9 +7,9 @@ import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.repository.TaskRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -38,8 +38,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAllTasks(Long cardId, User user) {
-        return taskRepository.findAllByTaskCardIdAndTaskCardUserIs(cardId, user);
+    public Page<Task> findAllTasks(Long cardId, User user, Pageable pageable) {
+        return taskRepository.findAllByTaskCardIdAndTaskCardUserIs(cardId, user, pageable);
     }
 
     @Override
