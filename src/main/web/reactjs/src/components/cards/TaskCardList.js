@@ -25,15 +25,15 @@ export default class TaskCardList extends React.Component {
     render() {
         return (
             <div>
-                {this.state.showInput ?
-                    <TaskCardForm onCancel={this.handleShowInputChange} onSubmit={this.handleTaskCardCreate}/>
-                    :
-                    <Button variant="primary" className="add__btn" onClick={this.handleShowInputChange}>
-                        Add task card
-                    </Button>
-                }
+                   {this.state.showInput ?
+                       <TaskCardForm onCancel={this.handleShowInputChange} onSubmit={this.handleTaskCardCreate}/>
+                       :
+                       <Button variant="primary" className="add_btn" onClick={this.handleShowInputChange}>
+                           Add task card
+                       </Button>
+                   }
 
-                <div className="container">
+                <div className="task-list">
                     {this.state.cards.map((card, i) => (
                         <TaskCard card={card} key={card.cardId} index={i} onUpdate={this.handleTaskCardUpdate}
                                   onDelete={(i) => this.handleTaskCardDelete(i)}/>
