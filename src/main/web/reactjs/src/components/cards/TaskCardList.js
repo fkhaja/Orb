@@ -24,7 +24,7 @@ export default class TaskCardList extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="card-list">
                    {this.state.showInput ?
                        <TaskCardForm onCancel={this.handleShowInputChange} onSubmit={this.handleTaskCardCreate}/>
                        :
