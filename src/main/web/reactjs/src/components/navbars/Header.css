@@ -5,7 +5,7 @@
     align-items: center;
     height: 90px;
     padding: 9px 16px 0;
-    border-bottom: 1px solid rgba(164,175,221,.2);
+    border-bottom: 1px solid rgba(164, 175, 221, .2);
     width: 95%;
     margin: 0 auto;
     font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
@@ -23,7 +23,6 @@
     padding: 10px 30px 10px 20px;
     cursor: pointer;
     white-space: nowrap;
-
 }
 
 .avatar-pic {
@@ -56,9 +55,10 @@
     border-radius: 4px;
     padding: 0;
     margin: 2px 0 0 0;
-    box-shadow: 0 0 6px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
     list-style-type: none;
+    z-index: 10;
 }
 
 .dd-input + .dd-menu {
@@ -85,12 +85,12 @@
     padding: 10px 20px;
 }
 
-.dd-menu li.divider{
+.dd-menu li.divider {
     padding: 0;
     border-bottom: 1px solid #cccccc;
 }
 
-.dd-text{
+.dd-text {
     font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
     color: #3f5368;
 }

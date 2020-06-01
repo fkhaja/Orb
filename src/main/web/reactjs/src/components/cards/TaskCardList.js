@@ -1,15 +1,14 @@
 import React from 'react';
 import TaskCard from "./TaskCard";
 import './TaskCardList.css'
-import {Button} from "react-bootstrap";
-import TaskCardForm from "./TaskCardForm";
+import "../Modal.css"
 import {deleteTaskCard, saveTaskCard, updateTaskCard} from "../../util/RequestUtils";
 
 export default class TaskCardList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showInput: false,
+            showModal: false,
             cards: []
         };
         this.handleShowInputChange = this.handleShowInputChange.bind(this);
@@ -19,21 +18,22 @@ export default class TaskCardList extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({cards: this.props.cards})
+        this.setState({cards: this.props.cards});
     }
 
     render() {
         return (
-            <div className="card-list">
-                   {this.state.showInput ?
-                       <TaskCardForm onCancel={this.handleShowInputChange} onSubmit={this.handleTaskCardCreate}/>
-                       :
-                       <Button variant="primary" className="add_btn" onClick={this.handleShowInputChange}>
-                           Add task card
-                       </Button>
-                   }
+            <div className="card-container">
+                <div className="add_btn" onClick={this.handleShowInputChange}>
+                    <button className="icon-btn add-btn">
+                        <div className="add-icon"/>
+                        <div className="btn-txt">
+                            <span>Add card</span>
+                        </div>
+                    </button>
+                </div>
 
-                <div className="task-list">
+                <div className="card-list">
                     {this.state.cards.map((card, i) => (
                         <TaskCard card={card} key={card.cardId} index={i} onUpdate={this.handleTaskCardUpdate}
                                   onDelete={(i) => this.handleTaskCardDelete(i)}/>
@@ -44,7 +44,7 @@ export default class TaskCardList extends React.Component {
     }
 
     handleShowInputChange() {
-        this.setState(() => ({showInput: !this.state.showInput}));
+        this.setState(() => ({showModal: !this.state.showModal}));
     }
 
     handleTaskCardCreate(card) {
@@ -54,7 +54,7 @@ export default class TaskCardList extends React.Component {
     }
 
     handleTaskCardUpdate(card) {
-        this.setState({showInput: false});
+        this.setState({showModal: false});
         updateTaskCard(card).catch(console.log);
     }
 

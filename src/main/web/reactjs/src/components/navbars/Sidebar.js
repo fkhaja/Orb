@@ -17,7 +17,7 @@ export default class Sidebar extends React.Component {
                             <FontAwesomeIcon icon={faListAlt}/>
                             <span>Workspace</span>
                         </li>
-                        <li className="sidebar-item" style={{"margin-top": "25px"}}>
+                        <li className="sidebar-item" style={{"marginTop": "25px"}}>
                             <div className="tabs">
                                 <div className="tab">
                                     <input type="checkbox" id="chck2" className="accordion_input"/>

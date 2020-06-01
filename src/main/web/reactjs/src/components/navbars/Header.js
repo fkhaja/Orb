@@ -18,7 +18,7 @@ export default class Header extends React.Component {
                         <input type="checkbox" className="dd-input" id="test"/>
                         <ul className="dd-menu">
                             <li>
-                                <NavLink to="/profile" style={{"text-decoration": "none"}} className="text-dark">
+                                <NavLink to="/profile" style={{"textDecoration": "none"}} className="text-dark">
                                     Profile
                                 </NavLink>
                             </li>
