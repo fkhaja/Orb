@@ -101,6 +101,8 @@
     margin-bottom: .5em;
     color: #8e54e9;
     text-align: center;
+    padding-right: 30px;
+    padding-left: 30px;
 }
 
 .modal-content-text {
