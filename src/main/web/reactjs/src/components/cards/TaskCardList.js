@@ -3,6 +3,7 @@ import TaskCard from "./TaskCard";
 import './TaskCardList.css'
 import "../Modal.css"
 import {deleteTaskCard, saveTaskCard, updateTaskCard} from "../../util/RequestUtils";
+import AddCardModal from "./AddCardModal";
 
 export default class TaskCardList extends React.Component {
     constructor(props) {
@@ -39,6 +40,9 @@ export default class TaskCardList extends React.Component {
                                   onDelete={(i) => this.handleTaskCardDelete(i)}/>
                     ))}
                 </div>
+
+                <AddCardModal show={this.state.showModal} onClose={this.handleShowInputChange}
+                              onCreate={this.handleTaskCardCreate}/>
             </div>
         )
     }

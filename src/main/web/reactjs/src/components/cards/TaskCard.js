@@ -40,7 +40,7 @@ export default class TaskCard extends React.Component {
                             <div onClick={this.handleShow}>
                                 <h3 className="h3-card">{this.props.card.name}</h3>
                                 <p className="small p-card">
-                                    Card description with lots of great facts and interesting details.
+                                    {this.props.card.description || "Card without description"}
                                 </p>
                                 <div className="go-corner">
                                     <div className="go-arrow">→</div>

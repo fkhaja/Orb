@@ -16,13 +16,6 @@ export async function updateTask(task, cardId) {
     })
 }
 
-export async function findAllTasksForCard(cardId) {
-    return request({
-        url: `${API_BASE_URL}/taskcards/${cardId}/tasks`,
-        method: 'GET'
-    })
-}
-
 export async function saveTask(task, cardId) {
     return request({
         url: `${API_BASE_URL}/taskcards/${cardId}/tasks`,
@@ -47,7 +40,6 @@ export async function saveTaskCard(card) {
 }
 
 export async function updateTaskCard(card) {
-    console.log(card);
     return request({
         url: `${API_BASE_URL}/taskcards/${card.cardId}`,
         method: 'PUT',
