@@ -33,6 +33,10 @@ export default class TaskList extends React.Component {
         return (
             <div>
                 <hr/>
+                {taskCount > 0 &&
+                <div className="modal-progress-bar">
+                    <ProgressBar label={`${percentage}%`} now={percentage} variant="success"/>
+                </div>}
                 <div className="task-container">
                     {this.state.tasks.map((task, i) => (
                         <Task task={task} onUpdate={this.handleTaskUpdate} key={task.taskId} index={i}
@@ -51,14 +55,8 @@ export default class TaskList extends React.Component {
                             </label>
                         </div>
                     }
-
                 </div>
-                {taskCount > 0 &&
-                <div className="modal_progress_bar footer">
-                    <hr/>
-                    <h3 className="text-muted text-center small">Completed</h3>
-                    <ProgressBar label={`${percentage}%`} now={percentage}/>
-                </div>}
+                <hr/>
             </div>
         )
     }
