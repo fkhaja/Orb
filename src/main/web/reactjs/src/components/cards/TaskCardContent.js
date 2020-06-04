@@ -5,6 +5,7 @@ import moment from "moment";
 import PickDateTimeModal from "./PickDateTimeModal";
 import EdiText from 'react-editext';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {updateTaskCard} from "../../util/RequestUtils";
 import {
     faCalendarAlt,
     faCheck,
@@ -19,10 +20,19 @@ import {
 export default class TaskCardContent extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {showModal: false};
+        this.state = {
+            showModal: false,
+            term: new Date(this.props.card.term),
+            description: this.props.card.description
+        };
+
+        this.handleDescriptionUpdate = this.handleDescriptionUpdate.bind(this);
+        this.updateCard = this.updateCard.bind(this);
     }
 
     render() {
+        let status = this.getCardStatus(this.state.term);
+
         return (
             <div>
                 <h3 className="card-name">{this.props.card.name}</h3>
@@ -33,9 +43,9 @@ export default class TaskCardContent extends React.Component {
                     </h6>
                     <div onClick={() => this.setState({show: !this.state.show})} className="term-box">
                         <span className="term-date">
-                            {this.props.card.term ? moment(this.props.card.term).format("dddd MM, HH:mm") : "No time limit"}
+                            {this.state.term ? moment(this.state.term).format("MMMM D, HH:mm") : "No time limit"}
                         </span>
-                        <span className="term-status">Success</span>
+                        <span className={`term-status ${status}`}>{status}</span>
                     </div>
                 </div>
                 <div className="card-description">
@@ -53,7 +63,7 @@ export default class TaskCardContent extends React.Component {
                              saveButtonContent={<FontAwesomeIcon icon={faCheck} title="Save changes"/>}
                              type="text"
                              value={this.props.card.description || "No description."}
-                             onSave={this.onSave}
+                             onSave={this.handleDescriptionUpdate}
                              editOnViewClick/>
                 </div>
                 <div className="card-tasks-title">
@@ -86,8 +96,34 @@ export default class TaskCardContent extends React.Component {
                     </div>
                 </div>
 
-                <PickDateTimeModal show={this.state.show} onClose={() => this.setState({show: !this.state.show})}/>
+                <PickDateTimeModal show={this.state.show} onClose={() => this.setState({show: !this.state.show})}
+                                   term={this.state.term} onChangeTerm={this.handleChangeTerm}/>
             </div>
         );
+    }
+
+    handleDescriptionUpdate(description) {
+        this.props.description = description;
+        this.updateCard();
+    }
+
+    handleChangeTerm = date => {
+        this.setState({term: date}, () => {
+            this.props.card.term = moment(this.state.term).format("YYYY-MM-DDTHH:mm");
+            this.updateCard();
+        });
+    }
+
+    updateCard() {
+        updateTaskCard(this.props.card).catch(console.log);
+    }
+
+    getCardStatus(term) {
+        const completedTaskNumber = this.props.card.tasks.filter(task => task.completed).length;
+        const today = Date.now();
+
+        if(today < term || !this.props.card.tasks.length) return "in-progress";
+
+        return completedTaskNumber === this.props.card.tasks.length && today >= term? "success" : "fail";
     }
 }

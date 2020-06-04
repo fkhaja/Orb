@@ -90,7 +90,18 @@
 
 .term-status {
     margin-left: 8px;
+}
+
+.fail {
+    background: #d9534f;
+}
+
+.success {
     background: #22bb33;
+}
+
+.in-progress {
+    display: none;
 }
 
 .button-box {

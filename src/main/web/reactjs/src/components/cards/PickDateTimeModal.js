@@ -6,6 +6,20 @@ import "../../styles/Modal.css";
 import DatePicker from "@y0c/react-datepicker/lib/components/DatePicker";
 
 export default class AddCardModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            date: this.props.term,
+            time: {
+                hours: this.props.term.getHours(),
+                minutes: this.props.term.getMinutes()
+            }
+        }
+
+        this.onTimeChange = this.onTimeChange.bind(this);
+        this.onDateChange = this.onDateChange.bind(this);
+        this.onSaveEdit = this.onSaveEdit.bind(this);
+    }
 
     render() {
         return (
@@ -25,18 +39,33 @@ export default class AddCardModal extends React.Component {
                             <div className="datetime-box">
                                 <div className="datetime-box-date">
                                     <h6 className="text-muted font-weight-bold">Date</h6>
-                                    <DatePicker locale="en" className="date-picker"/>
+                                    <DatePicker locale="en" className="date-picker"
+                                                initialDate={this.state.date} onChange={this.onDateChange}/>
                                 </div>
                                 <div className="datetime-box-time">
                                     <h6 className="text-muted font-weight-bold">Time</h6>
-                                    <TimeContainer/>
+                                    <TimeContainer hour={this.state.time.hours}
+                                                   minute={this.state.time.minutes} onChange={this.onTimeChange}/>
                                 </div>
                             </div>
-                            <button className="bttn-dark datetime-save-btn">Save</button>
+                            <button className="bttn-dark datetime-save-btn" onClick={this.onSaveEdit}>Save</button>
                         </div>
                     </div>
                 </div>
             </div>
         )
+    }
+
+    onDateChange(date) {
+        this.setState({date: new Date(date)})
+    }
+
+    onTimeChange(hours, minutes) {
+        this.setState({time: {hours, minutes}});
+    }
+
+    onSaveEdit() {
+        this.props.onChangeTerm(new Date(this.state.date.setHours(this.state.time.hours, this.state.time.minutes)));
+        this.props.onClose();
     }
 }
