@@ -1,4 +1,5 @@
 @import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:700';
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
 
 /**
  * Overlay
@@ -40,6 +41,7 @@
     background-color: #fff;
     width: 560px;
     min-height: 15rem;
+    max-height: 90vh;
     padding: 1rem;
     border-radius: .5em;
     opacity: 0;
@@ -91,8 +93,12 @@
     opacity: 1;
 }
 
-.modal_progress_bar {
+.modal-progress-bar {
     margin-bottom: 10px;
+}
+
+.modal-progress-bar-percentage {
+    float: left;
 }
 
 .title {
@@ -150,18 +156,20 @@ p.bttn-dark:focus {
 }
 
 .bttn-dark {
-    font-size: 18px;
-    letter-spacing: 2px;
+    font-size: 14px;
+    font-family: Nunito, sans-serif;
     text-transform: uppercase;
     display: inline-block;
     text-align: center;
-    width: 270px;
-    font-weight: bold;
-    padding: 14px 0;
-    border: 3px solid #644cad;
-    border-radius: 15px;
+    width: 100%;
+    font-weight: bolder;
+    padding: 5px 0;
+    border: 2px solid #7a58e5;
+    border-radius: 5px;
     position: relative;
     z-index: 2;
+    color: #7a58e5;
+    background: white;
 }
 
 .bttn-dark:before {
@@ -174,9 +182,9 @@ p.bttn-dark:focus {
     bottom: 0;
     opacity: 0;
     content: '';
-    background-color: #644cad;
-    border-radius: 10px;
+    background-color: #7a58e5;
     z-index: -1;
+    color: #fff;
 }
 
 .bttn-dark:hover:before {
@@ -185,6 +193,7 @@ p.bttn-dark:focus {
     left: 0;
     right: 0;
     opacity: 1;
+    color: #fff;
 }
 
 .bttn-dark:focus:before {
@@ -193,4 +202,10 @@ p.bttn-dark:focus {
     left: 0;
     right: 0;
     opacity: 1;
+    color: #fff;
+}
+
+.bttn-dark:hover {
+    color: #fff;
+    transition: 0.2s ease-in-out;
 }
