@@ -270,3 +270,39 @@
     color: #fff;
     transition: 0.2s ease-in-out;
 }
+
+.main-text-container {
+    font-size: 14px;
+    font-family: Roboto, sans-serif;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.edit-btn {
+    display: none;
+}
+
+.save-btn {
+    height: 30px;
+    width: 30px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    background: #7a58e5;
+}
+
+.cancel-btn {
+    height: 30px;
+    width: 30px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    background: lightgray;
+    margin-left: 3px;
+}
+
+.edit-text-container {
+    display: flex;
+    height: 30px;
+    width: 500px;
+}

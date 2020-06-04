@@ -3,9 +3,18 @@ import TaskList from "../tasks/TaskList";
 import "./TaskCardContent.css";
 import moment from "moment";
 import PickDateTimeModal from "./PickDateTimeModal";
+import EdiText from 'react-editext';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheckCircle} from "@fortawesome/free-solid-svg-icons/faCheckCircle";
-import {faCalendarAlt, faCheck, faCopy, faInfoCircle, faTrash, faWrench} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCalendarAlt,
+    faCheck,
+    faCheckCircle,
+    faCopy,
+    faInfoCircle,
+    faTimes,
+    faTrash,
+    faWrench
+} from "@fortawesome/free-solid-svg-icons";
 
 export default class TaskCardContent extends React.Component {
     constructor(props) {
@@ -34,7 +43,18 @@ export default class TaskCardContent extends React.Component {
                         <FontAwesomeIcon icon={faInfoCircle}/>
                         <span>Description</span>
                     </h6>
-                    <p className="text-muted">{this.props.card.description || "No description."}</p>
+                    <EdiText className="text-muted"
+                             mainContainerClassName="main-text-container"
+                             editContainerClassName="edit-text-container"
+                             editButtonClassName="edit-btn"
+                             saveButtonClassName="save-btn"
+                             cancelButtonClassName="cancel-btn"
+                             cancelButtonContent={<FontAwesomeIcon icon={faTimes} title="Cancel"/>}
+                             saveButtonContent={<FontAwesomeIcon icon={faCheck} title="Save changes"/>}
+                             type="text"
+                             value={this.props.card.description || "No description."}
+                             onSave={this.onSave}
+                             editOnViewClick/>
                 </div>
                 <div className="card-tasks-title">
                     <h6 className="text-muted font-weight-bold small text-uppercase">

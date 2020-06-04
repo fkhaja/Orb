@@ -8921,6 +8921,11 @@ react-dom@^16.13.1, react-dom@^16.8.4:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
+react-editext@^3.16.0:
+  version "3.16.0"
+  resolved "https://registry.yarnpkg.com/react-editext/-/react-editext-3.16.0.tgz#ffe05f8f591c8254ff8cdf57735d83fd2c43a084"
+  integrity sha512-v9H3ZNG9uSZmuZ0Yiqv24ZhCxI+uWzN9wkLFbYgAXn6CSHGR1CVXC1uTH62l7dKAngMo0ARuCtlZY4FParAjSw==
+
 react-error-overlay@^6.0.7:
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.7.tgz#1dcfb459ab671d53f660a991513cb2f0a0553108"
