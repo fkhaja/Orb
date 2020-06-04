@@ -32,7 +32,7 @@
     border-radius: 5px;
 }
 
-.inputGroup label:hover .action_buttons{
+.inputGroup label:hover .action_buttons {
     opacity: 0.3;
 }
 
@@ -141,7 +141,6 @@
     opacity: 1 !important;
 }
 
-
 .add-task {
     background-color: #fff;
     display: block;
@@ -165,15 +164,15 @@
     color: #5562eb;
 }
 
-.add-task:hover .add-task-icon-container{
+.add-task:hover .add-task-icon-container {
     background-color: #5562eb;
 }
 
-.add-task:hover .add-task-icon{
+.add-task:hover .add-task-icon {
     color: white;
 }
 
-.add-task:hover .add-task-content{
+.add-task:hover .add-task-content {
     color: #5562eb;
 }
 
@@ -190,4 +189,40 @@
 
 .add-task-icon {
     color: black;
+}
+
+.task-save-btn {
+    height: 30px;
+    width: 30px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    background: #7a58e5;
+    margin-left: 5px;
+}
+
+.task-cancel-btn {
+    height: 30px;
+    width: 30px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    background: #d9534f;
+    margin-left: 3px;
+}
+
+.task-edit-input {
+    width: 79%;
+    margin-left: 40px;
+    border: 1px solid lightgray;
+    font-size: 14px;
+    color: #3C454C;
+    padding-left: 7px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: 30px;
+}
+
+.hidden {
+    display: none;
 }

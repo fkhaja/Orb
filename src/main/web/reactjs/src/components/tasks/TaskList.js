@@ -4,7 +4,7 @@ import "./TaskList.css";
 import "../../styles/Modal.css"
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Task from "./Task";
-import TaskForm from "./TaskForm";
+import TaskEditForm from "./TaskEditForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
@@ -44,7 +44,7 @@ export default class TaskList extends React.Component {
                     ))}
 
                     {this.state.showInput ?
-                        <TaskForm onCancel={this.handleShowInputChange} onSubmit={this.handleTaskCreate}/>
+                        <TaskEditForm onCancel={this.handleShowInputChange} onSubmit={this.handleTaskCreate}/>
                         :
                         <div className="add-task" onClick={this.handleShowInputChange}>
                             <label>
