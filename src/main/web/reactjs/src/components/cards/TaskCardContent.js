@@ -79,7 +79,7 @@ export default class TaskCardContent extends React.Component {
                             <FontAwesomeIcon icon={faCheck}/>
                             <span>Mark as done</span>
                         </button>
-                        <button className="button-remove">
+                        <button className="button-remove" onClick={() => this.props.onDelete(this.props.index)}>
                             <FontAwesomeIcon icon={faTrash}/>
                             <span>Remove</span>
                         </button>

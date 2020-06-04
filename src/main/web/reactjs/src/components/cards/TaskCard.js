@@ -41,7 +41,8 @@ export default class TaskCard extends React.Component {
                             </svg>
                         </p>
                         <div className="modal-content">
-                            <TaskCardContent card={this.props.card}/>
+                            <TaskCardContent card={this.props.card} onDelete={this.props.onDelete}
+                                             index={this.props.index}/>
                         </div>
                     </div>
                 </div>
