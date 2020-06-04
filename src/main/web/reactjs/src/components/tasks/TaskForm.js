@@ -1,6 +1,6 @@
 import React from 'react';
 import "./TaskList.css";
-import "../Modal.css"
+import "../../styles/Modal.css"
 import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 

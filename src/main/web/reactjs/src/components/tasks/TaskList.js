@@ -1,7 +1,7 @@
 import React from 'react';
 import {deleteTask, saveTask, updateTask} from "../../util/RequestUtils";
 import "./TaskList.css";
-import "../Modal.css"
+import "../../styles/Modal.css"
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Task from "./Task";
 import TaskForm from "./TaskForm";

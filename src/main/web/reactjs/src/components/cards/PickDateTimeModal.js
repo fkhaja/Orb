@@ -2,7 +2,7 @@ import React from "react";
 import "./PickDateTimeModal.css";
 import TimeContainer from "@y0c/react-datepicker/lib/components/TimeContainer";
 import '../datepicker/calendar.scss';
-import "../Modal.css";
+import "../../styles/Modal.css";
 import DatePicker from "@y0c/react-datepicker/lib/components/DatePicker";
 
 export default class AddCardModal extends React.Component {

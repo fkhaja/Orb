@@ -1,0 +1,83 @@
+.input-wrapper body {
+    background: #424242;
+}
+
+.input-wrapper form {
+    width: 80%;
+    margin: 30px auto;
+}
+
+.group {
+    position: relative;
+    margin: 30px 0;
+}
+
+.input-wrapper textarea {
+    resize: none;
+}
+
+.input-wrapper input {
+    background: none;
+    color: dimgray;
+    font-size: 16px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #c6c6c6;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+}
+
+.input-wrapper input:focus ~ label,
+.input-wrapper input:valid ~ label {
+    top: -14px;
+    font-size: 12px;
+    color: #7a58e5;
+}
+
+.input-wrapper input:focus ~ .bar:before {
+    width: 422px;
+}
+
+.input-wrapper input[type="password"] {
+    letter-spacing: 0.3em;
+}
+
+.input-wrapper label {
+    color: #c6c6c6;
+    font-size: 16px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 300ms ease all;
+}
+
+.input-wrapper .bar {
+    position: relative;
+    display: block;
+    width: 320px;
+}
+
+.input-wrapper .bar:before {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 0;
+    position: absolute;
+    background: #7a58e5;
+    transition: 300ms ease all;
+    left: 0;
+}
+
+.input-wrapper .sumbit {
+    width: 80%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}

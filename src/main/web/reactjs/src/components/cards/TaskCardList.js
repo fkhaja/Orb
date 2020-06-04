@@ -1,7 +1,7 @@
 import React from 'react';
 import TaskCard from "./TaskCard";
 import './TaskCardList.css'
-import "../Modal.css"
+import "../../styles/Modal.css"
 import {deleteTaskCard, saveTaskCard, updateTaskCard} from "../../util/RequestUtils";
 import AddCardModal from "./AddCardModal";
 

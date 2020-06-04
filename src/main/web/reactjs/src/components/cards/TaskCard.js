@@ -1,6 +1,6 @@
 import React from 'react';
 import './TaskCard.css';
-import '../Modal.css';
+import '../../styles/Modal.css';
 import TaskCardContent from "./TaskCardContent";
 
 export default class TaskCard extends React.Component {

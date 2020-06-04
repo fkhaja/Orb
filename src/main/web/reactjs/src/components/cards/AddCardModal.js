@@ -1,7 +1,6 @@
 import React from "react";
-import Form from "react-bootstrap/Form";
-import {Button} from "react-bootstrap";
-import "../Modal.css";
+import "../../styles/Modal.css";
+import "../../styles/InputText.css";
 
 export default class AddCardModal extends React.Component {
     constructor(props) {
@@ -26,26 +25,30 @@ export default class AddCardModal extends React.Component {
                         </svg>
                     </p>
                     <div className="modal-content">
-                        <h2 className="title">Add task card</h2>
+                        <h2 className="title">Create task card</h2>
                         <div className="modal_task_list">
                             <div>
-                                <Form>
-                                    <Form.Group controlId="formBasicName">
-                                        <Form.Label>Name</Form.Label>
-                                        <Form.Control type="text" onChange={this.handleChange} name="name"
-                                                      value={this.state.name} placeholder="Enter name" required/>
-                                    </Form.Group>
-                                    <Form.Group controlId="formBasicDescription">
-                                        <Form.Label>
-                                            Description <span className="text-muted small">(optional)</span>
-                                        </Form.Label>
-                                        <Form.Control type="text" onChange={this.handleChange} name="description"
-                                                      value={this.state.description} placeholder="Enter description"/>
-                                    </Form.Group>
-                                    <Button block onClick={this.handleSubmit}>
-                                        Create
-                                    </Button>
-                                </Form>
+                                <div className="input-wrapper">
+                                    <form>
+                                        <div className="group">
+                                            <input type="text" required="required" onChange={this.handleChange}
+                                                   name="name" value={this.state.name}/>
+                                            <span className="highlight"/>
+                                            <span className="bar"/>
+                                            <label>Name</label>
+                                        </div>
+                                        <div className="group">
+                                            <input type="text" required="required" onChange={this.handleChange}
+                                                   name="description" value={this.state.description}/>
+                                            <span className="highlight"/>
+                                            <span className="bar"/>
+                                            <label>Description</label>
+                                        </div>
+                                        <button className="bttn-dark sumbit" onClick={this.handleSubmit}>
+                                            Create
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,7 +66,7 @@ export default class AddCardModal extends React.Component {
         if (this.state.name.length !== 0) {
             const newCard = {
                 name: this.state.name,
-                description: this.state.description
+                description: this.state.description,
             };
             this.props.onCreate(newCard);
             this.props.onClose();
