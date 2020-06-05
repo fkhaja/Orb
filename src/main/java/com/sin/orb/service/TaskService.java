@@ -3,8 +3,8 @@ package com.sin.orb.service;
 import com.sin.orb.domain.Task;
 import com.sin.orb.domain.TaskCard;
 import com.sin.orb.domain.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface TaskService {
 
@@ -14,7 +14,7 @@ public interface TaskService {
 
     void deleteTask(Task task);
 
-    Page<Task> findAllTasks(Long cardId, User user, Pageable pageable);
+    List<Task> findAllTasks(Long cardId, User user);
 
     Task findTaskById(Long id, Long cardId, User user);
 }

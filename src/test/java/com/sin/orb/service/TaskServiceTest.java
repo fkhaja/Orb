@@ -11,9 +11,6 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,15 +37,15 @@ class TaskServiceTest {
 
     @Test
     void findAllTasksShouldReturnTaskList() {
-        Page<Task> stubPage = new PageImpl<>(List.of(taskStub));
+        List<Task> stubList = List.of(taskStub);
 
-        when(taskRepository.findAllByTaskCardIdAndTaskCardUserIs(any(Long.class), any(User.class), any(Pageable.class)))
-                .thenReturn(stubPage);
+        when(taskRepository.findAllByTaskCardIdAndTaskCardUserIs(any(Long.class), any(User.class)))
+                .thenReturn(stubList);
 
-        Page<Task> resultPage = taskService.findAllTasks(1L, userStub, Pageable.unpaged());
-        verify(taskRepository).findAllByTaskCardIdAndTaskCardUserIs(any(Long.class), any(User.class), any(Pageable.class));
-        assertThat(resultPage.getTotalElements()).isEqualTo(1);
-        assertThat(resultPage.getTotalPages()).isEqualTo(1);
+        List<Task> resultList = taskService.findAllTasks(1L, userStub);
+        verify(taskRepository).findAllByTaskCardIdAndTaskCardUserIs(any(Long.class), any(User.class));
+        assertThat(resultList.size()).isEqualTo(1);
+        assertThat(resultList.get(0)).isSameAs(stubList.get(0));
     }
 
     @Test

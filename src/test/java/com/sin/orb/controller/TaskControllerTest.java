@@ -12,13 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -50,28 +48,28 @@ class TaskControllerTest {
     void getAllTasksShouldReturnCorrectDtoList() throws Exception {
         Task firstStub = new Task(1L, "test", false, null);
         Task secondStub = new Task(2L, "task", false, null);
-        Page<Task> stubPage = new PageImpl<>(List.of(firstStub, secondStub));
+        List<Task> stubList = List.of(firstStub, secondStub);
 
-        when(taskService.findAllTasks(any(Long.class), eq(null), any(Pageable.class))).thenReturn(stubPage);
+        when(taskService.findAllTasks(any(Long.class), eq(null))).thenReturn(stubList);
 
         mockMvc.perform(get("/taskcards/1/tasks").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.content", hasSize(2)))
-               .andExpect(jsonPath("$.content[0].taskId", equalTo(1)))
-               .andExpect(jsonPath("$.content[0].value", equalTo("test")))
-               .andExpect(jsonPath("$.content[0].completed", equalTo(false)))
-               .andExpect(jsonPath("$.content[1].taskId", equalTo(2)))
-               .andExpect(jsonPath("$.content[1].value", equalTo("task")))
-               .andExpect(jsonPath("$.content[1].completed", equalTo(false)))
+               .andExpect(jsonPath("$", hasSize(2)))
+               .andExpect(jsonPath("$[0].taskId", equalTo(1)))
+               .andExpect(jsonPath("$[0].value", equalTo("test")))
+               .andExpect(jsonPath("$[0].completed", equalTo(false)))
+               .andExpect(jsonPath("$[1].taskId", equalTo(2)))
+               .andExpect(jsonPath("$[1].value", equalTo("task")))
+               .andExpect(jsonPath("$[1].completed", equalTo(false)))
                .andExpect(status().isOk());
 
-        verify(taskService).findAllTasks(any(Long.class), eq(null), any(Pageable.class));
+        verify(taskService).findAllTasks(any(Long.class), eq(null));
     }
 
     @Test
     @WithMockUser
     void getAllTasksShouldReturnStatusOk() throws Exception {
-        when(taskService.findAllTasks(any(Long.class), eq(null), any(Pageable.class))).thenReturn(Page.empty());
+        when(taskService.findAllTasks(any(Long.class), eq(null))).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/taskcards/1/tasks").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
