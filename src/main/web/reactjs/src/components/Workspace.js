@@ -28,7 +28,7 @@ export default class Workspace extends React.Component {
             <div className="workspace-box">
                 <Sidebar className="sidebar"/>
                 <div className="workspace">
-                    <Header currentUser={this.props.currentUser}/>
+                    <Header currentUser={this.props.currentUser} onLogout={this.props.onLogout}/>
                     {this.state.taskCards.length > 0 && <TaskCardList cards={this.state.taskCards}/>}
                 </div>
             </div>

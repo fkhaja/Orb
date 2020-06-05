@@ -96,10 +96,16 @@
 }
 
 .text-button {
+    outline: none;
     border: none;
     background-color: inherit;
     margin: 0;
     padding: 0;
     cursor: pointer;
     display: inline-block;
+}
+
+.text-button:focus {
+    border: none;
+    outline: none;
 }
