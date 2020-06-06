@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("taskcards")
 public class TaskCardController {
@@ -36,14 +38,15 @@ public class TaskCardController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskCardDto> createTaskCard(@CurrentUser User user, @RequestBody TaskCardDto taskCardDto) {
+    public ResponseEntity<TaskCardDto> createTaskCard(@CurrentUser User user, @Valid @RequestBody TaskCardDto taskCardDto) {
         TaskCard taskCard = TaskCardMapper.INSTANCE.toEntity(taskCardDto);
         TaskCard created = taskCardService.saveTaskCard(taskCard, user);
         return new ResponseEntity<>(TaskCardMapper.INSTANCE.toDto(created), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<TaskCardDto> updateTaskCard(@CurrentUser User user, @PathVariable("id") Long id, @RequestBody TaskCardDto replacementDto) {
+    public ResponseEntity<TaskCardDto> updateTaskCard(@CurrentUser User user, @PathVariable("id") Long id,
+                                                      @Valid @RequestBody TaskCardDto replacementDto) {
         TaskCard existing = taskCardService.findTaskCardForUser(id, user);
         TaskCard replacement = TaskCardMapper.INSTANCE.toEntity(replacementDto);
         return ResponseEntity.ok(TaskCardMapper.INSTANCE.toDto(taskCardService.updateTaskCard(existing, replacement)));

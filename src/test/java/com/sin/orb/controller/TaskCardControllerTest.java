@@ -191,6 +191,7 @@ class TaskCardControllerTest {
     @WithMockUser
     void createTaskCardShouldReturnStatusCreated() throws Exception {
         TaskCardDto body = new TaskCardDto();
+        body.setName("test");
 
         when(taskCardService.saveTaskCard(any(TaskCard.class), eq(null))).thenReturn(mock(TaskCard.class));
 
@@ -256,6 +257,7 @@ class TaskCardControllerTest {
     @WithMockUser
     void updateTaskCardShouldReturnStatusOk() throws Exception {
         TaskCardDto body = new TaskCardDto();
+        body.setName("test");
 
         when(taskCardService.updateTaskCard(any(TaskCard.class), any(TaskCard.class))).thenReturn(mock(TaskCard.class));
 
@@ -276,6 +278,7 @@ class TaskCardControllerTest {
     @WithMockUser
     void whenUpdateTaskCardGetsWrongIdThenDenyUpdateAndReturnStatusNotFound() throws Exception {
         TaskCardDto body = new TaskCardDto();
+        body.setName("test");
 
         when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenThrow(ResourceNotFoundException.class);
 

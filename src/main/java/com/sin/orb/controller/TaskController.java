@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,8 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskDto> createTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @RequestBody TaskDto taskDTO) {
+    public ResponseEntity<TaskDto> createTask(@CurrentUser User user, @PathVariable("cardId") Long cardId,
+                                              @Valid @RequestBody TaskDto taskDTO) {
         Task task = TaskMapper.INSTANCE.toEntity(taskDTO);
         TaskCard taskCard = taskCardService.findTaskCardForUser(cardId, user);
         Task created = taskService.saveTask(task, taskCard);
@@ -53,7 +55,7 @@ public class TaskController {
 
     @PutMapping("{id}")
     public ResponseEntity<TaskDto> updateTask(@CurrentUser User user, @PathVariable("cardId") Long cardId,
-                                              @PathVariable("id") Long id, @RequestBody TaskDto replacementDto) {
+                                              @PathVariable("id") Long id, @Valid @RequestBody TaskDto replacementDto) {
         Task existing = taskService.findTaskById(id, cardId, user);
         Task replacement = TaskMapper.INSTANCE.toEntity(replacementDto);
         return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(taskService.updateTask(existing, replacement)));

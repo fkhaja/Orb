@@ -141,6 +141,7 @@ class TaskControllerTest {
     @WithMockUser
     void createTaskShouldReturnStatusCreated() throws Exception {
         TaskDto body = new TaskDto();
+        body.setValue("test");
 
         when(taskService.saveTask(any(Task.class), any(TaskCard.class))).thenReturn(mock(Task.class));
 
@@ -161,6 +162,7 @@ class TaskControllerTest {
     @WithMockUser
     void whenCreateTaskGetsWrongCardIdThenDenySaveAndReturnStatusNotFound() throws Exception {
         TaskDto body = new TaskDto();
+        body.setValue("test");
 
         when(taskCardService.findTaskCardForUser(any(Long.class), eq(null)))
                 .thenThrow(ResourceNotFoundException.class);
@@ -201,6 +203,7 @@ class TaskControllerTest {
     @WithMockUser
     void updateTaskShouldReturnStatusOk() throws Exception {
         TaskDto body = new TaskDto();
+        body.setValue("test");
         when(taskService.updateTask(any(Task.class), any(Task.class))).thenReturn(mock(Task.class));
 
         mockMvc.perform(put("/taskcards/1/tasks/1")
@@ -220,6 +223,7 @@ class TaskControllerTest {
     @WithMockUser
     void whenUpdateTaskGetsWrongIdThenDenyUpdateAndReturnStatusNotFound() throws Exception {
         TaskDto body = new TaskDto();
+        body.setValue("test");
 
         when(taskService.findTaskById(any(Long.class), any(Long.class), eq(null)))
                 .thenThrow(ResourceNotFoundException.class);

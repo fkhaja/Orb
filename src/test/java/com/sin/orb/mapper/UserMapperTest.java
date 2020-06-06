@@ -22,7 +22,5 @@ class UserMapperTest {
         assertThat(dto.getUsername()).isSameAs(entity.getUsername());
         assertThat(dto.getEmail()).isSameAs(entity.getEmail());
         assertThat(dto.getImageUrl()).isSameAs(entity.getImageUrl());
-        assertThat(dto.getProvider()).isSameAs(entity.getProvider());
-        assertThat(dto.getProviderId()).isSameAs(entity.getProviderId());
     }
 }
