@@ -9,6 +9,8 @@ import com.sin.orb.payload.SignUpRequest;
 import com.sin.orb.security.AuthProvider;
 import com.sin.orb.security.TokenProvider;
 import com.sin.orb.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
+@Api
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -43,6 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @ApiOperation("Authenticate user")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
@@ -54,6 +58,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @ApiOperation("Register a new user")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest request) {
         if (userService.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email address already in use");

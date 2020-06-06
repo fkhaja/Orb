@@ -8,15 +8,19 @@ import com.sin.orb.mapper.TaskMapper;
 import com.sin.orb.security.CurrentUser;
 import com.sin.orb.service.TaskCardService;
 import com.sin.orb.service.TaskService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Api
 @RestController
 @RequestMapping("taskcards/{cardId}/tasks")
 public class TaskController {
@@ -30,7 +34,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskDto>> getAllTasks(@CurrentUser User user, @PathVariable("cardId") Long cardId) {
+    @ApiOperation("Get all tasks")
+    public ResponseEntity<List<TaskDto>> getAllTasks(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId) {
         List<TaskDto> taskDtos = taskService.findAllTasks(cardId, user)
                                             .stream()
                                             .map(TaskMapper.INSTANCE::toDto)
@@ -39,13 +44,15 @@ public class TaskController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<TaskDto> getTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable Long id) {
+    @ApiOperation("Get a task with the specified id")
+    public ResponseEntity<TaskDto> getTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable Long id) {
         Task task = taskService.findTaskById(id, cardId, user);
         return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(task));
     }
 
     @PostMapping
-    public ResponseEntity<TaskDto> createTask(@CurrentUser User user, @PathVariable("cardId") Long cardId,
+    @ApiOperation("Create a task")
+    public ResponseEntity<TaskDto> createTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId,
                                               @Valid @RequestBody TaskDto taskDTO) {
         Task task = TaskMapper.INSTANCE.toEntity(taskDTO);
         TaskCard taskCard = taskCardService.findTaskCardForUser(cardId, user);
@@ -54,7 +61,8 @@ public class TaskController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<TaskDto> updateTask(@CurrentUser User user, @PathVariable("cardId") Long cardId,
+    @ApiOperation("Update an existing task with the specified id")
+    public ResponseEntity<TaskDto> updateTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId,
                                               @PathVariable("id") Long id, @Valid @RequestBody TaskDto replacementDto) {
         Task existing = taskService.findTaskById(id, cardId, user);
         Task replacement = TaskMapper.INSTANCE.toEntity(replacementDto);
@@ -62,7 +70,8 @@ public class TaskController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteTask(@CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable("id") Long id) {
+    @ApiOperation("Delete a task with the specified id")
+    public ResponseEntity<Void> deleteTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable("id") Long id) {
         taskService.deleteTask(taskService.findTaskById(id, cardId, user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -79,7 +79,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                              "/**/*.jpg",
                              "/**/*.html",
                              "/**/*.css",
-                             "/**/*.js")
+                             "/**/*.js",
+                             "/v2/api-docs",
+                             "/swagger-resources",
+                             "/swagger-resources/**",
+                             "/configuration/ui",
+                             "/configuration/security",
+                             "/swagger-ui.html",
+                             "/webjars/**",
+                             "/csrf")
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
                 .permitAll()
@@ -113,9 +121,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

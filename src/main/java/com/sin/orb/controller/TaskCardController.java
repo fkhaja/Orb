@@ -6,6 +6,8 @@ import com.sin.orb.dto.TaskCardDto;
 import com.sin.orb.mapper.TaskCardMapper;
 import com.sin.orb.security.CurrentUser;
 import com.sin.orb.service.TaskCardService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +15,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
+@Api
 @RestController
 @RequestMapping("taskcards")
 public class TaskCardController {
@@ -27,25 +31,29 @@ public class TaskCardController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<TaskCardDto>> getAllTaskCards(@CurrentUser User user, @PageableDefault(sort = "id") Pageable pageable) {
+    @ApiOperation("Get all task cards")
+    public ResponseEntity<Page<TaskCardDto>> getAllTaskCards(@ApiIgnore @CurrentUser User user, @PageableDefault(sort = "id") Pageable pageable) {
         Page<TaskCard> cards = taskCardService.findAllForUser(user, pageable);
         return ResponseEntity.ok(cards.map(TaskCardMapper.INSTANCE::toDto));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<TaskCardDto> getTaskCard(@CurrentUser User user, @PathVariable Long id) {
+    @ApiOperation("Get a task card with the specified id")
+    public ResponseEntity<TaskCardDto> getTaskCard(@ApiIgnore @CurrentUser User user, @PathVariable Long id) {
         return ResponseEntity.ok(TaskCardMapper.INSTANCE.toDto(taskCardService.findTaskCardForUser(id, user)));
     }
 
     @PostMapping
-    public ResponseEntity<TaskCardDto> createTaskCard(@CurrentUser User user, @Valid @RequestBody TaskCardDto taskCardDto) {
+    @ApiOperation("Create a task card")
+    public ResponseEntity<TaskCardDto> createTaskCard(@ApiIgnore @CurrentUser User user, @Valid @RequestBody TaskCardDto taskCardDto) {
         TaskCard taskCard = TaskCardMapper.INSTANCE.toEntity(taskCardDto);
         TaskCard created = taskCardService.saveTaskCard(taskCard, user);
         return new ResponseEntity<>(TaskCardMapper.INSTANCE.toDto(created), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<TaskCardDto> updateTaskCard(@CurrentUser User user, @PathVariable("id") Long id,
+    @ApiOperation("Update the task card with the specified id")
+    public ResponseEntity<TaskCardDto> updateTaskCard(@ApiIgnore @CurrentUser User user, @PathVariable("id") Long id,
                                                       @Valid @RequestBody TaskCardDto replacementDto) {
         TaskCard existing = taskCardService.findTaskCardForUser(id, user);
         TaskCard replacement = TaskCardMapper.INSTANCE.toEntity(replacementDto);
@@ -53,7 +61,8 @@ public class TaskCardController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteTaskCard(@CurrentUser User user, @PathVariable("id") Long id) {
+    @ApiOperation("Delete a task card with the specified id")
+    public ResponseEntity<Void> deleteTaskCard(@ApiIgnore @CurrentUser User user, @PathVariable("id") Long id) {
         taskCardService.deleteTaskCard(taskCardService.findTaskCardForUser(id, user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
