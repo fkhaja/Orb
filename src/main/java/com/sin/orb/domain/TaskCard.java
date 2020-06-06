@@ -1,11 +1,8 @@
 package com.sin.orb.domain;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,33 +19,28 @@ public class TaskCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(name = "name")
-    @Length(max = 64)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Basic
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
     @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Task> tasks;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", updatable = false)
+    @JoinColumn(name = "user_id", updatable = false, nullable = false)
     private User user;
 
     @Column(name = "description")
-    @Length(max = 500)
     private String description;
 
     @Basic
     @Column(name = "term")
     private LocalDateTime term;
 
-    @NotNull
-    @Column(name = "done", columnDefinition = "boolean default false")
+    @Column(name = "done", columnDefinition = "boolean default false", nullable = false)
     private Boolean done;
 
     @Column(name = "image_url")

@@ -3,8 +3,6 @@ package com.sin.orb.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -18,16 +16,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(name = "value")
+    @Column(name = "value", nullable = false)
     private String value;
 
-    @NotNull
-    @Column(name = "completed", columnDefinition = "boolean default false")
+    @Column(name = "completed", columnDefinition = "boolean default false", nullable = false)
     private Boolean completed;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_card_id", updatable = false)
+    @JoinColumn(name = "task_card_id", updatable = false, nullable = false)
     private TaskCard taskCard;
 }
