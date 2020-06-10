@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './Login.css';
-import {ACCESS_TOKEN, FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL} from '../../../constants/Security';
-import {login} from '../../../util/AuthUtils';
+import {FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL} from '../../../constants/Security';
 import {Link, Redirect} from 'react-router-dom'
 import fbLogo from '../../../img/facebook-logo.png';
 import googleLogo from '../../../img/google-logo.png';
@@ -12,36 +11,31 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Image from "react-bootstrap/Image";
 import Col from "react-bootstrap/Col";
+import {useDispatch} from "react-redux";
+import {logIn} from "../../../redux/actions/authActions";
 
-export default class Login extends React.Component {
-    componentDidMount() {
-        if (this.props.location.state && this.props.location.state.error) {
+const Login = (props) => {
+
+    useEffect(() => {
+        if (props.location.state && props.location.state.error) {
             setTimeout(() => {
-                Alert.error(this.props.location.state.error, {
+                Alert.error(props.location.state.error, {
                     timeout: 5000
                 });
-                this.props.history.replace({
-                    pathname: this.props.location.pathname,
+                props.history.replace({
+                    pathname: props.location.pathname,
                     state: {}
                 });
             }, 100);
         }
-    }
+    }, [props.history, props.location.pathname, props.location.state]);
 
-    render() {
-        if (this.props.authenticated) {
-            return <Redirect
-                to={{
-                    pathname: "/workspace",
-                    state: {from: this.props.location}
-                }}/>;
-        }
-
-        return (
+    return props.authenticated ? <Redirect to={{pathname: "/workspace", state: {from: props.location}}}/> :
+        (
             <div className="login-container">
                 <div className="login-content">
                     <h1 className="login-title font-weight-bold">LOGIN</h1>
-                    <LoginForm {...this.props} onLogin={this.props.onLogin}/>
+                    <LoginForm/>
                     <br/>
                     <ProviderLogin/>
                     <br/> <br/>
@@ -52,88 +46,64 @@ export default class Login extends React.Component {
                 </div>
             </div>
         );
-    }
 }
 
-class ProviderLogin extends React.Component {
-    render() {
-        return (
-            <div style={{"textAlign": "center"}} className="signup-link">
-                <p>Or Sign Up Using</p>
-                <Container>
-                    <Row className="justify-content-md-center">
-                        <Col xs lg="2">
-                            <a href={GOOGLE_AUTH_URL}>
-                                <Image src={googleLogo} roundedCircle
-                                       style={{"width": "100%", "height": "auto"}}
-                                       title="Google"/>
-                            </a>
-                        </Col>
-                        <Col xs lg="2">
-                            <a href={FACEBOOK_AUTH_URL}>
-                                <Image src={fbLogo} roundedCircle
-                                       style={{"width": "100%", "height": "auto"}}
-                                       title="Facebook"/>
-                            </a>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-        );
-    }
+export default Login;
+
+const ProviderLogin = () => {
+    return (
+        <div className="signup-link align-content-center">
+            <p>Or Sign Up Using</p>
+            <Container>
+                <Row className="justify-content-md-center">
+                    <Col xs lg="2">
+                        <a href={GOOGLE_AUTH_URL}>
+                            <Image src={googleLogo} roundedCircle
+                                   style={{"width": "100%", "height": "auto"}}
+                                   title="Google"/>
+                        </a>
+                    </Col>
+                    <Col xs lg="2">
+                        <a href={FACEBOOK_AUTH_URL}>
+                            <Image src={fbLogo} roundedCircle
+                                   style={{"width": "100%", "height": "auto"}}
+                                   title="Facebook"/>
+                        </a>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
+    );
 }
 
 
-class LoginForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: ''
-        };
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+const LoginForm = () => {
+    const dispatch = useDispatch();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    handleInputChange(event) {
-        const target = event.target;
-        const inputName = target.name;
-        const inputValue = target.value;
-
-        this.setState({
-            [inputName]: inputValue
-        });
-    }
-
-    handleSubmit(event) {
+    const handleEmailChange = event => setEmail(event.target.value);
+    const handlePasswordChange = event => setPassword(event.target.value);
+    const handleSubmit = event => {
         event.preventDefault();
 
-        const loginRequest = Object.assign({}, this.state);
+        const loginRequest = {email: email, password: password};
+        dispatch(logIn(loginRequest));
+    };
 
-        login(loginRequest).then(response => {
-            localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-            Alert.success("You're successfully logged in!");
-            this.props.history.push("/");
-        }).then(this.props.onLogin).catch(error => {
-            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
-        });
-    }
-
-    render() {
-        return (
-            <Form onSubmit={this.handleSubmit}>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Control type="email" placeholder="Email" name="email" value={this.state.email}
-                                  onChange={this.handleInputChange} required/>
-                </Form.Group>
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Control type="password" placeholder="Password" name="password" value={this.state.password}
-                                  onChange={this.handleInputChange} required/>
-                </Form.Group>
-                <Button variant="primary" type="submit" block className="rounded">
-                    Log In
-                </Button>
-            </Form>
-        );
-    }
+    return (
+        <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formBasicEmail">
+                <Form.Control type="email" placeholder="Email" name="email" value={email}
+                              onChange={handleEmailChange} required/>
+            </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+                <Form.Control type="password" placeholder="Password" name="password" value={password}
+                              onChange={handlePasswordChange} required/>
+            </Form.Group>
+            <Button variant="primary" type="submit" block className="rounded">
+                Log In
+            </Button>
+        </Form>
+    );
 }

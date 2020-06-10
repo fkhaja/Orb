@@ -12,6 +12,8 @@ export const request = (options) => {
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
 
+    if (options.method === "DELETE") return fetch(options.url, options);
+
     return fetch(options.url, options)
         .then(response =>
             response.json().then(json => {

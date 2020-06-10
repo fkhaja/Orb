@@ -1,71 +1,40 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import TaskCard from "./TaskCard";
 import './TaskCardList.css'
 import "../../styles/Modal.css"
-import {deleteTaskCard, saveTaskCard, updateTaskCard} from "../../util/RequestUtils";
 import AddCardModal from "./AddCardModal";
+import {showCreateModal} from "../../redux/actions/modalActions";
+import {fetchCards} from "../../redux/actions/cardActions";
+import {useDispatch, useSelector} from "react-redux";
 
-export default class TaskCardList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            showModal: false,
-            cards: []
-        };
-        this.handleShowInputChange = this.handleShowInputChange.bind(this);
-        this.handleTaskCardCreate = this.handleTaskCardCreate.bind(this);
-        this.handleTaskCardUpdate = this.handleTaskCardUpdate.bind(this);
-        this.handleTaskCardDelete = this.handleTaskCardDelete.bind(this);
-    }
+const TaskCardList = () => {
+    const dispatch = useDispatch();
+    const cards = useSelector(state => state.cards.fetchedCards);
 
-    componentDidMount() {
-        this.setState({cards: this.props.cards});
-    }
+    useEffect(() => {
+        dispatch(fetchCards());
+    }, [dispatch]);
 
-    render() {
-        return (
-            <div className="card-container">
-                <div className="add_btn" onClick={this.handleShowInputChange}>
-                    <button className="icon-btn add-btn">
-                        <div className="add-icon"/>
-                        <div className="btn-txt">
-                            <span>Add card</span>
-                        </div>
-                    </button>
-                </div>
-
-                <div className="card-list">
-                    {this.state.cards.map((card, i) => (
-                        <TaskCard card={card} key={card.cardId} index={i} onUpdate={this.handleTaskCardUpdate}
-                                  onDelete={(i) => this.handleTaskCardDelete(i)}/>
-                    ))}
-                </div>
-
-                <AddCardModal show={this.state.showModal} onClose={this.handleShowInputChange}
-                              onCreate={this.handleTaskCardCreate}/>
+    return (
+        <div className="card-container">
+            <AddCardModal/>
+            <div className="add_btn">
+                <button className="icon-btn add-btn" onClick={() => dispatch(showCreateModal())}>
+                    <div className="add-icon"/>
+                    <div className="btn-txt">
+                        <span>Add card</span>
+                    </div>
+                </button>
             </div>
-        )
-    }
 
-    handleShowInputChange() {
-        this.setState(() => ({showModal: !this.state.showModal}));
-    }
+            {cards.length > 0 &&
+            <div className="card-list">
+                {cards.map((card, i) => (
+                    <TaskCard card={card} key={card.cardId} index={++i}/>
+                ))}
+            </div>}
+        </div>
+    )
+};
 
-    handleTaskCardCreate(card) {
-        saveTaskCard(card)
-            .then(response => this.setState(() => ({cards: this.state.cards.concat(response)})))
-            .catch(console.log);
-    }
-
-    handleTaskCardUpdate(card) {
-        this.setState({showModal: false});
-        updateTaskCard(card).catch(console.log);
-    }
-
-    handleTaskCardDelete(index) {
-        deleteTaskCard(this.state.cards[index]).catch(console.log);
-        let newCards = this.state.cards.slice();
-        newCards.splice(index, 1);
-        this.setState(() => ({cards: newCards}));
-    }
-}
+export default TaskCardList;

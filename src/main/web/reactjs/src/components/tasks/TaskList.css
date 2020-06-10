@@ -123,6 +123,9 @@
     background: #b4b4b4;
 }
 
+.action-label{
+    z-index: 100;
+}
 .action_buttons {
     color: black;
     position: absolute;
@@ -189,6 +192,7 @@
 
 .add-task-icon {
     color: black;
+    margin-bottom: 1px;
 }
 
 .task-save-btn {

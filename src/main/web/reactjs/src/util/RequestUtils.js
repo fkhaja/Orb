@@ -8,9 +8,9 @@ export async function findTaskCards() {
     })
 }
 
-export async function updateTask(task, cardId) {
+export async function updateTask(task, taskId, cardId) {
     return request({
-        url: `${API_BASE_URL}/taskcards/${cardId}/tasks/${task.taskId}`,
+        url: `${API_BASE_URL}/taskcards/${cardId}/tasks/${taskId}`,
         method: 'PUT',
         body: JSON.stringify(task)
     })
@@ -24,9 +24,9 @@ export async function saveTask(task, cardId) {
     })
 }
 
-export async function deleteTask(task, cardId) {
+export async function removeTask(taskId, cardId) {
     return request({
-        url: `${API_BASE_URL}/taskcards/${cardId}/tasks/${task.taskId}`,
+        url: `${API_BASE_URL}/taskcards/${cardId}/tasks/${taskId}`,
         method: 'DELETE'
     })
 }
@@ -39,17 +39,17 @@ export async function saveTaskCard(card) {
     })
 }
 
-export async function updateTaskCard(card) {
+export async function updateTaskCard(id, replacement) {
     return request({
-        url: `${API_BASE_URL}/taskcards/${card.cardId}`,
+        url: `${API_BASE_URL}/taskcards/${id}`,
         method: 'PUT',
-        body: JSON.stringify(card)
+        body: JSON.stringify(replacement)
     })
 }
 
-export async function deleteTaskCard(card) {
+export async function deleteTaskCard(id) {
     return request({
-        url: `${API_BASE_URL}/taskcards/${card.cardId}`,
+        url: `${API_BASE_URL}/taskcards/${id}`,
         method: 'DELETE'
     })
 }

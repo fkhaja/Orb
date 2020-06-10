@@ -1,7 +1,7 @@
 import {ACCESS_TOKEN, API_BASE_URL} from "../constants/Security";
 import {request} from "./APIUtils";
 
-export function getCurrentUser() {
+export function fetchCurrentUser() {
     if (!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
@@ -19,7 +19,7 @@ export function login(loginRequest) {
     });
 }
 
-export function signUp(signUpRequest) {
+export function signup(signUpRequest) {
     return request({
         url: API_BASE_URL + "/auth/signup",
         method: 'POST',

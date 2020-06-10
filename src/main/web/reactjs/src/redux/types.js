@@ -1,0 +1,20 @@
+export const LOAD_LOGGED_IN_USER = "LOAD_LOGGED_IN_USER";
+export const LOGOUT_USER = "LOGOUT_USER";
+
+export const LOG_IN = "LOG_IN";
+export const SIGN_UP = "SIGN_UP";
+
+export const FETCH_CARDS = "FETCH_CARDS";
+export const CREATE_CARD = "CREATE_CARD";
+export const DELETE_CARD = "DELETE_CARD";
+export const EDIT_CARD_DESCRIPTION = "EDIT_CARD_DESCRIPTION";
+export const EDIT_CARD_TERM = "EDIT_CARD_TERM";
+
+export const CREATE_TASK = "CREATE_TASK";
+export const EDIT_TASK = "EDIT_TASK";
+export const DELETE_TASK = "DELETE_TASK";
+export const COMPLETE_TASK = "COMPLETE_TASK";
+export const CANCEL_TASK_COMPLETION = "CANCEL_TASK_COMPLETION"
+
+export const SHOW_CREATE_MODAL = "SHOW_CREATE_MODAL";
+export const HIDE_CREATE_MODAL = "HIDE_CREATE_MODAL";
