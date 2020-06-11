@@ -4,7 +4,7 @@ import com.sin.orb.domain.TaskCard;
 import com.sin.orb.domain.User;
 import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.repository.TaskCardRepository;
-import org.springframework.beans.BeanUtils;
+import com.sin.orb.util.CustomBeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +33,7 @@ public class TaskCardServiceImpl implements TaskCardService {
 
     @Override
     public TaskCard updateTaskCard(TaskCard existing, TaskCard replacement) {
-        BeanUtils.copyProperties(replacement, existing, "id", "user", "creationDate", "tasks");
+        CustomBeanUtils.copyPropsIgnoringNulls(replacement, existing, "id", "user", "creationDate", "tasks");
         return repository.save(existing);
     }
 

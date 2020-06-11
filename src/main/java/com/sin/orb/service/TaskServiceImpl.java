@@ -5,7 +5,7 @@ import com.sin.orb.domain.TaskCard;
 import com.sin.orb.domain.User;
 import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.repository.TaskRepository;
-import org.springframework.beans.BeanUtils;
+import com.sin.orb.util.CustomBeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task updateTask(Task existing, Task task) {
-        BeanUtils.copyProperties(task, existing, "id", "taskCard");
+        CustomBeanUtils.copyPropsIgnoringNulls(task, existing, "id", "taskCard");
         return taskRepository.save(existing);
     }
 
