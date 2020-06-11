@@ -9,12 +9,19 @@ import {cancelTaskCompletion, completeTask, deleteTask} from "../../redux/action
 const Task = ({task, cardId}) => {
     const dispatch = useDispatch();
     const [editable, setEditable] = useState(false);
+    const [completed, setCompleted] = useState(task.completed)
     const id = `option${task.taskId}`;
     let removed = false;
 
     const handleCompletionChange = () => {
         if (!removed) {
-            dispatch(task.completed ? cancelTaskCompletion(task.taskId, cardId) : completeTask(task.taskId, cardId))
+            if (completed) {
+                setCompleted(false);
+                dispatch(cancelTaskCompletion(task.taskId, cardId));
+            } else {
+                setCompleted(true);
+                dispatch(completeTask(task.taskId, cardId));
+            }
         }
     }
 
@@ -28,7 +35,7 @@ const Task = ({task, cardId}) => {
                           onCancel={() => setEditable(false)}/> :
             <div className="inputGroup">
                 <input id={id} name={id} type="checkbox"
-                       checked={task.completed}
+                       checked={completed}
                        onChange={handleCompletionChange}/>
                 <label htmlFor={id} className="action-label">
                     <span className="inputGroup_content">{task.value}</span>
