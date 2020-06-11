@@ -1,9 +1,7 @@
 import {HIDE_CREATE_MODAL, SHOW_CREATE_MODAL} from "../types";
 
 const initialState = {
-    showCreateModal: false,
-    showContentModal: false,
-    showDatepickerModal: false
+    showCreateModal: false
 };
 
 export const modalReducer = (state = initialState, action) => {

@@ -1,5 +1,6 @@
 import {
     CANCEL_TASK_COMPLETION,
+    COMPLETE_CARD,
     COMPLETE_TASK,
     CREATE_CARD,
     CREATE_TASK,
@@ -35,6 +36,13 @@ export const cardReducer = (state = initialState, action) => {
                 ...state,
                 fetchedCards: state.fetchedCards.map(card => card.cardId === action.id ?
                     {...card, term: action.term} : card
+                )
+            };
+        case COMPLETE_CARD:
+            return {
+                ...state,
+                fetchedCards: state.fetchedCards.map(card => card.cardId === action.id ?
+                    {...card, done: true} : card
                 )
             };
         case CREATE_TASK:

@@ -7,28 +7,41 @@ import {
     faCalendarAlt,
     faCheck,
     faCheckCircle,
-    faCopy,
     faInfoCircle,
     faTimes,
     faTrash,
     faWrench
 } from "@fortawesome/free-solid-svg-icons";
-import {useDispatch} from "react-redux";
-import {deleteCard, editCardDescription} from "../../redux/actions/cardActions";
+import {useDispatch, useSelector} from "react-redux";
+import {completeCard, deleteCard, editCardDescription} from "../../redux/actions/cardActions";
 import moment from "moment";
 import PickDateTimeModal from "./PickDateTimeModal";
+import Alert from "react-bootstrap/Alert";
+import {hideCompletionErrorAlert, showCompletionErrorAlert} from "../../redux/actions/alertActions";
 
 const TaskCardContent = ({card}) => {
     const dispatch = useDispatch();
+    const showSuccessAlert = useSelector(state => state.alert.showCompletionSuccessAlert);
+    const showErrorAlert = useSelector(state => state.alert.showCompletionErrorAlert);
+    const done = useSelector(state => state.cards.fetchedCards.find(c => c.cardId === card.cardId).done);
     const [show, setShow] = useState(false);
 
     const handleDescriptionUpdate = description => dispatch(editCardDescription(card.cardId, description));
+
+    const handleCardComplete = () => {
+        if (card.tasks.length > 0 && card.tasks.every(task => task.completed)) {
+            dispatch(completeCard(card.cardId));
+        } else {
+            dispatch(showCompletionErrorAlert());
+            setTimeout(() => dispatch(hideCompletionErrorAlert()), 3000);
+        }
+    }
 
     const getCardStatus = (term) => {
         const completedTaskNumber = card.tasks.filter(task => task.completed).length;
         const today = moment(Date.now()).format("YYYY-MM-DDTHH:mm");
 
-        if(completedTaskNumber < card.tasks.length && today > term) return "fail";
+        if (completedTaskNumber < card.tasks.length && today > term) return "fail";
 
         return completedTaskNumber === card.tasks.length && today <= term ? "success" : "in-progress";
     }
@@ -81,20 +94,39 @@ const TaskCardContent = ({card}) => {
                     <span>Actions</span>
                 </h6>
                 <div className="button-box">
-                    <button className="button-copy">
-                        <FontAwesomeIcon icon={faCopy}/>
-                        <span>Copy</span>
-                    </button>
-                    <button className="button-mark-done">
+                    {done ?
+                        <button className="button-remove-done" onClick={() => dispatch(deleteCard(card.cardId))}>
+                            <FontAwesomeIcon icon={faTrash}/>
+                            <span>REMOVE</span>
+                        </button>
+                        :
+                        <button className="button-remove-normal" onClick={() => dispatch(deleteCard(card.cardId))}>
+                            <FontAwesomeIcon icon={faTrash}/>
+                        </button>
+                    }
+
+                    <button className={`button-mark-done ${done && "d-none"}`} onClick={handleCardComplete}>
                         <FontAwesomeIcon icon={faCheck}/>
                         <span>Mark as done</span>
                     </button>
-                    <button className="button-remove" onClick={() => dispatch(deleteCard(card.cardId))}>
-                        <FontAwesomeIcon icon={faTrash}/>
-                        <span>Remove</span>
-                    </button>
                 </div>
             </div>
+
+            {showSuccessAlert &&
+            <div className="card-completion-alert">
+                <Alert variant="success">
+                    Congratulations! You have completed this card. It is automatically moved to the "Completed" section
+                </Alert>
+            </div>
+            }
+
+            {showErrorAlert &&
+            <div className="card-completion-alert">
+                <Alert variant="danger">
+                    To mark a card as completed, you need to complete all the tasks in it
+                </Alert>
+            </div>}
+
             <PickDateTimeModal show={show} onClose={() => setShow(false)} card={card}/>
         </div>
     );

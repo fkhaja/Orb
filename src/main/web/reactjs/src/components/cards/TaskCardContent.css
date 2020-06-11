@@ -65,6 +65,10 @@
     margin-left: 5px;
 }
 
+.card-completion-alert {
+    margin-top: 80px;
+}
+
 .date-time-pick {
     display: block;
 }
@@ -105,8 +109,6 @@
 }
 
 .button-box {
-    margin-left: -30px;
-    display: flex;
     justify-content: space-around;
 }
 
@@ -114,60 +116,9 @@
     margin-left: 5px;
 }
 
-.button-copy {
+.ok-button {
     margin-top: 10px;
-    font-size: 14px;
-    font-family: Nunito, sans-serif;
-    text-transform: uppercase;
-    display: inline-block;
-    text-align: center;
-    width: 30%;
-    font-weight: bolder;
-    padding: 5px 0;
-    border: 2px solid #7a58e5;
-    border-radius: 5px;
-    position: relative;
-    z-index: 2;
-    color: #7a58e5;
-    background: white;
-}
-
-.button-copy:before {
-    -webkit-transition: 0.5s all ease;
-    transition: 0.5s all ease;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    right: 50%;
-    bottom: 0;
-    opacity: 0;
-    content: '';
-    background-color: #7a58e5;
-    z-index: -1;
-    color: #fff;
-}
-
-.button-copy:hover:before {
-    -webkit-transition: 0.5s all ease;
-    transition: 0.5s all ease;
-    left: 0;
-    right: 0;
-    opacity: 1;
-    color: #fff;
-}
-
-.button-copy:focus:before {
-    -webkit-transition: 0.5s all ease;
-    transition: 0.5s all ease;
-    left: 0;
-    right: 0;
-    opacity: 1;
-    color: #fff;
-}
-
-.button-copy:hover {
-    color: #fff;
-    transition: 0.2s ease-in-out;
+    width: 70px;
 }
 
 .button-mark-done {
@@ -186,6 +137,7 @@
     z-index: 2;
     color: #22bb33;
     background: white;
+    float: left;
 }
 
 .button-mark-done:before {
@@ -200,7 +152,6 @@
     content: '';
     background-color: #22bb33;
     z-index: -1;
-    color: #fff;
 }
 
 .button-mark-done:hover:before {
@@ -209,7 +160,6 @@
     left: 0;
     right: 0;
     opacity: 1;
-    color: #fff;
 }
 
 .button-mark-done:focus:before {
@@ -218,22 +168,26 @@
     left: 0;
     right: 0;
     opacity: 1;
-    color: #fff;
 }
 
 .button-mark-done:hover {
-    color: #fff;
+    color: #fff !important;
     transition: 0.2s ease-in-out;
 }
 
-.button-remove {
+.button-mark-done:focus {
+    color: #fff;
+    outline: none;
+}
+
+.button-remove-normal {
     margin-top: 10px;
     font-size: 14px;
     font-family: Nunito, sans-serif;
     text-transform: uppercase;
     display: inline-block;
     text-align: center;
-    width: 30%;
+    width: 40px;
     font-weight: bolder;
     padding: 5px 0;
     border: 2px solid #d9534f;
@@ -242,9 +196,67 @@
     z-index: 2;
     color: #d9534f;
     background: white;
+    float: right;
 }
 
-.button-remove:before {
+.button-remove-normal:before {
+    -webkit-transition: 0.2s all ease;
+    transition: 0.2s all ease;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: 50%;
+    bottom: 0;
+    opacity: 0;
+    content: '';
+    background-color: #d9534f;
+    z-index: -1;
+    color: #fff;
+}
+
+.button-remove-normal:hover:before {
+    -webkit-transition: 0.2s all ease;
+    transition: 0.2s all ease;
+    left: 0;
+    right: 0;
+    opacity: 1;
+    color: #fff;
+}
+
+.button-remove-normal:focus:before {
+    -webkit-transition: 0.5s all ease;
+    transition: 0.5s all ease;
+    left: 0;
+    right: 0;
+    opacity: 1;
+    color: #fff;
+}
+
+.button-remove-normal:hover {
+    color: #fff;
+    transition: 0.2s ease-in-out;
+}
+
+.button-remove-done {
+    margin-top: 10px;
+    font-size: 14px;
+    font-family: Nunito, sans-serif;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+    width: 120px;
+    font-weight: bolder;
+    position: relative;
+    padding: 5px 0;
+    border: 2px solid #d9534f;
+    border-radius: 5px;
+    z-index: 2;
+    float: left;
+    color: #d9534f;
+    background: white;
+}
+
+.button-remove-done:before {
     -webkit-transition: 0.5s all ease;
     transition: 0.5s all ease;
     position: absolute;
@@ -259,7 +271,7 @@
     color: #fff;
 }
 
-.button-remove:hover:before {
+.button-remove-done:hover:before {
     -webkit-transition: 0.5s all ease;
     transition: 0.5s all ease;
     left: 0;
@@ -268,7 +280,7 @@
     color: #fff;
 }
 
-.button-remove:focus:before {
+.button-remove-done:focus:before {
     -webkit-transition: 0.5s all ease;
     transition: 0.5s all ease;
     left: 0;
@@ -277,9 +289,9 @@
     color: #fff;
 }
 
-.button-remove:hover {
+.button-remove-done:hover {
     color: #fff;
-    transition: 0.2s ease-in-out;
+    transition: 0.5s ease-in-out;
 }
 
 .main-text-container {
@@ -316,4 +328,8 @@
     display: flex;
     height: 30px;
     width: 500px;
+}
+
+.popover-title {
+    color: #7a58e5;
 }
