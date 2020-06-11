@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import Login from './user/login/Login';
 import Signup from './user/signup/Signup';
-import Profile from './user/profile/Profile';
 import OAuth2RedirectHandler from './user/oauth2/OAuth2RedirectHandler';
 import PrivateRoute from './common/PrivateRoute';
 import Alert from 'react-s-alert';
@@ -29,9 +28,6 @@ const App = () => {
                         <Redirect to="/workspace"/>
                     </Route>
                     <PrivateRoute exact path="/workspace" authenticated={user.authenticated} component={Workspace}/>
-                    <PrivateRoute path="/profile" authenticated={user.authenticated}
-                                  currentUser={user.currentUser}
-                                  component={Profile}/>
                     <Route path="/login"
                            render={(props) => <Login authenticated={user.authenticated} {...props} />}/>
                     <Route path="/signup"

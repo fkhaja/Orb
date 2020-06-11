@@ -1,5 +1,4 @@
 import React from 'react';
-import {NavLink} from "react-router-dom";
 import './Header.css'
 import defaultPic from '../../img/default-avatar.png'
 import {Image} from "react-bootstrap";
@@ -17,19 +16,11 @@ const Header = () => {
                 <span className="dd-text font-weight-bold">{currentUser.username}</span>
                 <label className="dropdown">
                     <div className="dd-button">
-                        <Image src={currentUser.imageUrl || defaultPic} className="avatar-pic"/>
+                        <Image src={currentUser.imageUrl || defaultPic} className="avatar-pic" />
                     </div>
                     <input type="checkbox" className="dd-input" id="test"/>
                     <ul className="dd-menu">
-                        <li>
-                            <NavLink to="/profile" style={{"textDecoration": "none"}} className="text-dark">
-                                Profile
-                            </NavLink>
-                        </li>
-                        <li className="divider"/>
-                        <li>
-                            <button className="text-button" onClick={() => dispatch(logoutUser())}>Logout</button>
-                        </li>
+                        <li onClick={() => dispatch(logoutUser())}>Logout</li>
                     </ul>
                 </label>
             </div>
