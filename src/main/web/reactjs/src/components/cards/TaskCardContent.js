@@ -114,7 +114,7 @@ const TaskCardContent = ({card}) => {
 
             {showSuccessAlert &&
             <div className="card-completion-alert">
-                <Alert variant="success">
+                <Alert variant="success" transition="Fade">
                     Congratulations! You have completed this card. It is automatically moved to the "Completed" section
                 </Alert>
             </div>

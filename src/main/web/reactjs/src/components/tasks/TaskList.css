@@ -123,9 +123,10 @@
     background: #b4b4b4;
 }
 
-.action-label{
+.action-label {
     z-index: 100;
 }
+
 .action_buttons {
     color: black;
     position: absolute;
@@ -211,13 +212,13 @@
     border: none;
     color: white;
     border-radius: 5px;
-    background: #d9534f;
+    background: #5562eb;
     margin-left: 3px;
 }
 
 .task-edit-input {
-    width: 79%;
-    margin-left: 40px;
+    width: 87%;
+    margin-left: 0;
     border: 1px solid lightgray;
     font-size: 14px;
     color: #3C454C;
@@ -229,4 +230,7 @@
 
 .hidden {
     display: none;
+}
+.task-add-form {
+    margin-top: 5px;
 }

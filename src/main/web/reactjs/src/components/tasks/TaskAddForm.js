@@ -23,11 +23,11 @@ const TaskAddForm = ({onCancel, cardId}) => {
     }
 
     return (
-        <div>
+        <div className="task-add-form">
             <form>
                 <div>
                     <input type="text" onChange={handleValueChange} className="task-edit-input"
-                           name="name" value={value}/>
+                           name="name" value={value} placeholder="Enter task"/>
                     <button className="task-save-btn" onClick={handleSubmit}>
                         <FontAwesomeIcon icon={faCheck} title="Save"/>
                     </button>
