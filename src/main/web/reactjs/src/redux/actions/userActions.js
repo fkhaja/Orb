@@ -2,9 +2,11 @@ import {fetchCurrentUser} from "../../util/AuthUtils";
 import {LOAD_LOGGED_IN_USER, LOGOUT_USER} from "../types";
 import {ACCESS_TOKEN} from "../../constants/Security";
 import Alert from "react-s-alert";
+import {hideLoadingPage, showLoadingPage} from "./appActions";
 
 export function loadCurrentlyLoggedInUser() {
     return async dispatch => {
+        dispatch(showLoadingPage());
         const response = await fetchCurrentUser();
         dispatch({
             type: LOAD_LOGGED_IN_USER,
@@ -13,6 +15,7 @@ export function loadCurrentlyLoggedInUser() {
                 authenticated: true
             }
         });
+        dispatch(hideLoadingPage());
     };
 }
 

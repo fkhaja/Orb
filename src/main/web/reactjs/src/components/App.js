@@ -11,11 +11,12 @@ import NotFound from "./common/NotFound";
 import Workspace from "./Workspace";
 import {useDispatch, useSelector} from "react-redux";
 import {loadCurrentlyLoggedInUser} from "../redux/actions/userActions";
+import LoadingPage from "./common/LoadingPage";
 
 const App = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
-
+    const showLoadingPage = useSelector(state => state.app.showLoadingPage);
     useEffect(() => {
         dispatch(loadCurrentlyLoggedInUser());
     }, [dispatch]);
@@ -23,6 +24,7 @@ const App = () => {
     return (
         <div>
             <div>
+                {showLoadingPage ? <LoadingPage/> :
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/workspace"/>
@@ -35,6 +37,7 @@ const App = () => {
                     <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}/>
                     <Route component={NotFound}/>
                 </Switch>
+                }
             </div>
             <Alert stack={{limit: 3}}
                    timeout={3000}
