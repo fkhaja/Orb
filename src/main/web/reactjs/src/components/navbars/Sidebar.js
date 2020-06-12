@@ -1,9 +1,18 @@
 import React from 'react';
 import './Sidebar.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFilter, faListAlt, faTag} from "@fortawesome/free-solid-svg-icons";
+import {faFilter, faListAlt} from "@fortawesome/free-solid-svg-icons";
+import {useDispatch} from "react-redux";
+import {
+    setCardCompletedFilter,
+    setCardInProgressFilter,
+    setCardNoFilter,
+    setCardTodayFilter
+} from "../../redux/actions/filterActions";
 
 const Sidebar = () => {
+    const dispatch = useDispatch();
+
     return (
         <div>
             <div className="sidebar">
@@ -19,32 +28,6 @@ const Sidebar = () => {
                     <li className="sidebar-item" style={{"marginTop": "25px"}}>
                         <div className="tabs">
                             <div className="tab">
-                                <input type="checkbox" id="chck2" className="accordion_input"/>
-                                <label className="tab-label" htmlFor="chck2">
-                                    <div>
-                                        <FontAwesomeIcon icon={faTag}/>
-                                        <span>Categories</span>
-                                    </div>
-                                </label>
-                                <div className="tab-content">
-                                    <ul className="submenu">
-                                        <li>
-                                            <span>All</span>
-                                        </li>
-                                        <li>
-                                            <span>In process</span>
-                                        </li>
-                                        <li>
-                                            <span>Completed</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li className="sidebar-item">
-                        <div className="tabs">
-                            <div className="tab">
                                 <input type="checkbox" id="chck1" className="accordion_input"/>
                                 <label className="tab-label" htmlFor="chck1">
                                     <div>
@@ -54,14 +37,17 @@ const Sidebar = () => {
                                 </label>
                                 <div className="tab-content">
                                     <ul className="submenu">
-                                        <li>
-                                            <span>Filter 1</span>
+                                        <li tabIndex={1} onClick={() => dispatch(setCardNoFilter())}>
+                                            <span>No filter</span>
                                         </li>
-                                        <li>
-                                            <span>Filter 2</span>
+                                        <li tabIndex={2} onClick={() => dispatch(setCardInProgressFilter())}>
+                                            <span>In progress</span>
                                         </li>
-                                        <li>
-                                            <span>Filter 3</span>
+                                        <li tabIndex={3} onClick={() => dispatch(setCardCompletedFilter())}>
+                                            <span>Completed</span>
+                                        </li>
+                                        <li tabIndex={4} onClick={() => dispatch(setCardTodayFilter())}>
+                                            <span>Today</span>
                                         </li>
                                     </ul>
                                 </div>

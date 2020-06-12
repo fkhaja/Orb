@@ -9,7 +9,8 @@ import {useDispatch, useSelector} from "react-redux";
 
 const TaskCardList = () => {
     const dispatch = useDispatch();
-    const cards = useSelector(state => state.cards.fetchedCards);
+    const filter = useSelector(state => state.filters.cardFilter);
+    const cards = useSelector(state => state.cards.fetchedCards).filter(filter);
 
     useEffect(() => {
         dispatch(fetchCards());

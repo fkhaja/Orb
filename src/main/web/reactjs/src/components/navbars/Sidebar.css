@@ -29,10 +29,11 @@
 
 .sidebar-item span {
     margin-left: 10px;
+    font-family: Nunito, sans-serif;
 }
 
 .sidebar-item:hover {
-    color: #7a58e5;
+    color: #9d7dff;
     cursor: pointer;
 }
 
@@ -107,7 +108,7 @@
 }
 
 input:checked + .tab-label {
-    color: #7a58e5;
+    color: #9d7dff;
 }
 
 input:checked + .tab-label::after {
@@ -132,10 +133,18 @@ input:checked ~ .tab-content {
     font-weight: normal;
     border-radius: 10px;
     transition: 150ms ease-in-out;
+    font-family: Nunito, sans-serif;
 }
 
 .submenu li:hover {
+    color: #9d7dff;
+}
+
+.submenu li:focus {
     background: #7a58e5;
+    color: white;
+    text-decoration: none;
+    outline: none;
 }
 
 .submenu li span {
