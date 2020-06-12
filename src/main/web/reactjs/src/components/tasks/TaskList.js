@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import TaskAddForm from "./TaskAddForm";
 
-const TaskList = ({card}) => {
+const TaskList = ({card, done}) => {
     const [showInput, setShowInput] = useState(false);
     const tasks = card.tasks;
     const completed = tasks.filter(task => task.completed).length;
@@ -32,7 +32,7 @@ const TaskList = ({card}) => {
                     <Task task={task} key={task.taskId} cardId={card.cardId}/>
                 ))}
 
-                {showInput ? <TaskAddForm onCancel={() => setShowInput(false)} cardId={card.cardId}/> :
+                {!done && (showInput ? <TaskAddForm onCancel={() => setShowInput(false)} cardId={card.cardId}/> :
                     <div className="add-task" onClick={() => setShowInput(true)}>
                         <label>
                             <span className="add-task-icon-container">
@@ -41,7 +41,7 @@ const TaskList = ({card}) => {
                             <span className="add-task-content">Add task</span>
                         </label>
                     </div>
-                }
+                )}
             </div>
             <hr/>
         </div>

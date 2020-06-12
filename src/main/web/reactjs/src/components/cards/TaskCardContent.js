@@ -86,7 +86,7 @@ const TaskCardContent = ({card}) => {
                 </h6>
             </div>
 
-            <TaskList card={card}/>
+            <TaskList card={card} done={done}/>
 
             <div className="card-actions">
                 <h6 className="text-muted font-weight-bold small text-uppercase">
