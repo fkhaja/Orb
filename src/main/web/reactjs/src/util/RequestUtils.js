@@ -1,9 +1,9 @@
 import {API_BASE_URL} from "../constants/Security";
 import {request} from "./APIUtils";
 
-export async function findTaskCards() {
+export async function findTaskCards(page = 0, size = 28) {
     return request({
-        url: `${API_BASE_URL}/taskcards`,
+        url: `${API_BASE_URL}/taskcards?page=${page}&size=${size}`,
         method: 'GET'
     })
 }

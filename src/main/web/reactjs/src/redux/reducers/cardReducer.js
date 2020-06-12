@@ -13,13 +13,14 @@ import {
 } from "../types";
 
 const initialState = {
-    fetchedCards: []
+    fetchedCards: [],
+    totalPages: 0
 };
 
 export const cardReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_CARDS:
-            return {...state, fetchedCards: action.payload};
+            return {...state, fetchedCards: state.fetchedCards.concat(action.payload), totalPages: action.totalPages};
         case CREATE_CARD:
             return {...state, fetchedCards: state.fetchedCards.concat([action.payload])};
         case DELETE_CARD:

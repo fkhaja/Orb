@@ -1,14 +1,18 @@
 import {deleteTaskCard, findTaskCards, saveTaskCard, updateTaskCard} from "../../util/RequestUtils";
 import {COMPLETE_CARD, CREATE_CARD, DELETE_CARD, EDIT_CARD_DESCRIPTION, EDIT_CARD_TERM, FETCH_CARDS} from "../types";
 import {showCompletionSuccessAlert} from "./alertActions";
+import {hideLoader, showLoader} from "./appActions";
 
-export function fetchCards() {
+export function fetchCards(page, size) {
     return async dispatch => {
-        const response = await findTaskCards();
+        dispatch(showLoader());
+        const response = await findTaskCards(page, size);
         dispatch({
             type: FETCH_CARDS,
-            payload: response.content
+            payload: response.content,
+            totalPages: response.totalPages
         });
+        dispatch(hideLoader());
     };
 }
 
