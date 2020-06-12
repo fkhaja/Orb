@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import './TaskCard.css';
 import '../../styles/Modal.css';
+import "./Ribbon.css";
 import TaskCardContent from "./TaskCardContent";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {hideCompletionErrorAlert, hideCompletionSuccessAlert} from "../../redux/actions/alertActions";
 
 const TaskCard = ({card, index}) => {
-    const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
+    const [showModal, setShowModal] = useState(false);
+    const done = useSelector(state => state.cards.fetchedCards.find(c => c.cardId === card.cardId).done);
 
     const handleModalClose = () => {
         setShowModal(false);
@@ -26,6 +28,9 @@ const TaskCard = ({card, index}) => {
                 </p>
                 <div className="go-corner">
                     <div className="go-arrow">→</div>
+                </div>
+                <div className={`ribbon ${!done && "d-none"}`}>
+                    <span>DONE</span>
                 </div>
             </div>
             <div id={`modal-overlay-container-${index}`} className={`modal-overlay ${showModal && "active"}`}>
