@@ -48,46 +48,47 @@ const TaskCardContent = ({card}) => {
 
     return (
         <div>
-            <h3 className="card-name">{card.name}</h3>
-            <div className="card-term">
-                <h6 className="text-muted font-weight-bold small text-uppercase">
-                    <FontAwesomeIcon icon={faCalendarAlt}/>
-                    <span className="text">Term</span>
-                </h6>
-                <div onClick={() => setShow(true)} className="term-box">
+            <div className={`${done && "disabled"}`}>
+                <h3 className="card-name">{card.name}</h3>
+                <div className="card-term">
+                    <h6 className="text-muted font-weight-bold small text-uppercase">
+                        <FontAwesomeIcon icon={faCalendarAlt}/>
+                        <span className="text">Term</span>
+                    </h6>
+                    <div onClick={() => setShow(true)} className="term-box">
                         <span className="term-date">
                             {card.term ? moment(card.term).format("MMMM D, HH:mm") : "No time limit"}
                         </span>
-                    <span className={`term-status ${getCardStatus(card.term)}`}>{getCardStatus(card.term)}</span>
+                        <span className={`term-status ${getCardStatus(card.term)}`}>{getCardStatus(card.term)}</span>
+                    </div>
                 </div>
-            </div>
-            <div className="card-description">
-                <h6 className="text-muted font-weight-bold small text-uppercase">
-                    <FontAwesomeIcon icon={faInfoCircle}/>
-                    <span>Description</span>
-                </h6>
-                <EdiText className="text-muted"
-                         mainContainerClassName="main-text-container"
-                         editContainerClassName="edit-text-container"
-                         editButtonClassName="edit-btn"
-                         saveButtonClassName="save-btn"
-                         cancelButtonClassName="cancel-btn"
-                         cancelButtonContent={<FontAwesomeIcon icon={faTimes} title="Cancel"/>}
-                         saveButtonContent={<FontAwesomeIcon icon={faCheck} title="Save changes"/>}
-                         type="text"
-                         value={card.description || "No description."}
-                         onSave={handleDescriptionUpdate}
-                         editOnViewClick/>
-            </div>
-            <div className="card-tasks-title">
-                <h6 className="text-muted font-weight-bold small text-uppercase">
-                    <FontAwesomeIcon icon={faCheckCircle}/>
-                    <span>Tasks</span>
-                </h6>
-            </div>
+                <div className="card-description">
+                    <h6 className="text-muted font-weight-bold small text-uppercase">
+                        <FontAwesomeIcon icon={faInfoCircle}/>
+                        <span>Description</span>
+                    </h6>
+                    <EdiText className="text-muted"
+                             mainContainerClassName="main-text-container"
+                             editContainerClassName="edit-text-container"
+                             editButtonClassName="edit-btn"
+                             saveButtonClassName="save-btn"
+                             cancelButtonClassName="cancel-btn"
+                             cancelButtonContent={<FontAwesomeIcon icon={faTimes} title="Cancel"/>}
+                             saveButtonContent={<FontAwesomeIcon icon={faCheck} title="Save changes"/>}
+                             type="text"
+                             value={card.description || "No description."}
+                             onSave={handleDescriptionUpdate}
+                             editOnViewClick/>
+                </div>
+                <div className="card-tasks-title">
+                    <h6 className="text-muted font-weight-bold small text-uppercase">
+                        <FontAwesomeIcon icon={faCheckCircle}/>
+                        <span>Tasks</span>
+                    </h6>
+                </div>
 
-            <TaskList card={card} done={done}/>
-
+                <TaskList card={card} done={done}/>
+            </div>
             <div className="card-actions">
                 <h6 className="text-muted font-weight-bold small text-uppercase">
                     <FontAwesomeIcon icon={faWrench}/>

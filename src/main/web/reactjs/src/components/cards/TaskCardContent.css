@@ -94,6 +94,7 @@
 
 .term-status {
     margin-left: 8px;
+    text-transform: uppercase;
 }
 
 .fail {
@@ -332,4 +333,8 @@
 
 .popover-title {
     color: #7a58e5;
+}
+
+.disabled {
+    pointer-events: none;
 }
