@@ -7,7 +7,7 @@ import {createCard} from "../../redux/actions/cardActions";
 
 const AddCardModal = () => {
     const dispatch = useDispatch();
-    const [name, setName] = useState("");
+    const [name, setName] = useState('');
     const [description, setDescription] = useState("");
     const showModal = useSelector(state => state.modal.showCreateModal);
 
@@ -47,22 +47,22 @@ const AddCardModal = () => {
                     <div className="modal_task_list">
                         <div>
                             <div className="input-wrapper">
-                                <form>
+                                <form onSubmit={handleSubmit}>
                                     <div className="group">
-                                        <input type="text" required="required" onChange={handleNameChange}
-                                               name="name" value={name}/>
+                                        <input type="text" onChange={handleNameChange} placeholder=" "
+                                               name="name" value={name} maxLength={56} required/>
                                         <span className="highlight"/>
                                         <span className="bar"/>
                                         <label>Name</label>
                                     </div>
                                     <div className="group">
-                                        <input type="text" required="required" onChange={handleDescriptionChange}
-                                               name="description" value={description}/>
+                                        <input type="text" onChange={handleDescriptionChange} placeholder=" "
+                                               name="description" value={description} maxLength={100}/>
                                         <span className="highlight"/>
                                         <span className="bar"/>
-                                        <label>Description</label>
+                                        <label>Description<span>(optional)</span></label>
                                     </div>
-                                    <button className="bttn-dark sumbit" onClick={handleSubmit}>
+                                    <button className="bttn-dark sumbit" type="submit">
                                         Create
                                     </button>
                                 </form>

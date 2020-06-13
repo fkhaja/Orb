@@ -71,25 +71,48 @@ const SignUpForm = () => {
     const handleSubmit = event => {
         event.preventDefault();
 
-        const signUpRequest = {username: username, email: email, password: password};
-        dispatch(signUp(signUpRequest));
+        if ((username.length >= 4 && username.length <= 16) && email.length <= 129 && password.length <= 128) {
+            const signUpRequest = {username: username, email: email, password: password};
+            dispatch(signUp(signUpRequest));
+        }
     }
 
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formBasicUsername">
-                <Form.Control type="text" placeholder="Username" name="username" value={username}
-                              onChange={handleUsernameChange} required/>
+                <Form.Control type="text" required
+                              placeholder="Username"
+                              name="username"
+                              value={username}
+                              onChange={handleUsernameChange}
+                              isInvalid={(username.length > 0 && username.length < 4) || username.length > 16}/>
+                <Form.Control.Feedback type="invalid">
+                    Username must be between 4 and 16 characters
+                </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formBasicEmail">
-                <Form.Control type="email" placeholder="Email" name="email" value={email}
-                              onChange={handleEmailChange} required/>
+                <Form.Control type="email" required
+                              placeholder="Email"
+                              name="email"
+                              value={email}
+                              onChange={handleEmailChange}
+                              isInvalid={email.length > 129}/>
+                <Form.Control.Feedback type="invalid">
+                    Email length should not exceed 129 characters
+                </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
-                <Form.Control type="password" placeholder="Password" name="password" value={password}
-                              onChange={handlePasswordChange} required/>
+                <Form.Control type="password" required
+                              placeholder="Password"
+                              name="password"
+                              value={password}
+                              onChange={handlePasswordChange}
+                              isInvalid={password.length > 128}/>
+                <Form.Control.Feedback type="invalid">
+                    Password length should not exceed 128 characters
+                </Form.Control.Feedback>
             </Form.Group>
-            <Button variant="primary" type="submit" block className="rounded ">
+            <Button variant="primary" type="submit" block className="rounded">
                 Sign Up
             </Button>
         </Form>

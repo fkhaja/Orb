@@ -87,19 +87,35 @@ const LoginForm = () => {
     const handleSubmit = event => {
         event.preventDefault();
 
-        const loginRequest = {email: email, password: password};
-        dispatch(logIn(loginRequest));
+        if (password.length <= 128 && email.length <= 129) {
+            const loginRequest = {email: email, password: password};
+            dispatch(logIn(loginRequest));
+        }
     };
 
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formBasicEmail">
-                <Form.Control type="email" placeholder="Email" name="email" value={email}
-                              onChange={handleEmailChange} required/>
+                <Form.Control type="email" required
+                              placeholder="Email"
+                              name="email"
+                              value={email}
+                              onChange={handleEmailChange}
+                              isInvalid={email.length > 129}/>
+                <Form.Control.Feedback type="invalid">
+                    Email length should not exceed 129 characters
+                </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
-                <Form.Control type="password" placeholder="Password" name="password" value={password}
-                              onChange={handlePasswordChange} required/>
+                <Form.Control type="password" required
+                              placeholder="Password"
+                              name="password"
+                              value={password}
+                              onChange={handlePasswordChange}
+                              isInvalid={password.length > 128}/>
+                <Form.Control.Feedback type="invalid">
+                    Password length should not exceed 128 characters
+                </Form.Control.Feedback>
             </Form.Group>
             <Button variant="primary" type="submit" block className="rounded">
                 Log In

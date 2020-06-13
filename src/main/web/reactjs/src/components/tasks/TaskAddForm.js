@@ -15,20 +15,18 @@ const TaskAddForm = ({onCancel, cardId}) => {
     const handleSubmit = event => {
         event.preventDefault();
 
-        if (value.length !== 0) {
-            const newTask = {value: value};
-            dispatch(createTask(newTask, cardId))
-            setValue("");
-        }
+        const newTask = {value: value};
+        dispatch(createTask(newTask, cardId))
+        setValue("");
     }
 
     return (
         <div className="task-add-form">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <input type="text" onChange={handleValueChange} className="task-edit-input"
-                           name="name" value={value} placeholder="Enter task"/>
-                    <button className="task-save-btn" onClick={handleSubmit}>
+                           name="name" value={value} placeholder="Enter task" required maxLength={255}/>
+                    <button className="task-save-btn" type="submit">
                         <FontAwesomeIcon icon={faCheck} title="Save"/>
                     </button>
                     <button className="task-cancel-btn" onClick={onCancel}>

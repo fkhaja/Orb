@@ -172,6 +172,10 @@ p.bttn-dark:focus {
     background: white;
 }
 
+.bttn-dark:focus{
+    color: #fff;
+}
+
 .bttn-dark:before {
     -webkit-transition: 0.5s all ease;
     transition: 0.5s all ease;
