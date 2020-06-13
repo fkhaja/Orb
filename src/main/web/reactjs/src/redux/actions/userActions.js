@@ -7,15 +7,21 @@ import {hideLoadingPage, showLoadingPage} from "./appActions";
 export function loadCurrentlyLoggedInUser() {
     return async dispatch => {
         dispatch(showLoadingPage());
-        const response = await fetchCurrentUser();
-        dispatch({
-            type: LOAD_LOGGED_IN_USER,
-            payload: {
-                currentUser: response,
-                authenticated: true
-            }
-        });
-        dispatch(hideLoadingPage());
+
+        try {
+            const response = await fetchCurrentUser();
+            dispatch({
+                type: LOAD_LOGGED_IN_USER,
+                payload: {
+                    currentUser: response,
+                    authenticated: true
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            dispatch(hideLoadingPage());
+        }
     };
 }
 

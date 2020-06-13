@@ -16,7 +16,7 @@ import LoadingPage from "./common/LoadingPage";
 const App = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
-    const showLoadingPage = useSelector(state => state.app.showLoadingPage) && user;
+    const showLoadingPage = useSelector(state => state.app.showLoadingPage);
 
     useEffect(() => {
         dispatch(loadCurrentlyLoggedInUser());
