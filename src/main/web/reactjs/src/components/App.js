@@ -12,6 +12,7 @@ import Workspace from "./Workspace";
 import {useDispatch, useSelector} from "react-redux";
 import {loadCurrentlyLoggedInUser} from "../redux/actions/userActions";
 import LoadingPage from "./common/LoadingPage";
+import WelcomePage from "./common/WelcomePage";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -26,18 +27,18 @@ const App = () => {
         <div>
             <div>
                 {showLoadingPage ? <LoadingPage/> :
-                <Switch>
-                    <Route exact path="/">
-                        <Redirect to="/workspace"/>
-                    </Route>
-                    <PrivateRoute exact path="/workspace" authenticated={user.authenticated} component={Workspace}/>
-                    <Route path="/login"
-                           render={(props) => <Login authenticated={user.authenticated} {...props} />}/>
-                    <Route path="/signup"
-                           render={(props) => <Signup authenticated={user.authenticated} {...props} />}/>
-                    <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}/>
-                    <Route component={NotFound}/>
-                </Switch>
+                    <Switch>
+                        <Route exact path="/">
+                            {user.currentUser ? <Redirect to="/workspace"/> : <Route path="/" component={WelcomePage}/>}
+                        </Route>
+                        <PrivateRoute exact path="/workspace" authenticated={user.authenticated} component={Workspace}/>
+                        <Route path="/login"
+                               render={(props) => <Login authenticated={user.authenticated} {...props} />}/>
+                        <Route path="/signup"
+                               render={(props) => <Signup authenticated={user.authenticated} {...props} />}/>
+                        <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}/>
+                        <Route component={NotFound}/>
+                    </Switch>
                 }
             </div>
             <Alert stack={{limit: 3}}
