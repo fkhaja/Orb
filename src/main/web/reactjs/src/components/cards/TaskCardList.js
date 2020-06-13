@@ -29,26 +29,38 @@ const TaskCardList = () => {
     return (
         <div className="card-container">
             <AddCardModal/>
-            <div className="add_btn">
-                <button className="icon-btn add-btn" onClick={() => dispatch(showCreateModal())}>
-                    <div className="add-icon"/>
-                    <div className="btn-txt">
-                        <span>Add card</span>
+            {cards.length > 0 ?
+                <div>
+                    <div className="add_btn">
+                        <button className="icon-btn add-btn" onClick={() => dispatch(showCreateModal())}>
+                            <div className="add-icon"/>
+                            <div className="btn-txt">
+                                <span>Add card</span>
+                            </div>
+                        </button>
                     </div>
-                </button>
-            </div>
 
-            {cards.length > 0 &&
-            <div className="card-list">
-                {cards.map((card, i) => (
-                    <TaskCard card={card} key={card.cardId} index={++i}/>
-                ))}
-            </div>}
+                    {cards.length > 0 &&
+                    <div className="card-list">
+                        {cards.map((card, i) => (
+                            <TaskCard card={card} key={card.cardId} index={++i}/>
+                        ))}
+                    </div>}
 
-            {loading &&
-            <div className="loader-container">
-                <Loader/>
-            </div>
+                    {loading &&
+                    <div className="loader-container">
+                        <Loader/>
+                    </div>}
+                </div>
+                :
+                <div className="no-card">
+                    <span>You don't have any cards yet</span>
+                    <div className="no-card-btn">
+                        <button className="add-first-btn" onClick={() => dispatch(showCreateModal())}>
+                            Create one
+                        </button>
+                    </div>
+                </div>
             }
         </div>
     )
