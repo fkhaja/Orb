@@ -83,7 +83,8 @@
     position: absolute;
     background: #7a58e5;
     transition: 300ms ease all;
-    left: 0;
+    left: -5px;
+    top: -26px;
 }
 
 .input-wrapper .sumbit {
