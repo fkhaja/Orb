@@ -7,7 +7,7 @@ const NotFound = () => {
             <div className="background">
                 <div className="ground"/>
             </div>
-            <div className="container">
+            <div className="not-found-content">
                 <div className="left-section">
                     <div className="inner-content">
                         <h1 className="heading">404</h1>
