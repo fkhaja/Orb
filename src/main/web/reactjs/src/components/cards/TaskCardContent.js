@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import TaskList from "../tasks/TaskList";
 import "./TaskCardContent.css";
+import "./Checkbox.css";
 import EdiText from 'react-editext';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
@@ -13,7 +14,13 @@ import {
     faWrench
 } from "@fortawesome/free-solid-svg-icons";
 import {useDispatch, useSelector} from "react-redux";
-import {completeCard, deleteCard, editCardDescription} from "../../redux/actions/cardActions";
+import {
+    cancelCardTermCompletion,
+    completeCard,
+    completeCardTerm,
+    deleteCard,
+    editCardDescription
+} from "../../redux/actions/cardActions";
 import moment from "moment";
 import PickDateTimeModal from "./PickDateTimeModal";
 import Alert from "react-bootstrap/Alert";
@@ -25,6 +32,7 @@ const TaskCardContent = ({card}) => {
     const showErrorAlert = useSelector(state => state.alert.showCompletionErrorAlert);
     const done = useSelector(state => state.cards.fetchedCards.find(c => c.cardId === card.cardId).done);
     const [show, setShow] = useState(false);
+    const [termCompleted, setTermCompleted] = useState(card.completedAtTerm)
 
     const handleDescriptionUpdate = description => dispatch(editCardDescription(card.cardId, description));
 
@@ -37,13 +45,21 @@ const TaskCardContent = ({card}) => {
         }
     }
 
+    const handleTermCompletionChange = () => {
+        if (termCompleted) {
+            setTermCompleted(false);
+            dispatch(cancelCardTermCompletion(card.cardId));
+        } else {
+            setTermCompleted(true);
+            dispatch(completeCardTerm(card.cardId));
+        }
+    }
+
     const getCardStatus = (term) => {
-        const completedTaskNumber = card.tasks.filter(task => task.completed).length;
+        if (card.completedAtTerm) return "success";
+
         const today = moment(Date.now()).format("YYYY-MM-DDTHH:mm");
-
-        if (completedTaskNumber < card.tasks.length && today > term) return "fail";
-
-        return completedTaskNumber === card.tasks.length && today <= term ? "success" : "in-progress";
+        return today > term ? "expired" : "none";
     }
 
     return (
@@ -55,11 +71,21 @@ const TaskCardContent = ({card}) => {
                         <FontAwesomeIcon icon={faCalendarAlt}/>
                         <span className="text">Term</span>
                     </h6>
-                    <div onClick={() => setShow(true)} className="term-box">
-                        <span className="term-date">
-                            {card.term ? moment(card.term).format("MMMM D, HH:mm") : "No time limit"}
+                    <div className="term-content">
+                        <input id="c1" type="checkbox"
+                               title="Mark as completed at term" checked={termCompleted}
+                               className={`${!card.term && "d-none"}`}
+                               onChange={handleTermCompletionChange}/>
+                        <span>
+                            <div className="term-box">
+                            <span className="term-date" onClick={() => setShow(true)} >
+                                {card.term ? moment(card.term).format("MMMM D, HH:mm") : "No time limit"}
+                            </span>
+                                <span className={`term-status ${getCardStatus(card.term)}`}>
+                                    {getCardStatus(card.term)}
+                                </span>
+                            </div>
                         </span>
-                        <span className={`term-status ${getCardStatus(card.term)}`}>{getCardStatus(card.term)}</span>
                     </div>
                 </div>
                 <div className="card-description">
@@ -115,7 +141,7 @@ const TaskCardContent = ({card}) => {
 
             {showSuccessAlert &&
             <div className="card-completion-alert">
-                <Alert variant="success" transition="Fade">
+                <Alert variant="success">
                     Congratulations! You have completed this card. It is automatically moved to the "Completed" section
                 </Alert>
             </div>

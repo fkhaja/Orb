@@ -12,7 +12,7 @@
 }
 
 .card-description {
-    margin-top: 25px;
+    margin-top: 10px;
     font-size: 16px;
     margin-bottom: .5em;
     text-align: left;
@@ -79,7 +79,7 @@
     height: 30px;
     color: #fff;
     vertical-align: middle;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .term-box span {
@@ -95,9 +95,10 @@
 .term-status {
     margin-left: 8px;
     text-transform: uppercase;
+    cursor: default;
 }
 
-.fail {
+.expired {
     background: #d9534f;
 }
 
@@ -105,7 +106,7 @@
     background: #22bb33;
 }
 
-.in-progress {
+.none {
     display: none;
 }
 

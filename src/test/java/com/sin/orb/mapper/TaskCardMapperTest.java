@@ -23,6 +23,7 @@ class TaskCardMapperTest {
         entity.setImageUrl("url");
         entity.setDone(true);
         entity.setTerm(LocalDateTime.now());
+        entity.setCompletedAtTerm(true);
 
         TaskCardDto dto = TaskCardMapper.INSTANCE.toDto(entity);
         assertThat(dto.getCardId()).isEqualTo(entity.getId());
@@ -33,6 +34,7 @@ class TaskCardMapperTest {
         assertThat(dto.getImageUrl()).isEqualTo(entity.getImageUrl());
         assertThat(dto.getDone()).isEqualTo(entity.getDone());
         assertThat(dto.getTerm()).isEqualTo(entity.getTerm());
+        assertThat(dto.getCompletedAtTerm()).isEqualTo(entity.getCompletedAtTerm());
     }
 
     @Test
@@ -46,6 +48,7 @@ class TaskCardMapperTest {
         dto.setImageUrl("url");
         dto.setDone(true);
         dto.setTerm(LocalDateTime.now());
+        dto.setCompletedAtTerm(true);
 
         TaskCard entity = TaskCardMapper.INSTANCE.toEntity(dto);
         assertThat(dto.getCardId()).isEqualTo(entity.getId());
@@ -56,5 +59,6 @@ class TaskCardMapperTest {
         assertThat(dto.getImageUrl()).isEqualTo(entity.getImageUrl());
         assertThat(dto.getDone()).isEqualTo(entity.getDone());
         assertThat(dto.getTerm()).isEqualTo(entity.getTerm());
+        assertThat(dto.getCompletedAtTerm()).isEqualTo(entity.getCompletedAtTerm());
     }
 }

@@ -42,6 +42,9 @@ public class TaskCard {
     @Column(name = "term")
     private LocalDateTime term;
 
+    @Column(name = "completed_at_term", columnDefinition = "boolean default false", nullable = false)
+    private Boolean completedAtTerm;
+
     @Column(name = "done", columnDefinition = "boolean default false", nullable = false)
     private Boolean done;
 

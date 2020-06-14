@@ -1,5 +1,14 @@
 import {deleteTaskCard, findTaskCards, saveTaskCard, updateTaskCard} from "../../util/RequestUtils";
-import {COMPLETE_CARD, CREATE_CARD, DELETE_CARD, EDIT_CARD_DESCRIPTION, EDIT_CARD_TERM, FETCH_CARDS} from "../types";
+import {
+    CANCEL_CARD_TERM_COMPLETION,
+    COMPLETE_CARD,
+    COMPLETE_CARD_TERM,
+    CREATE_CARD,
+    DELETE_CARD,
+    EDIT_CARD_DESCRIPTION,
+    EDIT_CARD_TERM,
+    FETCH_CARDS
+} from "../types";
 import {showCompletionSuccessAlert} from "./alertActions";
 import {hideLoader, showLoader} from "./appActions";
 
@@ -64,6 +73,26 @@ export function completeCard(id) {
         await updateTaskCard(id, {done: true});
         dispatch({
             type: COMPLETE_CARD,
+            id
+        });
+    }
+}
+
+export function completeCardTerm(id) {
+    return async dispatch => {
+        await updateTaskCard(id, {completedAtTerm: true});
+        dispatch({
+            type: COMPLETE_CARD_TERM,
+            id
+        });
+    }
+}
+
+export function cancelCardTermCompletion(id) {
+    return async dispatch => {
+        await updateTaskCard(id, {completedAtTerm: false});
+        dispatch({
+            type: CANCEL_CARD_TERM_COMPLETION,
             id
         });
     }

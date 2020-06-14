@@ -30,8 +30,10 @@ public class TaskCardDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime term;
 
-    private Boolean done = false;
-
     @Null
     private List<TaskDto> tasks;
+
+    private Boolean done = false;
+
+    private Boolean completedAtTerm = false;
 }
