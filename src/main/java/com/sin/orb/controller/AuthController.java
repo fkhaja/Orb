@@ -1,7 +1,7 @@
 package com.sin.orb.controller;
 
 import com.sin.orb.domain.User;
-import com.sin.orb.exception.BadRequestException;
+import com.sin.orb.exception.ConflictException;
 import com.sin.orb.payload.ApiResponse;
 import com.sin.orb.payload.AuthResponse;
 import com.sin.orb.payload.LoginRequest;
@@ -61,7 +61,7 @@ public class AuthController {
     @ApiOperation("Register a new user")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest request) {
         if (userService.existsByEmail(request.getEmail())) {
-            throw new BadRequestException("Email address already in use");
+            throw new ConflictException("Email address already in use");
         }
 
         User user = new User();
