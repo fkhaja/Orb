@@ -1,5 +1,6 @@
 package com.sin.orb.exception;
 
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,11 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {BadRequestException.class})
     protected ResponseEntity<?> handleBadRequest(BadRequestException e, WebRequest request) {
         return getExceptionResponseEntity(request, HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(value = {PropertyReferenceException.class})
+    protected ResponseEntity<?> handleNotFound(PropertyReferenceException e, WebRequest request) {
+        return getExceptionResponseEntity(request, HttpStatus.UNPROCESSABLE_ENTITY, e.getLocalizedMessage());
     }
 
     @ExceptionHandler({Exception.class})
