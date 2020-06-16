@@ -1,6 +1,7 @@
 package com.sin.orb.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.Null;
@@ -12,9 +13,11 @@ import java.util.List;
 @Data
 public class TaskCardDto {
     @Null
+    @ApiModelProperty(readOnly = true)
     private Long cardId;
 
     @Size(min = 1, max = 56)
+    @ApiModelProperty(required = true)
     private String name;
 
     @Size(max = 2048)
@@ -24,6 +27,7 @@ public class TaskCardDto {
     private String description;
 
     @Null
+    @ApiModelProperty(readOnly = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
@@ -31,6 +35,7 @@ public class TaskCardDto {
     private LocalDateTime term;
 
     @Null
+    @ApiModelProperty(readOnly = true)
     private List<TaskDto> tasks;
 
     private Boolean done = false;

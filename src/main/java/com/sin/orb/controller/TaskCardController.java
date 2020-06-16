@@ -7,6 +7,8 @@ import com.sin.orb.mapper.TaskCardMapper;
 import com.sin.orb.security.CurrentUser;
 import com.sin.orb.service.TaskCardService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +34,13 @@ public class TaskCardController {
 
     @GetMapping
     @ApiOperation("Get all task cards")
-    public ResponseEntity<Page<TaskCardDto>> getAllTaskCards(@ApiIgnore @CurrentUser User user, @PageableDefault(sort = "id") Pageable pageable) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", paramType = "integer", value = "page number"),
+            @ApiImplicitParam(name = "size", paramType = "integer", value = "page size"),
+            @ApiImplicitParam(name = "sort", paramType = "string", value = "direction and field sort")
+    })
+    public ResponseEntity<Page<TaskCardDto>> getAllTaskCards(@ApiIgnore @CurrentUser User user,
+                                                             @ApiIgnore @PageableDefault(sort = "id") Pageable pageable) {
         Page<TaskCard> cards = taskCardService.findAllForUser(user, pageable);
         return ResponseEntity.ok(cards.map(TaskCardMapper.INSTANCE::toDto));
     }
