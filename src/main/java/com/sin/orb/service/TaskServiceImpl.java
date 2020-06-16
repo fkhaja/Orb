@@ -6,10 +6,12 @@ import com.sin.orb.domain.User;
 import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.repository.TaskRepository;
 import com.sin.orb.util.CustomBeanUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -28,7 +30,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task updateTask(Task existing, Task task) {
-        CustomBeanUtils.copyPropsIgnoringNulls(task, existing, "id", "taskCard");
+        BeanUtils.copyProperties(task, existing, "id", "taskCard");
         return taskRepository.save(existing);
     }
 
@@ -46,5 +48,11 @@ public class TaskServiceImpl implements TaskService {
     public Task findTaskById(Long id, Long cardId, User user) {
         return taskRepository.findByIdAndTaskCardIdAndTaskCardUserIs(id, cardId, user)
                              .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
+    }
+
+    @Override
+    public Task partlyUpdateTask(Task task, Map<String, Object> updates) {
+        CustomBeanUtils.copyPropertiesFromMap(task, updates, Task.class, "id", "taskCard");
+        return taskRepository.save(task);
     }
 }

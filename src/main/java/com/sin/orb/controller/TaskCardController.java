@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @Api
 @RestController
@@ -73,5 +74,14 @@ public class TaskCardController {
     public ResponseEntity<Void> deleteTaskCard(@ApiIgnore @CurrentUser User user, @PathVariable("id") Long id) {
         taskCardService.deleteTaskCard(taskCardService.findTaskCardForUser(id, user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("{id}")
+    @ApiOperation("Patch an existing task card with partial update")
+    public ResponseEntity<TaskCardDto> patchTaskCard(@ApiIgnore @CurrentUser User user, @PathVariable("id") Long id,
+                                                     @RequestBody Map<String, Object> updates) {
+        TaskCard taskCard = taskCardService.findTaskCardForUser(id, user);
+        TaskCard updated = taskCardService.partlyUpdateTaskCard(taskCard, updates);
+        return ResponseEntity.ok(TaskCardMapper.INSTANCE.toDto(updated));
     }
 }

@@ -318,4 +318,51 @@ class TaskCardControllerTest {
 
         verify(taskCardService, never()).deleteTaskCard(any(TaskCard.class));
     }
+
+    @Test
+    @WithMockUser
+    void patchTaskCardShouldUpdatePassedFields() throws Exception {
+        TaskCardDto body = new TaskCardDto();
+        body.setName("test");
+
+        TaskCard result = new TaskCard();
+        result.setName("test");
+
+        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(mock(TaskCard.class));
+        when(taskCardService.partlyUpdateTaskCard(any(TaskCard.class), anyMap())).thenReturn(result);
+
+        mockMvc.perform(patch("/taskcards/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(body)))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.name", equalTo("test")));
+
+        verify(taskCardService).partlyUpdateTaskCard(any(TaskCard.class), anyMap());
+    }
+
+    @Test
+    @WithMockUser
+    void patchTaskCardShouldReturnStatusOk() throws Exception {
+        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(mock(TaskCard.class));
+        when(taskCardService.partlyUpdateTaskCard(any(TaskCard.class), anyMap())).thenReturn(mock(TaskCard.class));
+
+        mockMvc.perform(patch("/taskcards/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(new TaskCardDto())))
+               .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void whenPatchTaskCardGetsWrongIdThenDenyUpdateAndReturnStatusNotFound() throws Exception {
+        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(patch("/taskcards/0")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(new TaskCardDto())))
+               .andExpect(status().isNotFound());
+
+        verify(taskCardService, never()).partlyUpdateTaskCard(any(TaskCard.class), anyMap());
+    }
 }

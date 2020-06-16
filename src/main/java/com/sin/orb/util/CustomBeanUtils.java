@@ -1,31 +1,25 @@
 package com.sin.orb.util;
 
-import com.nimbusds.jose.util.ArrayUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.util.ReflectionUtils;
 
-import java.beans.PropertyDescriptor;
-import java.util.HashSet;
-import java.util.Set;
+import javax.validation.constraints.NotNull;
+import java.lang.reflect.Field;
+import java.util.Map;
 
 public class CustomBeanUtils {
 
-    public static <T> void copyPropsIgnoringNulls(T src, T target, String...ignoreProperties) {
-        BeanUtils.copyProperties(src, target, getNullPropertyNames(src, ignoreProperties));
-    }
-
-    private static <T> String[] getNullPropertyNames(T source, String[] ignoreProperties) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<>();
-        for (PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
+    public static <T> void copyPropertiesFromMap(@NotNull T source, @NotNull Map<String, Object> target,
+                                                 @NotNull Class<T> srcClass, String... ignoreProperties) {
+        for (String prop : ignoreProperties) {
+            target.remove(prop);
         }
 
-        String[] result = ArrayUtils.concat(emptyNames.toArray(new String[0]), ignoreProperties);
-        return emptyNames.toArray(result);
+        target.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(srcClass, k);
+            if (field != null) {
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, source, v);
+            }
+        });
     }
 }

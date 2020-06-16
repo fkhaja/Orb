@@ -5,6 +5,7 @@ import com.sin.orb.domain.TaskCard;
 import com.sin.orb.domain.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskService {
 
@@ -17,4 +18,6 @@ public interface TaskService {
     List<Task> findAllTasks(Long cardId, User user);
 
     Task findTaskById(Long id, Long cardId, User user);
+
+    Task partlyUpdateTask(Task task, Map<String, Object> updates);
 }

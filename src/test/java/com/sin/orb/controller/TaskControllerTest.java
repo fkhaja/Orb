@@ -3,6 +3,7 @@ package com.sin.orb.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sin.orb.domain.Task;
 import com.sin.orb.domain.TaskCard;
+import com.sin.orb.dto.TaskCardDto;
 import com.sin.orb.dto.TaskDto;
 import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.service.TaskCardService;
@@ -264,5 +265,52 @@ class TaskControllerTest {
                .andExpect(status().isNotFound());
 
         verify(taskService, never()).deleteTask(any(Task.class));
+    }
+
+    @Test
+    @WithMockUser
+    void patchTaskShouldUpdatePassedFields() throws Exception {
+        TaskDto body = new TaskDto();
+        body.setValue("test");
+
+        Task result = new Task();
+        result.setValue("test");
+
+        when(taskService.findTaskById(any(Long.class), anyLong(), eq(null))).thenReturn(mock(Task.class));
+        when(taskService.partlyUpdateTask(any(Task.class), anyMap())).thenReturn(result);
+
+        mockMvc.perform(patch("/taskcards/1/tasks/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(body)))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.value", equalTo("test")));
+
+        verify(taskService).partlyUpdateTask(any(Task.class), anyMap());
+    }
+
+    @Test
+    @WithMockUser
+    void patchTaskShouldReturnStatusOk() throws Exception {
+        when(taskService.findTaskById(any(Long.class), anyLong(), eq(null))).thenReturn(mock(Task.class));
+        when(taskService.partlyUpdateTask(any(Task.class), anyMap())).thenReturn(mock(Task.class));
+
+        mockMvc.perform(patch("/taskcards/1/tasks/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(new TaskCardDto())))
+               .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void whenPatchTaskGetsWrongIdThenDenyUpdateAndReturnStatusNotFound() throws Exception {
+        when(taskService.findTaskById(any(Long.class), anyLong(), eq(null))).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(patch("/taskcards/0/tasks/0")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(new TaskCardDto())))
+               .andExpect(status().isNotFound());
+
+        verify(taskService, never()).partlyUpdateTask(any(Task.class), anyMap());
     }
 }

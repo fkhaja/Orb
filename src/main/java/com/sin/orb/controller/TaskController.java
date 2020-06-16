@@ -18,6 +18,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Api
@@ -74,5 +75,14 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable("id") Long id) {
         taskService.deleteTask(taskService.findTaskById(id, cardId, user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("{id}")
+    @ApiOperation("Patch an existing task with partial update")
+    public ResponseEntity<TaskDto> patchTask(@ApiIgnore @CurrentUser User user, @PathVariable("id") Long id,
+                                             @PathVariable("cardId") Long cardId, @RequestBody Map<String, Object> updates) {
+        Task task = taskService.findTaskById(id, cardId, user);
+        Task updated = taskService.partlyUpdateTask(task, updates);
+        return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(updated));
     }
 }

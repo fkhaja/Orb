@@ -5,6 +5,7 @@ import com.sin.orb.domain.User;
 import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.repository.TaskCardRepository;
 import com.sin.orb.util.CustomBeanUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Service
 public class TaskCardServiceImpl implements TaskCardService {
@@ -33,7 +35,7 @@ public class TaskCardServiceImpl implements TaskCardService {
 
     @Override
     public TaskCard updateTaskCard(TaskCard existing, TaskCard replacement) {
-        CustomBeanUtils.copyPropsIgnoringNulls(replacement, existing, "id", "user", "creationDate", "tasks");
+        BeanUtils.copyProperties(replacement, existing, "id", "user", "creationDate", "tasks");
         return repository.save(existing);
     }
 
@@ -51,5 +53,13 @@ public class TaskCardServiceImpl implements TaskCardService {
     public TaskCard findTaskCardForUser(Long id, User user) {
         return repository.findByIdAndUserIs(id, user)
                          .orElseThrow(() -> new ResourceNotFoundException("Task card", "id", id));
+    }
+
+    @Override
+    public TaskCard partlyUpdateTaskCard(TaskCard card, Map<String, Object> updates) {
+        String[] ignoreProps = {"id", "creationDate", "tasks", "user"};
+        CustomBeanUtils.copyPropertiesFromMap(card, updates, TaskCard.class, ignoreProps);
+
+        return repository.save(card);
     }
 }
