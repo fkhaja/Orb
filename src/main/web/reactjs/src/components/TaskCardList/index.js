@@ -40,7 +40,7 @@ const TaskCardList = () => {
                         </button>
                     </div>
                     <div className="card-list">
-                        {cards.map((card, i) => (
+                        {cards.sort((a, b) => b.cardId - a.cardId).map((card, i) => (
                             <TaskCard card={card} key={card.cardId} index={++i}/>
                         ))}
                     </div>

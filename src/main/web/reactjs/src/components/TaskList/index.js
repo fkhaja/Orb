@@ -27,7 +27,7 @@ const TaskList = ({card, done}) => {
             </div>}
 
             <div className="task-container">
-                {card.tasks.map((task) => (
+                {card.tasks.sort((a, b) => a.taskId - b.taskId).map((task) => (
                     <Task task={task} key={task.taskId} cardId={card.cardId}/>
                 ))}
 
