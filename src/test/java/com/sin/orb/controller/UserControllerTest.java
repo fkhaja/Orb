@@ -26,7 +26,7 @@ class UserControllerTest {
     }
 
     @Test
-    void getCurrentUserUnauthenticatedRequestShouldFailWithStatusUnauthorized() throws Exception {
+    void getCurrentUserNotAuthenticatedRequestShouldFailWithStatusUnauthorized() throws Exception {
         mockMvc.perform(get("/user/me").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isUnauthorized());
     }

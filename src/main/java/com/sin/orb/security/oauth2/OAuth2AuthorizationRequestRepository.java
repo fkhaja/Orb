@@ -16,26 +16,26 @@ public class OAuth2AuthorizationRequestRepository implements AuthorizationReques
     private static final int cookieExpireSeconds = 180;
 
     @Override
-    public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-        return CookieUtils.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE)
+    public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest req) {
+        return CookieUtils.getCookie(req, OAUTH2_AUTHORIZATION_REQUEST_COOKIE)
                           .map(cookie -> CookieUtils.deserialize(cookie, OAuth2AuthorizationRequest.class))
                           .orElse(null);
     }
 
     @Override
-    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response) {
+    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest req, HttpServletResponse resp) {
         if (authorizationRequest != null) {
-            CookieUtils.addCookie(response,
-                                  OAUTH2_AUTHORIZATION_REQUEST_COOKIE,
+            CookieUtils.addCookie(resp, OAUTH2_AUTHORIZATION_REQUEST_COOKIE,
                                   CookieUtils.serialize(authorizationRequest),
                                   cookieExpireSeconds);
-            String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_COOKIE);
+
+            String redirectUriAfterLogin = req.getParameter(REDIRECT_URI_COOKIE);
             if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
-                CookieUtils.addCookie(response, REDIRECT_URI_COOKIE, redirectUriAfterLogin, cookieExpireSeconds);
+                CookieUtils.addCookie(resp, REDIRECT_URI_COOKIE, redirectUriAfterLogin, cookieExpireSeconds);
             }
         } else {
-            CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE);
-            CookieUtils.deleteCookie(request, response, REDIRECT_URI_COOKIE);
+            CookieUtils.deleteCookie(req, resp, OAUTH2_AUTHORIZATION_REQUEST_COOKIE);
+            CookieUtils.deleteCookie(req, resp, REDIRECT_URI_COOKIE);
         }
     }
 

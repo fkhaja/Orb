@@ -1,7 +1,7 @@
 package com.sin.orb.controller;
 
 import com.sin.orb.domain.User;
-import com.sin.orb.exception.ConflictException;
+import com.sin.orb.exception.ConflictingRequestException;
 import com.sin.orb.payload.ApiResponse;
 import com.sin.orb.payload.AuthResponse;
 import com.sin.orb.payload.LoginRequest;
@@ -12,6 +12,7 @@ import com.sin.orb.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,10 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @Api
 @RestController
@@ -47,21 +46,20 @@ public class AuthController {
 
     @PostMapping("/login")
     @ApiOperation("Authenticate user")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> authenticateUser(@Valid @RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
-
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
     @PostMapping("/signup")
     @ApiOperation("Register a new user")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest request) {
+    public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest request) {
         if (userService.existsByEmail(request.getEmail())) {
-            throw new ConflictException("Email address already in use");
+            throw new ConflictingRequestException("Email address already in use");
         }
 
         User user = new User();
@@ -69,11 +67,9 @@ public class AuthController {
         user.setEmail(request.getEmail());
         user.setProvider(AuthProvider.LOCAL);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userService.save(user);
 
-        User result = userService.save(user);
-        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
-                                                  .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+        ApiResponse response = new ApiResponse(true, "User registered successfully");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

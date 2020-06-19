@@ -1,6 +1,9 @@
 package com.sin.orb.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +14,6 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(of = {"id"})
 @ToString(exclude = {"taskCard"})
 @NoArgsConstructor
-@AllArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +24,7 @@ public class Task {
     private String value;
 
     @Column(name = "completed", columnDefinition = "boolean default false", nullable = false)
-    private Boolean completed;
+    private boolean completed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_card_id", updatable = false, nullable = false)

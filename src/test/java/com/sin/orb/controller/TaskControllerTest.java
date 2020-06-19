@@ -3,11 +3,11 @@ package com.sin.orb.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sin.orb.domain.Task;
 import com.sin.orb.domain.TaskCard;
-import com.sin.orb.dto.TaskCardDto;
 import com.sin.orb.dto.TaskDto;
 import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.service.TaskCardService;
 import com.sin.orb.service.TaskService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,13 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,33 +42,52 @@ class TaskControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
+    private static List<Task> taskStubs;
+
+    private static TaskDto defaultBody;
+
+    @BeforeAll
+    public static void setUp() {
+        Task firstStub = new Task();
+        firstStub.setId(1L);
+        firstStub.setValue("test_1");
+        firstStub.setCompleted(true);
+
+        Task secondStub = new Task();
+        secondStub.setId(2L);
+        secondStub.setValue("test_2");
+        secondStub.setCompleted(true);
+
+        taskStubs = List.of(firstStub, secondStub);
+
+        defaultBody = new TaskDto();
+        defaultBody.setValue("test");
+        defaultBody.setCompleted(true);
+    }
+
     @Test
     @WithMockUser
     void getAllTasksShouldReturnCorrectDtoList() throws Exception {
-        Task firstStub = new Task(1L, "test", false, null);
-        Task secondStub = new Task(2L, "task", false, null);
-        List<Task> stubList = List.of(firstStub, secondStub);
-
-        when(taskService.findAllTasks(any(Long.class), eq(null))).thenReturn(stubList);
+        when(taskService.findAllTasks(anyLong(), any())).thenReturn(taskStubs);
 
         mockMvc.perform(get("/taskcards/1/tasks").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$", hasSize(2)))
                .andExpect(jsonPath("$[0].taskId", equalTo(1)))
-               .andExpect(jsonPath("$[0].value", equalTo("test")))
-               .andExpect(jsonPath("$[0].completed", equalTo(false)))
+               .andExpect(jsonPath("$[0].value", equalTo("test_1")))
+               .andExpect(jsonPath("$[0].completed", equalTo(true)))
                .andExpect(jsonPath("$[1].taskId", equalTo(2)))
-               .andExpect(jsonPath("$[1].value", equalTo("task")))
-               .andExpect(jsonPath("$[1].completed", equalTo(false)))
+               .andExpect(jsonPath("$[1].value", equalTo("test_2")))
+               .andExpect(jsonPath("$[1].completed", equalTo(true)))
                .andExpect(status().isOk());
 
-        verify(taskService).findAllTasks(any(Long.class), eq(null));
+        verify(taskService).findAllTasks(anyLong(), any());
     }
 
     @Test
     @WithMockUser
     void getAllTasksShouldReturnStatusOk() throws Exception {
-        when(taskService.findAllTasks(any(Long.class), eq(null))).thenReturn(Collections.emptyList());
+        when(taskService.findAllTasks(anyLong(), any())).thenReturn(taskStubs);
 
         mockMvc.perform(get("/taskcards/1/tasks").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -80,24 +97,22 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void getTaskShouldReturnCorrectDto() throws Exception {
-        Task taskStub = new Task(1L, "test", false, null);
-
-        when(taskService.findTaskById(any(Long.class), any(Long.class), eq(null))).thenReturn(taskStub);
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenReturn(taskStubs.get(0));
 
         mockMvc.perform(get("/taskcards/1/tasks/1").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.taskId", equalTo(1)))
-               .andExpect(jsonPath("$.value", equalTo("test")))
-               .andExpect(jsonPath("$.completed", equalTo(false)))
+               .andExpect(jsonPath("$.value", equalTo("test_1")))
+               .andExpect(jsonPath("$.completed", equalTo(true)))
                .andExpect(status().isOk());
 
-        verify(taskService).findTaskById(any(Long.class), any(Long.class), eq(null));
+        verify(taskService).findTaskById(anyLong(), anyLong(), any());
     }
 
     @Test
     @WithMockUser
     void getTaskShouldReturnStatusOk() throws Exception {
-        when(taskService.findTaskById(any(Long.class), any(Long.class), eq(null))).thenReturn(mock(Task.class));
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenReturn(taskStubs.get(0));
 
         mockMvc.perform(get("/taskcards/1/tasks/1").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -107,32 +122,27 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void whenGetTaskGetsWrongIdThenReturnStatusNotFound() throws Exception {
-        when(taskService.findTaskById(any(Long.class), any(Long.class), eq(null)))
-                .thenThrow(ResourceNotFoundException.class);
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(get("/taskcards/1/tasks/0").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isNotFound());
 
-        verify(taskService).findTaskById(any(Long.class), any(Long.class), eq(null));
+        verify(taskService).findTaskById(anyLong(), anyLong(), any());
     }
 
     @Test
     @WithMockUser
     void createTaskShouldSaveTaskAndReturnCorrectDto() throws Exception {
-        Task taskStub = new Task(1L, "test", false, null);
-        TaskDto body = new TaskDto();
-        body.setValue("test");
-
-        when(taskService.saveTask(any(Task.class), any(TaskCard.class))).thenReturn(taskStub);
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(mock(TaskCard.class));
+        when(taskService.saveTask(any(Task.class), any(TaskCard.class))).thenReturn(taskStubs.get(0));
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenReturn(mock(TaskCard.class));
 
         mockMvc.perform(post("/taskcards/1/tasks")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.taskId", equalTo(1)))
-               .andExpect(jsonPath("$.value", equalTo("test")))
-               .andExpect(jsonPath("$.completed", equalTo(false)))
+               .andExpect(jsonPath("$.value", equalTo("test_1")))
+               .andExpect(jsonPath("$.completed", equalTo(true)))
                .andExpect(status().isCreated());
 
         verify(taskService).saveTask(any(Task.class), any(TaskCard.class));
@@ -141,14 +151,11 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void createTaskShouldReturnStatusCreated() throws Exception {
-        TaskDto body = new TaskDto();
-        body.setValue("test");
-
-        when(taskService.saveTask(any(Task.class), any(TaskCard.class))).thenReturn(mock(Task.class));
+        when(taskService.saveTask(any(Task.class), any(TaskCard.class))).thenReturn(taskStubs.get(0));
 
         mockMvc.perform(post("/taskcards/1/tasks")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isCreated());
     }
 
@@ -162,15 +169,11 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void whenCreateTaskGetsWrongCardIdThenDenySaveAndReturnStatusNotFound() throws Exception {
-        TaskDto body = new TaskDto();
-        body.setValue("test");
-
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null)))
-                .thenThrow(ResourceNotFoundException.class);
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(post("/taskcards/0/tasks")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isNotFound());
 
         verify(taskService, never()).saveTask(any(Task.class), any(TaskCard.class));
@@ -179,21 +182,15 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void updateTaskShouldUpdateTaskAndReturnCorrectDto() throws Exception {
-        Task existingStub = new Task(1L, "test", false, null);
-        Task replacementStub = new Task(1L, "task", true, null);
-        TaskDto body = new TaskDto();
-        body.setValue("task");
-        body.setCompleted(true);
-
-        when(taskService.findTaskById(any(Long.class), any(Long.class), eq(null))).thenReturn(existingStub);
-        when(taskService.updateTask(any(Task.class), any(Task.class))).thenReturn(replacementStub);
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenReturn(taskStubs.get(0));
+        when(taskService.updateTask(any(Task.class), any(Task.class))).thenReturn(taskStubs.get(1));
 
         mockMvc.perform(put("/taskcards/1/tasks/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.taskId", equalTo(1)))
-               .andExpect(jsonPath("$.value", equalTo("task")))
+               .andExpect(jsonPath("$.taskId", equalTo(2)))
+               .andExpect(jsonPath("$.value", equalTo("test_2")))
                .andExpect(jsonPath("$.completed", equalTo(true)))
                .andExpect(status().isOk());
 
@@ -203,13 +200,11 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void updateTaskShouldReturnStatusOk() throws Exception {
-        TaskDto body = new TaskDto();
-        body.setValue("test");
-        when(taskService.updateTask(any(Task.class), any(Task.class))).thenReturn(mock(Task.class));
+        when(taskService.updateTask(any(Task.class), any(Task.class))).thenReturn(taskStubs.get(0));
 
         mockMvc.perform(put("/taskcards/1/tasks/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isOk());
     }
 
@@ -223,15 +218,11 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void whenUpdateTaskGetsWrongIdThenDenyUpdateAndReturnStatusNotFound() throws Exception {
-        TaskDto body = new TaskDto();
-        body.setValue("test");
-
-        when(taskService.findTaskById(any(Long.class), any(Long.class), eq(null)))
-                .thenThrow(ResourceNotFoundException.class);
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(put("/taskcards/1/tasks/0")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isNotFound());
 
         verify(taskService, never()).updateTask(any(Task.class), any(Task.class));
@@ -240,7 +231,7 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void deleteTaskShouldDeleteTask() throws Exception {
-        when(taskService.findTaskById(any(Long.class), any(Long.class), eq(null))).thenReturn(mock(Task.class));
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenReturn(taskStubs.get(0));
 
         mockMvc.perform(delete("/taskcards/1/tasks/1").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isNoContent());
@@ -258,8 +249,7 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void whenDeleteTaskGetsWrongIdThenDenyDeleteAndReturnStatusNotFound() throws Exception {
-        when(taskService.findTaskById(any(Long.class), any(Long.class), eq(null)))
-                .thenThrow(ResourceNotFoundException.class);
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(delete("/taskcards/1/tasks/0").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isNotFound());
@@ -270,21 +260,16 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void patchTaskShouldUpdatePassedFields() throws Exception {
-        TaskDto body = new TaskDto();
-        body.setValue("test");
-
-        Task result = new Task();
-        result.setValue("test");
-
-        when(taskService.findTaskById(any(Long.class), anyLong(), eq(null))).thenReturn(mock(Task.class));
-        when(taskService.partlyUpdateTask(any(Task.class), anyMap())).thenReturn(result);
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenReturn(taskStubs.get(0));
+        when(taskService.partlyUpdateTask(any(Task.class), anyMap())).thenReturn(taskStubs.get(1));
 
         mockMvc.perform(patch("/taskcards/1/tasks/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.value", equalTo("test")));
+               .andExpect(jsonPath("$.value", equalTo("test_2")))
+               .andExpect(jsonPath("$.completed", equalTo(true)));
 
         verify(taskService).partlyUpdateTask(any(Task.class), anyMap());
     }
@@ -292,23 +277,23 @@ class TaskControllerTest {
     @Test
     @WithMockUser
     void patchTaskShouldReturnStatusOk() throws Exception {
-        when(taskService.findTaskById(any(Long.class), anyLong(), eq(null))).thenReturn(mock(Task.class));
-        when(taskService.partlyUpdateTask(any(Task.class), anyMap())).thenReturn(mock(Task.class));
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenReturn(taskStubs.get(0));
+        when(taskService.partlyUpdateTask(any(Task.class), anyMap())).thenReturn(taskStubs.get(1));
 
         mockMvc.perform(patch("/taskcards/1/tasks/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(new TaskCardDto())))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
     void whenPatchTaskGetsWrongIdThenDenyUpdateAndReturnStatusNotFound() throws Exception {
-        when(taskService.findTaskById(any(Long.class), anyLong(), eq(null))).thenThrow(ResourceNotFoundException.class);
+        when(taskService.findTaskById(anyLong(), anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(patch("/taskcards/0/tasks/0")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(new TaskCardDto())))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isNotFound());
 
         verify(taskService, never()).partlyUpdateTask(any(Task.class), anyMap());

@@ -2,23 +2,26 @@ package com.sin.orb.payload;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Getter
-@Setter
+@RequiredArgsConstructor
 public class LoginRequest {
     @Email
+    @NonNull
     @NotBlank
     @Size(min = 1, max = 129)
     @ApiModelProperty(required = true)
-    private String email;
+    private final String email;
 
+    @NonNull
     @NotBlank
     @Size(min = 1, max = 128)
     @ApiModelProperty(required = true)
-    private String password;
+    private final String password;
 }

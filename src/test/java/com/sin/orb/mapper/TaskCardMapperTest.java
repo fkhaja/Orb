@@ -15,7 +15,7 @@ class TaskCardMapperTest {
     @Test
     void whenConvertTaskCardToDtoThenCorrect() {
         TaskCard entity = new TaskCard();
-        entity.setName("test");
+        entity.setTitle("test");
         entity.setId(1L);
         entity.setCreationDate(LocalDate.now());
         entity.setTasks(Collections.emptyList());
@@ -27,20 +27,20 @@ class TaskCardMapperTest {
 
         TaskCardDto dto = TaskCardMapper.INSTANCE.toDto(entity);
         assertThat(dto.getCardId()).isEqualTo(entity.getId());
-        assertThat(dto.getName()).isEqualTo(entity.getName());
+        assertThat(dto.getTitle()).isEqualTo(entity.getTitle());
         assertThat(dto.getCreationDate()).isEqualTo(entity.getCreationDate());
         assertThat(dto.getTasks()).isEqualTo(entity.getTasks());
         assertThat(dto.getDescription()).isEqualTo(entity.getDescription());
         assertThat(dto.getImageUrl()).isEqualTo(entity.getImageUrl());
-        assertThat(dto.getDone()).isEqualTo(entity.getDone());
+        assertThat(dto.isDone()).isEqualTo(entity.isDone());
         assertThat(dto.getTerm()).isEqualTo(entity.getTerm());
-        assertThat(dto.getCompletedAtTerm()).isEqualTo(entity.getCompletedAtTerm());
+        assertThat(dto.isCompletedAtTerm()).isEqualTo(entity.isCompletedAtTerm());
     }
 
     @Test
     void whenConvertTaskCardDtoToEntityThenCorrect() {
         TaskCardDto dto = new TaskCardDto();
-        dto.setName("test");
+        dto.setTitle("test");
         dto.setCardId(1L);
         dto.setCreationDate(LocalDate.now());
         dto.setTasks(Collections.emptyList());
@@ -52,13 +52,13 @@ class TaskCardMapperTest {
 
         TaskCard entity = TaskCardMapper.INSTANCE.toEntity(dto);
         assertThat(dto.getCardId()).isEqualTo(entity.getId());
-        assertThat(dto.getName()).isEqualTo(entity.getName());
+        assertThat(dto.getTitle()).isEqualTo(entity.getTitle());
         assertThat(dto.getCreationDate()).isEqualTo(entity.getCreationDate());
         assertThat(dto.getTasks()).isEqualTo(entity.getTasks());
         assertThat(dto.getDescription()).isEqualTo(entity.getDescription());
         assertThat(dto.getImageUrl()).isEqualTo(entity.getImageUrl());
-        assertThat(dto.getDone()).isEqualTo(entity.getDone());
+        assertThat(dto.isDone()).isEqualTo(entity.isDone());
         assertThat(dto.getTerm()).isEqualTo(entity.getTerm());
-        assertThat(dto.getCompletedAtTerm()).isEqualTo(entity.getCompletedAtTerm());
+        assertThat(dto.isCompletedAtTerm()).isEqualTo(entity.isCompletedAtTerm());
     }
 }

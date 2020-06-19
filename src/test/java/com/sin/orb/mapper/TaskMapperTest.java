@@ -18,7 +18,7 @@ class TaskMapperTest {
         TaskDto dto = TaskMapper.INSTANCE.toDto(entity);
         assertThat(dto.getValue()).isSameAs(entity.getValue());
         assertThat(dto.getTaskId()).isEqualTo(entity.getId());
-        assertThat(dto.getCompleted()).isEqualTo(entity.getCompleted());
+        assertThat(dto.isCompleted()).isEqualTo(entity.isCompleted());
     }
 
     @Test
@@ -31,6 +31,6 @@ class TaskMapperTest {
         Task entity = TaskMapper.INSTANCE.toEntity(dto);
         assertThat(entity.getValue()).isSameAs(dto.getValue());
         assertThat(entity.getId()).isEqualTo(dto.getTaskId());
-        assertThat(entity.getCompleted()).isEqualTo(dto.getCompleted());
+        assertThat(entity.isCompleted()).isEqualTo(dto.isCompleted());
     }
 }

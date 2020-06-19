@@ -58,10 +58,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         String token = tokenProvider.createToken(auth);
-
-        return UriComponentsBuilder.fromUriString(targetUrl)
-                                   .queryParam("token", token)
-                                   .build().toUriString();
+        return UriComponentsBuilder.fromUriString(targetUrl).queryParam("token", token).build().toUriString();
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest req, HttpServletResponse resp) {

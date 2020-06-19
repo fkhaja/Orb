@@ -56,23 +56,25 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             AuthProvider provider = user.getProvider();
 
             if (!provider.equals(AuthProvider.valueOf(registrationId.toUpperCase()))) {
-                throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
-                                                                          provider + " account. Please use your " +
-                                                                          provider + " account to login.");
+                StringBuilder message = new StringBuilder();
+                final String providerName = String.valueOf(provider).toLowerCase();
+                message.append("Looks like you're signed up with ").append(providerName)
+                       .append(" account. Please use your ").append(providerName).append(" account to login.");
+                throw new OAuth2AuthenticationProcessingException(message.toString());
             }
             user = updateExistingUser(user, userInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, userInfo);
         }
-        user.setAuthorities(Collections.singleton(Role.ROLE_USER));
+        user.setAuthorities(Collections.singleton(Role.USER));
         user.setAttributes(oAuth2User.getAttributes());
         return user;
     }
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         final String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
-        User user = new User();
 
+        User user = new User();
         user.setProvider(AuthProvider.valueOf(registrationId.toUpperCase()));
         user.setProviderId(oAuth2UserInfo.getId());
         user.setUsername(oAuth2UserInfo.getName());

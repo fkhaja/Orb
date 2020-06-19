@@ -2,6 +2,7 @@ package com.sin.orb.service;
 
 import com.sin.orb.domain.TaskCard;
 import com.sin.orb.domain.User;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,9 +10,9 @@ import java.util.Map;
 
 public interface TaskCardService {
 
-    TaskCard saveTaskCard(TaskCard card, User user);
+    TaskCard saveTaskCard(@NonNull TaskCard card, User user);
 
-    TaskCard updateTaskCard(TaskCard existing, TaskCard replacement);
+    TaskCard updateTaskCard(@NonNull TaskCard existing, @NonNull TaskCard replacement);
 
     void deleteTaskCard(TaskCard card);
 
@@ -19,5 +20,5 @@ public interface TaskCardService {
 
     TaskCard findTaskCardForUser(Long id, User user);
 
-    TaskCard partlyUpdateTaskCard(TaskCard card, Map<String, Object> updates);
+    TaskCard partlyUpdateTaskCard(@NonNull TaskCard card, @NonNull Map<String, Object> updates);
 }

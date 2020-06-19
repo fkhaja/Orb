@@ -12,32 +12,20 @@ import java.util.Date;
 @Slf4j
 @Service
 public class TokenProvider {
-
     @Value("${app.auth.tokenSecret}")
     private String tokenSecret;
 
-    @Value("${app.auth.tokenExpirationMsec}")
-    private long tokenExpiration;
-
     public String createToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + tokenExpiration);
-
         return Jwts.builder()
                    .setSubject(Long.toString(user.getId()))
                    .setIssuedAt(new Date())
-                   .setExpiration(expiryDate)
                    .signWith(SignatureAlgorithm.HS512, tokenSecret)
                    .compact();
     }
 
     public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                            .setSigningKey(tokenSecret)
-                            .parseClaimsJws(token)
-                            .getBody();
-
+        Claims claims = Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token).getBody();
         return Long.parseLong(claims.getSubject());
     }
 

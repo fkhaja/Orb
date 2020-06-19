@@ -3,15 +3,16 @@ package com.sin.orb.service;
 import com.sin.orb.domain.Task;
 import com.sin.orb.domain.TaskCard;
 import com.sin.orb.domain.User;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Map;
 
 public interface TaskService {
 
-    Task saveTask(Task task, TaskCard card);
+    Task saveTask(@NonNull Task task, TaskCard card);
 
-    Task updateTask(Task existing, Task task);
+    Task updateTask(@NonNull Task existing, @NonNull Task replacement);
 
     void deleteTask(Task task);
 
@@ -19,5 +20,5 @@ public interface TaskService {
 
     Task findTaskById(Long id, Long cardId, User user);
 
-    Task partlyUpdateTask(Task task, Map<String, Object> updates);
+    Task partlyUpdateTask(@NonNull Task task, @NonNull Map<String, Object> updates);
 }

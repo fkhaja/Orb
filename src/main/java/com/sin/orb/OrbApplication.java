@@ -9,5 +9,4 @@ public class OrbApplication {
     public static void main(String[] args) {
         SpringApplication.run(OrbApplication.class, args);
     }
-
 }

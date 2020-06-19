@@ -81,7 +81,10 @@ public class TaskCardController {
     public ResponseEntity<TaskCardDto> patchTaskCard(@ApiIgnore @CurrentUser User user, @PathVariable("id") Long id,
                                                      @RequestBody Map<String, Object> updates) {
         TaskCard taskCard = taskCardService.findTaskCardForUser(id, user);
-        TaskCard updated = taskCardService.partlyUpdateTaskCard(taskCard, updates);
-        return ResponseEntity.ok(TaskCardMapper.INSTANCE.toDto(updated));
+        if (!updates.isEmpty()) {
+            TaskCard updated = taskCardService.partlyUpdateTaskCard(taskCard, updates);
+            return ResponseEntity.ok(TaskCardMapper.INSTANCE.toDto(updated));
+        }
+        return ResponseEntity.ok(TaskCardMapper.INSTANCE.toDto(taskCard));
     }
 }

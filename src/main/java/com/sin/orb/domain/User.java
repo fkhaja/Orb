@@ -13,11 +13,10 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+@Table(name = "users")
 @EqualsAndHashCode(of = {"id"})
 @ToString(exclude = "taskCards")
 @NoArgsConstructor
-@AllArgsConstructor
 public class User implements OAuth2User, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +26,13 @@ public class User implements OAuth2User, UserDetails {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)

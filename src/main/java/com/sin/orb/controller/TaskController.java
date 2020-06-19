@@ -46,7 +46,8 @@ public class TaskController {
 
     @GetMapping("{id}")
     @ApiOperation("Get a task with the specified id")
-    public ResponseEntity<TaskDto> getTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable Long id) {
+    public ResponseEntity<TaskDto> getTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId,
+                                           @PathVariable Long id) {
         Task task = taskService.findTaskById(id, cardId, user);
         return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(task));
     }
@@ -72,7 +73,8 @@ public class TaskController {
 
     @DeleteMapping("{id}")
     @ApiOperation("Delete a task with the specified id")
-    public ResponseEntity<Void> deleteTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId, @PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteTask(@ApiIgnore @CurrentUser User user, @PathVariable("cardId") Long cardId,
+                                           @PathVariable("id") Long id) {
         taskService.deleteTask(taskService.findTaskById(id, cardId, user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -82,7 +84,10 @@ public class TaskController {
     public ResponseEntity<TaskDto> patchTask(@ApiIgnore @CurrentUser User user, @PathVariable("id") Long id,
                                              @PathVariable("cardId") Long cardId, @RequestBody Map<String, Object> updates) {
         Task task = taskService.findTaskById(id, cardId, user);
-        Task updated = taskService.partlyUpdateTask(task, updates);
-        return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(updated));
+        if (!updates.isEmpty()) {
+            Task updated = taskService.partlyUpdateTask(task, updates);
+            return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(updated));
+        }
+        return ResponseEntity.ok(TaskMapper.INSTANCE.toDto(task));
     }
 }

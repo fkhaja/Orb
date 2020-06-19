@@ -2,6 +2,7 @@ package com.sin.orb.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -9,9 +10,10 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 @Data
+@NoArgsConstructor
 public class UserDto {
     @Null
-    @ApiModelProperty(readOnly = true)
+    @ApiModelProperty(accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private Long id;
 
     @NotBlank

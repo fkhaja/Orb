@@ -5,6 +5,7 @@ import com.sin.orb.domain.TaskCard;
 import com.sin.orb.dto.TaskCardDto;
 import com.sin.orb.exception.ResourceNotFoundException;
 import com.sin.orb.service.TaskCardService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -42,61 +43,83 @@ class TaskCardControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
-    @Test
-    @WithMockUser
-    void getAllTaskCardsShouldReturnCorrectDtoList() throws Exception {
+    private static List<TaskCard> cardStubs;
+
+    private static TaskCardDto defaultBody;
+
+    @BeforeAll
+    public static void setUp() {
         TaskCard firstStub = new TaskCard();
         firstStub.setId(1L);
-        firstStub.setName("test");
-        firstStub.setCreationDate(LocalDate.now());
+        firstStub.setTitle("title_1");
+        firstStub.setDescription("description_1");
+        firstStub.setImageUrl("url_1");
+        firstStub.setCompletedAtTerm(true);
         firstStub.setTasks(Collections.emptyList());
-        firstStub.setDescription("description1");
-        firstStub.setTerm(LocalDateTime.MAX);
-        firstStub.setImageUrl("url1");
         firstStub.setDone(true);
+        firstStub.setCreationDate(LocalDate.now());
+        firstStub.setTerm(LocalDateTime.now());
 
         TaskCard secondStub = new TaskCard();
         secondStub.setId(2L);
-        secondStub.setName("card");
-        secondStub.setCreationDate(LocalDate.now());
+        secondStub.setTitle("title_2");
+        secondStub.setDescription("description_2");
+        secondStub.setImageUrl("url_2");
+        secondStub.setCompletedAtTerm(true);
         secondStub.setTasks(Collections.emptyList());
-        secondStub.setDescription("description2");
-        secondStub.setTerm(LocalDateTime.MIN);
-        secondStub.setImageUrl("url2");
         secondStub.setDone(true);
+        secondStub.setCreationDate(LocalDate.now());
+        secondStub.setTerm(LocalDateTime.now());
 
-        Page<TaskCard> stubPage = new PageImpl<>(List.of(firstStub, secondStub));
+        cardStubs = List.of(firstStub, secondStub);
 
-        when(taskCardService.findAllForUser(eq(null), any(Pageable.class))).thenReturn(stubPage);
+        defaultBody = new TaskCardDto();
+        defaultBody.setTitle("title");
+        defaultBody.setDescription("description");
+        defaultBody.setImageUrl("url");
+        defaultBody.setCompletedAtTerm(true);
+        defaultBody.setDone(true);
+        defaultBody.setTerm(LocalDateTime.now());
+    }
+
+    @Test
+    @WithMockUser
+    void getAllTaskCardsShouldReturnCorrectDtoList() throws Exception {
+        Page<TaskCard> page = new PageImpl<>(cardStubs);
+
+        when(taskCardService.findAllForUser(any(), any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/taskcards").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.content", hasSize(2)))
                .andExpect(jsonPath("$.content[0].cardId", equalTo(1)))
-               .andExpect(jsonPath("$.content[0].name", equalTo("test")))
+               .andExpect(jsonPath("$.content[0].title", equalTo("title_1")))
                .andExpect(jsonPath("$.content[0].creationDate", notNullValue()))
                .andExpect(jsonPath("$.content[0].tasks", hasSize(0)))
-               .andExpect(jsonPath("$.content[0].description", equalTo("description1")))
+               .andExpect(jsonPath("$.content[0].description", equalTo("description_1")))
                .andExpect(jsonPath("$.content[0].term", notNullValue()))
-               .andExpect(jsonPath("$.content[0].imageUrl", equalTo("url1")))
+               .andExpect(jsonPath("$.content[0].imageUrl", equalTo("url_1")))
                .andExpect(jsonPath("$.content[0].done", equalTo(true)))
+               .andExpect(jsonPath("$.content[0].completedAtTerm", equalTo(true)))
                .andExpect(jsonPath("$.content[1].cardId", equalTo(2)))
-               .andExpect(jsonPath("$.content[1].name", equalTo("card")))
+               .andExpect(jsonPath("$.content[1].title", equalTo("title_2")))
                .andExpect(jsonPath("$.content[1].creationDate", notNullValue()))
                .andExpect(jsonPath("$.content[1].tasks", hasSize(0)))
-               .andExpect(jsonPath("$.content[1].description", equalTo("description2")))
+               .andExpect(jsonPath("$.content[1].description", equalTo("description_2")))
                .andExpect(jsonPath("$.content[1].term", notNullValue()))
-               .andExpect(jsonPath("$.content[1].imageUrl", equalTo("url2")))
+               .andExpect(jsonPath("$.content[1].imageUrl", equalTo("url_2")))
                .andExpect(jsonPath("$.content[1].done", equalTo(true)))
+               .andExpect(jsonPath("$.content[1].completedAtTerm", equalTo(true)))
+               .andExpect(jsonPath("$.totalElements", equalTo(2)))
                .andExpect(status().isOk());
 
-        verify(taskCardService).findAllForUser(eq(null), any(Pageable.class));
+        verify(taskCardService).findAllForUser(any(), any(Pageable.class));
     }
 
     @Test
     @WithMockUser
     void getAllTaskCardsShouldReturnStatusOk() throws Exception {
-        when(taskCardService.findAllForUser(eq(null), any(Pageable.class))).thenReturn(Page.empty());
+        when(taskCardService.findAllForUser(any(), any(Pageable.class))).thenReturn(Page.empty());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/taskcards").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());
@@ -105,37 +128,28 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void getTaskCardShouldReturnCorrectDto() throws Exception {
-        TaskCard cardStub = new TaskCard();
-        cardStub.setId(1L);
-        cardStub.setName("test");
-        cardStub.setCreationDate(LocalDate.now());
-        cardStub.setTasks(Collections.emptyList());
-        cardStub.setDescription("description");
-        cardStub.setTerm(LocalDateTime.MAX);
-        cardStub.setImageUrl("url");
-        cardStub.setDone(true);
-
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(cardStub);
+        when(taskCardService.findTaskCardForUser(anyLong(),any())).thenReturn(cardStubs.get(0));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/taskcards/1").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.cardId", equalTo(1)))
-               .andExpect(jsonPath("$.name", equalTo("test")))
+               .andExpect(jsonPath("$.title", equalTo("title_1")))
                .andExpect(jsonPath("$.creationDate", notNullValue()))
                .andExpect(jsonPath("$.tasks", hasSize(0)))
-               .andExpect(jsonPath("$.description", equalTo("description")))
+               .andExpect(jsonPath("$.description", equalTo("description_1")))
                .andExpect(jsonPath("$.term", notNullValue()))
-               .andExpect(jsonPath("$.imageUrl", equalTo("url")))
+               .andExpect(jsonPath("$.imageUrl", equalTo("url_1")))
                .andExpect(jsonPath("$.done", equalTo(true)))
+               .andExpect(jsonPath("$.completedAtTerm", equalTo(true)))
                .andExpect(status().isOk());
 
-        verify(taskCardService).findTaskCardForUser(any(Long.class), eq(null));
+        verify(taskCardService).findTaskCardForUser(anyLong(), any());
     }
 
     @Test
     @WithMockUser
     void getTaskCardShouldReturnStatusOk() throws Exception {
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(mock(TaskCard.class));
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenReturn(cardStubs.get(0));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/taskcards/1").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());
@@ -144,60 +158,45 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void whenGetTaskCardGetsWrongIdThenReturnStatusNotFound() throws Exception {
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenThrow(ResourceNotFoundException.class);
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/taskcards/0").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isNotFound());
 
-        verify(taskCardService).findTaskCardForUser(any(Long.class), eq(null));
+        verify(taskCardService).findTaskCardForUser(anyLong(), any());
     }
 
     @Test
     @WithMockUser
     void createTaskCardShouldSaveCardAndReturnCorrectDto() throws Exception {
-        TaskCard cardStub = new TaskCard();
-        cardStub.setId(1L);
-        cardStub.setName("test");
-        cardStub.setCreationDate(LocalDate.now());
-        cardStub.setTasks(Collections.emptyList());
-        cardStub.setDescription("description");
-        cardStub.setTerm(LocalDateTime.MAX);
-        cardStub.setImageUrl("url");
-        cardStub.setDone(true);
-
-        TaskCardDto body = new TaskCardDto();
-        body.setName("test");
-
-        when(taskCardService.saveTaskCard(any(TaskCard.class), eq(null))).thenReturn(cardStub);
+        when(taskCardService.saveTaskCard(any(TaskCard.class), any())).thenReturn(cardStubs.get(0));
 
         mockMvc.perform(post("/taskcards")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.cardId", equalTo(1)))
-               .andExpect(jsonPath("$.name", equalTo("test")))
+               .andExpect(jsonPath("$.title", equalTo("title_1")))
                .andExpect(jsonPath("$.creationDate", notNullValue()))
                .andExpect(jsonPath("$.tasks", hasSize(0)))
-               .andExpect(jsonPath("$.description", equalTo("description")))
+               .andExpect(jsonPath("$.description", equalTo("description_1")))
                .andExpect(jsonPath("$.term", notNullValue()))
-               .andExpect(jsonPath("$.imageUrl", equalTo("url")))
+               .andExpect(jsonPath("$.imageUrl", equalTo("url_1")))
                .andExpect(jsonPath("$.done", equalTo(true)))
+               .andExpect(jsonPath("$.completedAtTerm", equalTo(true)))
                .andExpect(status().isCreated());
 
-        verify(taskCardService).saveTaskCard(any(TaskCard.class), eq(null));
+        verify(taskCardService).saveTaskCard(any(TaskCard.class), any());
     }
 
     @Test
     @WithMockUser
     void createTaskCardShouldReturnStatusCreated() throws Exception {
-        TaskCardDto body = new TaskCardDto();
-        body.setName("test");
-
-        when(taskCardService.saveTaskCard(any(TaskCard.class), eq(null))).thenReturn(mock(TaskCard.class));
+        when(taskCardService.saveTaskCard(any(TaskCard.class), any())).thenReturn(cardStubs.get(0));
 
         mockMvc.perform(post("/taskcards")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isCreated());
     }
 
@@ -211,43 +210,22 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void updateTaskCardShouldUpdateCardAndReturnCorrectDto() throws Exception {
-        TaskCard existingStub = new TaskCard();
-        existingStub.setId(1L);
-        existingStub.setName("test");
-        existingStub.setCreationDate(LocalDate.now());
-        existingStub.setTasks(Collections.emptyList());
-        existingStub.setDescription("description");
-        existingStub.setTerm(LocalDateTime.MAX);
-        existingStub.setImageUrl("url");
-
-        TaskCard replacementStub = new TaskCard();
-        replacementStub.setId(1L);
-        replacementStub.setName("card");
-        replacementStub.setCreationDate(LocalDate.now());
-        replacementStub.setTasks(Collections.emptyList());
-        replacementStub.setDescription("description upd");
-        replacementStub.setTerm(LocalDateTime.MIN);
-        replacementStub.setImageUrl("url upd");
-        replacementStub.setDone(true);
-
-        TaskCardDto body = new TaskCardDto();
-        body.setName("card");
-
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(existingStub);
-        when(taskCardService.updateTaskCard(any(TaskCard.class), any(TaskCard.class))).thenReturn(replacementStub);
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenReturn(cardStubs.get(0));
+        when(taskCardService.updateTaskCard(any(TaskCard.class), any(TaskCard.class))).thenReturn(cardStubs.get(1));
 
         mockMvc.perform(put("/taskcards/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.cardId", equalTo(1)))
-               .andExpect(jsonPath("$.name", equalTo("card")))
+               .andExpect(jsonPath("$.cardId", equalTo(2)))
+               .andExpect(jsonPath("$.title", equalTo("title_2")))
                .andExpect(jsonPath("$.creationDate", notNullValue()))
                .andExpect(jsonPath("$.tasks", hasSize(0)))
-               .andExpect(jsonPath("$.description", equalTo("description upd")))
+               .andExpect(jsonPath("$.description", equalTo("description_2")))
                .andExpect(jsonPath("$.term", notNullValue()))
-               .andExpect(jsonPath("$.imageUrl", equalTo("url upd")))
+               .andExpect(jsonPath("$.imageUrl", equalTo("url_2")))
                .andExpect(jsonPath("$.done", equalTo(true)))
+               .andExpect(jsonPath("$.completedAtTerm", equalTo(true)))
                .andExpect(status().isOk());
 
         verify(taskCardService).updateTaskCard(any(TaskCard.class), any(TaskCard.class));
@@ -256,14 +234,11 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void updateTaskCardShouldReturnStatusOk() throws Exception {
-        TaskCardDto body = new TaskCardDto();
-        body.setName("test");
-
-        when(taskCardService.updateTaskCard(any(TaskCard.class), any(TaskCard.class))).thenReturn(mock(TaskCard.class));
+        when(taskCardService.updateTaskCard(any(TaskCard.class), any(TaskCard.class))).thenReturn(cardStubs.get(0));
 
         mockMvc.perform(put("/taskcards/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isOk());
     }
 
@@ -277,14 +252,11 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void whenUpdateTaskCardGetsWrongIdThenDenyUpdateAndReturnStatusNotFound() throws Exception {
-        TaskCardDto body = new TaskCardDto();
-        body.setName("test");
-
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenThrow(ResourceNotFoundException.class);
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(put("/taskcards/0")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isNotFound());
 
         verify(taskCardService, never()).updateTaskCard(any(TaskCard.class), any(TaskCard.class));
@@ -293,7 +265,7 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void deleteTaskCardShouldDeleteCard() throws Exception {
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(mock(TaskCard.class));
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenReturn(cardStubs.get(0));
 
         mockMvc.perform(delete("/taskcards/1").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isNoContent());
@@ -311,7 +283,7 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void whenDeleteTaskCardGetsWrongIdThenDenyDeleteAndReturnStatusNotFound() throws Exception {
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenThrow(ResourceNotFoundException.class);
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(delete("/taskcards/0").contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isNotFound());
@@ -322,21 +294,24 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void patchTaskCardShouldUpdatePassedFields() throws Exception {
-        TaskCardDto body = new TaskCardDto();
-        body.setName("test");
-
-        TaskCard result = new TaskCard();
-        result.setName("test");
-
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(mock(TaskCard.class));
-        when(taskCardService.partlyUpdateTaskCard(any(TaskCard.class), anyMap())).thenReturn(result);
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenReturn(cardStubs.get(0));
+        when(taskCardService.partlyUpdateTaskCard(any(TaskCard.class), anyMap())).thenReturn(cardStubs.get(1));
 
         mockMvc.perform(patch("/taskcards/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(body)))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.name", equalTo("test")));
+               .andExpect(jsonPath("$.cardId", equalTo(2)))
+               .andExpect(jsonPath("$.title", equalTo("title_2")))
+               .andExpect(jsonPath("$.creationDate", notNullValue()))
+               .andExpect(jsonPath("$.tasks", hasSize(0)))
+               .andExpect(jsonPath("$.description", equalTo("description_2")))
+               .andExpect(jsonPath("$.term", notNullValue()))
+               .andExpect(jsonPath("$.imageUrl", equalTo("url_2")))
+               .andExpect(jsonPath("$.done", equalTo(true)))
+               .andExpect(jsonPath("$.completedAtTerm", equalTo(true)))
+               .andExpect(status().isOk());
 
         verify(taskCardService).partlyUpdateTaskCard(any(TaskCard.class), anyMap());
     }
@@ -344,23 +319,23 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void patchTaskCardShouldReturnStatusOk() throws Exception {
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenReturn(mock(TaskCard.class));
-        when(taskCardService.partlyUpdateTaskCard(any(TaskCard.class), anyMap())).thenReturn(mock(TaskCard.class));
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenReturn(cardStubs.get(0));
+        when(taskCardService.partlyUpdateTaskCard(any(TaskCard.class), anyMap())).thenReturn(cardStubs.get(0));
 
         mockMvc.perform(patch("/taskcards/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(new TaskCardDto())))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
     void whenPatchTaskCardGetsWrongIdThenDenyUpdateAndReturnStatusNotFound() throws Exception {
-        when(taskCardService.findTaskCardForUser(any(Long.class), eq(null))).thenThrow(ResourceNotFoundException.class);
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(patch("/taskcards/0")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(new TaskCardDto())))
+                                .content(mapper.writeValueAsString(defaultBody)))
                .andExpect(status().isNotFound());
 
         verify(taskCardService, never()).partlyUpdateTaskCard(any(TaskCard.class), anyMap());

@@ -1,9 +1,11 @@
 package com.sin.orb.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,15 +16,13 @@ import java.util.List;
 @Table(name = "task_cards")
 @ToString(exclude = {"user"})
 @NoArgsConstructor
-@AllArgsConstructor
 public class TaskCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @Basic
     @Column(name = "creation_date", nullable = false)
@@ -31,7 +31,7 @@ public class TaskCard {
     @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Task> tasks;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", updatable = false, nullable = false)
     private User user;
 
@@ -43,10 +43,10 @@ public class TaskCard {
     private LocalDateTime term;
 
     @Column(name = "completed_at_term", columnDefinition = "boolean default false", nullable = false)
-    private Boolean completedAtTerm;
+    private boolean completedAtTerm;
 
     @Column(name = "done", columnDefinition = "boolean default false", nullable = false)
-    private Boolean done;
+    private boolean done;
 
     @Column(name = "image_url")
     private String imageUrl;

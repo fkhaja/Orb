@@ -12,10 +12,8 @@ public interface TaskCardMapper {
     TaskCardMapper INSTANCE = Mappers.getMapper(TaskCardMapper.class);
 
     @Mapping(source = "id", target = "cardId")
-    @Mapping(source = "completedAtTerm", target = "completedAtTerm")
     TaskCardDto toDto(TaskCard card);
 
     @Mapping(source = "cardId", target = "id")
-    @Mapping(source = "completedAtTerm", target = "completedAtTerm")
     TaskCard toEntity(TaskCardDto dto);
 }
