@@ -1,0 +1,208 @@
+@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:700';
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+
+@media only screen and (min-width: 40em) {
+    .modal-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        background-color: rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        visibility: hidden;
+        backface-visibility: hidden;
+        transition: opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1), visibility 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto;
+    background-color: #fff;
+    width: 560px;
+    min-height: 15rem;
+    max-height: 95vh;
+    padding: 1rem;
+    border-radius: .5em;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    backface-visibility: hidden;
+    transform: scale(1.2);
+    transition: all 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.modal .close-modal {
+    position: absolute;
+    cursor: pointer;
+    top: 5px;
+    right: 15px;
+    opacity: 0;
+    backface-visibility: hidden;
+    transition: opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1), transform 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+    transition-delay: 0.3s;
+    z-index: 1;
+}
+
+.modal .close-modal svg {
+    width: 2em;
+    height: 2em;
+    color: #8e54e9;
+}
+
+.modal .modal-content {
+    border: 0;
+    opacity: 0;
+    backface-visibility: hidden;
+    transition: opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+    transition-delay: 0.3s;
+}
+
+.modal.active {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.modal.active .modal-content {
+    opacity: 1;
+}
+
+.modal.active .close-modal {
+    transform: translateY(10px);
+    opacity: 1;
+}
+
+.modal-progress-bar {
+    margin-bottom: 15px;
+}
+
+.modal-progress-bar-percentage {
+    float: left;
+}
+
+.title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: .5em;
+    color: #8e54e9;
+    text-align: center;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.modal-content-text {
+    margin-bottom: 2em;
+    color: #666;
+}
+
+@media only screen and (max-width: 39.9375em) {
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0;
+        transform: scale(1.1);
+        padding: 0 !important;
+    }
+
+    .close-modal {
+        right: 20px !important;
+    }
+}
+
+p.button-dark {
+    cursor: pointer;
+    color: #644cad;
+    text-decoration: none;
+    -webkit-transition: 0.3s all ease;
+    transition: 0.3s ease all;
+}
+
+p.button-dark:hover {
+    color: #FFF;
+}
+
+p.button-dark:focus {
+    color: #FFF;
+}
+
+.button-dark {
+    font-size: 14px;
+    font-family: Nunito, sans-serif;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    font-weight: bolder;
+    padding: 5px 0;
+    border: 2px solid #7a58e5;
+    border-radius: 5px;
+    position: relative;
+    z-index: 2;
+    color: #7a58e5;
+    background: white;
+}
+
+.button-dark:focus {
+    color: #fff;
+}
+
+.button-dark:before {
+    -webkit-transition: 0.5s all ease;
+    transition: 0.5s all ease;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: 50%;
+    bottom: 0;
+    opacity: 0;
+    content: '';
+    background-color: #7a58e5;
+    z-index: -1;
+    color: #fff;
+}
+
+.button-dark:hover:before {
+    -webkit-transition: 0.5s all ease;
+    transition: 0.5s all ease;
+    left: 0;
+    right: 0;
+    opacity: 1;
+    color: #fff;
+}
+
+.button-dark:focus:before {
+    -webkit-transition: 0.5s all ease;
+    transition: 0.5s all ease;
+    left: 0;
+    right: 0;
+    opacity: 1;
+    color: #fff;
+}
+
+.button-dark:hover {
+    color: #fff;
+    transition: 0.2s ease-in-out;
+}

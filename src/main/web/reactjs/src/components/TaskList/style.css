@@ -1,0 +1,237 @@
+.inputGroup {
+    background-color: #fff;
+    display: block;
+    margin: 5px 0;
+    position: relative;
+    word-break: break-word;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.inputGroup_content {
+    width: 480px;
+    margin-left: 34px;
+    display: -webkit-box;
+    word-wrap: break-word;
+    -webkit-box-orient: vertical;
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.inputGroup label {
+    padding: 10px 30px 10px 7px;
+    width: 100%;
+    display: block;
+    text-align: left;
+    color: #3C454C;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: color 200ms ease-in;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.inputGroup label:hover .action_buttons {
+    opacity: 0.3;
+}
+
+.inputGroup label:before {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    content: '';
+    background-color: #5562eb;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    z-index: -1;
+}
+
+.inputGroup label:after {
+    width: 26px;
+    height: 26px;
+    content: '';
+    border: 2px solid #D1D7DC;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: all 200ms ease-in;
+}
+
+.inputGroup input:checked ~ label {
+    color: #fff;
+}
+
+.inputGroup input:checked ~ label:before {
+    transform: translate(-50%, -50%) scale3d(56, 56, 1);
+    opacity: 1;
+}
+
+.inputGroup input:checked ~ label:after {
+    background-color: #54E0C7;
+    border-color: #54E0C7;
+}
+
+.inputGroup input {
+    width: 26px;
+    height: 26px;
+    order: 1;
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.add__btn {
+    position: relative;
+    width: 150px;
+}
+
+.task-container {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.task-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.task-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.task-container::-webkit-scrollbar-thumb {
+    background: #bebebe;
+    border-radius: 5px;
+}
+
+.task-container::-webkit-scrollbar-thumb:hover {
+    background: #b4b4b4;
+}
+
+.action-label {
+    z-index: 100;
+}
+
+.action_buttons {
+    color: black;
+    position: absolute;
+    width: auto;
+    height: auto;
+    padding-left: 5px;
+    background-color: white;
+    border-radius: 5px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    transition: all 150ms ease;
+}
+
+.action_buttons:hover {
+    opacity: 1 !important;
+}
+
+.add-task {
+    background-color: #fff;
+    display: block;
+    margin: 5px 0;
+    font-size: 14px;
+    color: black;
+    position: relative;
+}
+
+.add-task label {
+    padding: 10px 30px 10px 7px;
+    width: 100%;
+    display: block;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.add-task:hover {
+    color: #5562eb;
+}
+
+.add-task:hover .add-task-icon-container {
+    background-color: #5562eb;
+}
+
+.add-task:hover .add-task-icon {
+    color: white;
+}
+
+.add-task:hover .add-task-content {
+    color: #5562eb;
+}
+
+.add-task-icon-container {
+    padding: 6px 7px 2px 7px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+}
+
+.add-task-content {
+    margin-left: 9px;
+}
+
+.add-task-icon {
+    color: black;
+    margin-bottom: 1px;
+}
+
+.task-save-btn {
+    height: 30px;
+    width: 30px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    background: #7a58e5;
+    margin-left: 5px;
+}
+
+.task-cancel-btn {
+    height: 30px;
+    width: 30px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    background: #5562eb;
+    margin-left: 3px;
+}
+
+.task-edit-input {
+    width: 87%;
+    margin-left: 0;
+    border: 1px solid lightgray;
+    font-size: 14px;
+    color: #3C454C;
+    padding-left: 7px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: 30px;
+}
+
+.hidden {
+    display: none;
+}
+
+.task-add-form {
+    margin-top: 5px;
+}
