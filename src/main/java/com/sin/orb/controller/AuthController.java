@@ -1,12 +1,10 @@
 package com.sin.orb.controller;
 
-import com.sin.orb.domain.User;
 import com.sin.orb.exception.ConflictingRequestException;
 import com.sin.orb.payload.ApiResponse;
 import com.sin.orb.payload.AuthResponse;
 import com.sin.orb.payload.LoginRequest;
 import com.sin.orb.payload.SignUpRequest;
-import com.sin.orb.security.AuthProvider;
 import com.sin.orb.security.TokenProvider;
 import com.sin.orb.service.UserService;
 import io.swagger.annotations.Api;
@@ -18,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,15 +29,12 @@ import javax.validation.Valid;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserService userService,
-                          PasswordEncoder passwordEncoder, TokenProvider tokenProvider) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, TokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
     }
 
@@ -61,14 +55,7 @@ public class AuthController {
         if (userService.existsByEmail(request.getEmail())) {
             throw new ConflictingRequestException("Email address already in use");
         }
-
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setProvider(AuthProvider.LOCAL);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userService.save(user);
-
+        userService.registerUser(request);
         ApiResponse response = new ApiResponse(true, "User registered successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
