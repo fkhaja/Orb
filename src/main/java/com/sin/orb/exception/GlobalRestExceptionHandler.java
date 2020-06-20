@@ -27,7 +27,7 @@ import java.util.Map;
 public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ResourceNotFoundException.class})
-    protected ResponseEntity<?> handleNotFound(ResourceNotFoundException e, WebRequest request) {
+    protected ResponseEntity<?> handleResourceNotFound(ResourceNotFoundException e, WebRequest request) {
         return getExceptionResponseEntity(request, HttpStatus.NOT_FOUND, e.getLocalizedMessage());
     }
 

@@ -1,7 +1,10 @@
 package com.sin.orb.domain;
 
 import com.sin.orb.security.AuthProvider;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -20,7 +23,6 @@ import java.util.Set;
 public class User implements OAuth2User, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Column(name = "username", nullable = false)
