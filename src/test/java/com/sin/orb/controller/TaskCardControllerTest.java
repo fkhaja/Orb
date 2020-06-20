@@ -128,7 +128,7 @@ class TaskCardControllerTest {
     @Test
     @WithMockUser
     void getTaskCardShouldReturnCorrectDto() throws Exception {
-        when(taskCardService.findTaskCardForUser(anyLong(),any())).thenReturn(cardStubs.get(0));
+        when(taskCardService.findTaskCardForUser(anyLong(), any())).thenReturn(cardStubs.get(0));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/taskcards/1").contentType(MediaType.APPLICATION_JSON))
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
