@@ -53,7 +53,7 @@ const TaskCardList = () => {
                 <div className="no-card">
                     {"" + filter === "" + (card => card) ?
                         <div>
-                            <span>You don"t have any cards yet</span>
+                            <span>You don't have any cards yet</span>
                             <div className="no-card-btn">
                                 <button className="add-first-btn" onClick={() => dispatch(showCreateModal())}>
                                     Create one
