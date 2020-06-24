@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public interface TaskCardRepository extends PagingAndSortingRepository<TaskCard, Long> {
 
-    @EntityGraph(attributePaths = {"tasks"})
     Page<TaskCard> findAllByUserIs(User user, Pageable pageable);
 
     @EntityGraph(attributePaths = {"tasks"})

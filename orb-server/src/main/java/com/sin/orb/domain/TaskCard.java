@@ -31,7 +31,7 @@ public class TaskCard {
     @OneToMany(mappedBy = "taskCard", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Task> tasks;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", updatable = false, nullable = false)
     private User user;
 
