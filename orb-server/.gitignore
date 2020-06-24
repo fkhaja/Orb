@@ -17,3 +17,6 @@ target/
 *.iws
 *.iml
 *.ipr
+
+# Production properties
+src/main/resources/application-prod.properties
