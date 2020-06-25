@@ -16,6 +16,7 @@ CREATE TABLE task_cards (
     image_url VARCHAR(2048),
     title VARCHAR(56) NOT NULL,
     term TIMESTAMP,
+    completed_at_term BOOLEAN DEFAULT FALSE NOT NULL,
     user_id BIGINT NOT NULL
 );
 
