@@ -1,0 +1,4 @@
+export const SHOW_LOADING_PAGE = "SHOW_LOADING_PAGE";
+export const HIDE_LOADING_PAGE = "HIDE_LOADING_PAGE";
+export const SHOW_LOADER = "SHOW_LOADER";
+export const HIDE_LOADER = "HIDE_LOADER";

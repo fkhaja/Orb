@@ -1,0 +1,16 @@
+.workspace-box {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.sidebar {
+    display: block;
+    width: 305px;
+}
+
+.workspace {
+    margin-left: 305px;
+    flex: 1;
+}
