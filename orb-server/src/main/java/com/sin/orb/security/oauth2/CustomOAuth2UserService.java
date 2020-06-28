@@ -7,6 +7,7 @@ import com.sin.orb.security.AuthProvider;
 import com.sin.orb.security.Role;
 import com.sin.orb.security.oauth2.user.OAuth2UserInfo;
 import com.sin.orb.security.oauth2.user.OAuth2UserInfoFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 import java.util.Collections;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
@@ -35,6 +37,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         try {
             return processOAuth2User(oAuth2UserRequest, oAuth2User);
         } catch (AuthenticationException e) {
+            log.error("Authentication cannot be processed", e);
             throw e;
         } catch (Exception e) {
             throw new InternalAuthenticationServiceException(e.getMessage(), e.getCause());
