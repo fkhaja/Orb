@@ -206,6 +206,10 @@
     margin-left: 5px;
 }
 
+.task-save-btn:focus {
+    outline: 0;
+}
+
 .task-cancel-btn {
     height: 30px;
     width: 30px;
@@ -214,6 +218,10 @@
     border-radius: 5px;
     background: #5562eb;
     margin-left: 3px;
+}
+
+.task-cancel-btn:focus {
+    outline: 0;
 }
 
 .task-edit-input {
@@ -226,6 +234,10 @@
     padding-top: 2px;
     padding-bottom: 2px;
     height: 30px;
+}
+
+.task-edit-input:focus {
+    outline: 0;
 }
 
 .hidden {

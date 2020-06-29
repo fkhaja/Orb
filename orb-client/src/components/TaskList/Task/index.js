@@ -10,15 +10,23 @@ const Task = ({task, cardId}) => {
     const dispatch = useDispatch();
     const [editable, setEditable] = useState(false);
     const [completed, setCompleted] = useState(task.completed)
+    let removed = false;
 
     const handleCompletionChange = () => {
-        if (completed) {
-            setCompleted(false);
-            dispatch(cancelTaskCompletion(task.taskId, cardId));
-        } else {
-            setCompleted(true);
-            dispatch(completeTask(task.taskId, cardId));
+        if (!removed) {
+            if (completed) {
+                setCompleted(false);
+                dispatch(cancelTaskCompletion(task.taskId, cardId));
+            } else {
+                setCompleted(true);
+                dispatch(completeTask(task.taskId, cardId));
+            }
         }
+    }
+
+    const handleTaskDelete = () => {
+        removed = true;
+        dispatch(deleteTask(task.taskId, cardId));
     }
 
     return (editable ?
@@ -35,7 +43,7 @@ const Task = ({task, cardId}) => {
                         <FontAwesomeIcon icon={faEdit} color="gray" size="sm" title="Edit"
                                          className="card-icon" onClick={() => setEditable(true)}/>
                         <FontAwesomeIcon icon={faTrash} color="gray" size="sm" title="Remove" className="card-icon"
-                                         onClick={() => dispatch(deleteTask(task.taskId, cardId))}/>
+                                         onClick={handleTaskDelete}/>
                     </div>
                 </label>
             </div>

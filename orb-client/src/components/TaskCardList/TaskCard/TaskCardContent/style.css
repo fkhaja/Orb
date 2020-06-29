@@ -225,6 +225,11 @@
     color: #fff;
 }
 
+.button-remove-normal:focus {
+    color: #fff;
+    outline: 0;
+}
+
 .button-remove-normal:focus:before {
     -webkit-transition: 0.5s all ease;
     transition: 0.5s all ease;
@@ -296,6 +301,11 @@
     transition: 0.5s ease-in-out;
 }
 
+.button-remove-done:focus {
+    outline: 0;
+    color: #fff;
+}
+
 .main-text-container {
     font-size: 14px;
     font-family: Roboto, sans-serif;
@@ -316,6 +326,10 @@
     background: #7a58e5;
 }
 
+.save-btn:focus {
+    outline: 0;
+}
+
 .cancel-btn {
     height: 30px;
     width: 30px;
@@ -324,6 +338,10 @@
     border-radius: 5px;
     background: #5562eb;
     margin-left: 3px;
+}
+
+.cancel-btn:focus {
+    outline: 0;
 }
 
 .edit-text-container {
