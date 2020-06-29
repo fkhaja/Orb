@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
+/**
+ * This class is an implementation of UserDetailsService
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository repository;
@@ -30,6 +33,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         return user;
     }
 
+    /**
+     * Loads a user with the passed id from the repository
+     *
+     * @param id id of the required user
+     * @return user instance that implements UserDetails
+     * @throws ResourceNotFoundException if the user with the passed id is not found
+     */
     @Transactional(readOnly = true)
     public UserDetails loadUserById(Long id) {
         User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));

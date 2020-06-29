@@ -7,8 +7,19 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+/**
+ * This utility class contains methods for working with beans
+ */
 public class CustomBeanUtils {
 
+    /**
+     * Copies properties from Map to bean
+     *
+     * @param <T>              bean type
+     * @param props            Map with properties to copy
+     * @param srcClass         bean class
+     * @param ignoreProperties properties that DO NOT be copied
+     */
     public static <T> void populate(@NonNull T bean, @NonNull Map<String, Object> props, Class<T> srcClass, String... ignoreProperties) {
         removeIgnoredProps(props, ignoreProperties);
 
